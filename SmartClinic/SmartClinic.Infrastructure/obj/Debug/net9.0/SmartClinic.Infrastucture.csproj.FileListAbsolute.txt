@@ -1,0 +1,17 @@
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\bin\Debug\net9.0\SmartClinic.Infrastucture.deps.json
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\bin\Debug\net9.0\SmartClinic.Infrastucture.runtimeconfig.json
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\bin\Debug\net9.0\SmartClinic.Infrastucture.dll
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\bin\Debug\net9.0\SmartClinic.Infrastucture.pdb
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\bin\Debug\net9.0\SmartClinic.Domain.dll
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\bin\Debug\net9.0\SmartClinic.Domain.pdb
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.csproj.AssemblyReference.cache
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.GeneratedMSBuildEditorConfig.editorconfig
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.AssemblyInfoInputs.cache
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.AssemblyInfo.cs
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.csproj.CoreCompileInputs.cache
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartCli.65E3A92C.Up2Date
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.dll
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\refint\SmartClinic.Infrastucture.dll
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.pdb
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\SmartClinic.Infrastucture.genruntimeconfig.cache
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastucture\obj\Debug\net9.0\ref\SmartClinic.Infrastucture.dll
