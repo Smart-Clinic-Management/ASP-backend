@@ -2956,23 +2956,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Hesham\\.nuget\\packages\\": {},
+    "C:\\Users\\Maverick\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
+      "projectUniqueName": "C:\\Users\\Maverick\\Desktop\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
       "projectName": "SmartClinic.Application",
-      "projectPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
-      "packagesPath": "C:\\Users\\Hesham\\.nuget\\packages\\",
-      "outputPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\obj\\",
+      "projectPath": "C:\\Users\\Maverick\\Desktop\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
+      "packagesPath": "C:\\Users\\Maverick\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Maverick\\Desktop\\ASP-backend\\SmartClinic\\SmartClinic.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Hesham\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Maverick\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2987,8 +2987,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj": {
-              "projectPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj"
+            "C:\\Users\\Maverick\\Desktop\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Maverick\\Desktop\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj"
             }
           }
         }
@@ -3003,7 +3003,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -3024,7 +3024,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
