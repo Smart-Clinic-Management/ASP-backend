@@ -20,8 +20,4 @@
     <ProjectReference Include="..\SmartClinic.Application\SmartClinic.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
