@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\SmartClinic.API.props" />
-</Project>
