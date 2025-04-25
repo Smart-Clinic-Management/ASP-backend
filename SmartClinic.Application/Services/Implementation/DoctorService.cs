@@ -1,4 +1,5 @@
 ﻿using SmartClinic.Application.Bases;
+using SmartClinic.Application.Features.Doctors.Command.DTOs.DeleteDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
 
@@ -55,5 +56,32 @@ namespace SmartClinic.Application.Services.Implementation
             var response = doctor.ToUpdateDoctorResponse();
             return new ResponseHandler().Success(response);
         }
+
+        public async Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId)
+        {
+            var doctor = await _doctorRepo.GetByIdAsync(doctorId);
+            if (doctor == null)
+            {
+                return new ResponseHandler().NotFound<SoftDeleteDoctorResponse>($"No doctor found with ID {doctorId}");
+            }
+
+            doctor.IsActive = false;
+            _doctorRepo.Update(doctor);
+
+            var user = await _userManager.FindByIdAsync(doctor.UserId);
+            if (user != null)
+            {
+                user.IsActive = false;
+                await _userManager.UpdateAsync(user);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ResponseHandler().Success(new SoftDeleteDoctorResponse("Doctor and associated user successfully soft deleted."));
+        }
+
+
+
+
     }
 }

@@ -47,5 +47,17 @@ namespace SmartClinic.API.Controllers
             }
             return Ok(result.Data); 
         }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> SoftDeleteDoctor(int id)
+        {
+            var result = await _doctorService.SoftDeleteDoctorAsync(id);
+            if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound(result.Message);  
+            }
+            return Ok(result.Data);  
+        }
     }
 }
