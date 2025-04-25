@@ -11,7 +11,7 @@ public class Doctor : BaseEntity
 
     public int? WaitingTime { get; set; }
 
-    public required string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 
     public bool IsActive { get; set; } = true;
 
