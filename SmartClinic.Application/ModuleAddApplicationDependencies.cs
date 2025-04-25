@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+using SmartClinic.Application.Services.Implementation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
@@ -9,7 +10,7 @@ public static class ModuleAddApplicationDependencies
 {
     public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
     {
-
+        services.AddScoped<IDoctorService, DoctorService>();
 
         services.AddScoped<ResponseHandler>();
         services.AddScoped<IAuthService, AuthService>();

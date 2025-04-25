@@ -1,0 +1,12 @@
+﻿global using System.Text;
+global using API.Middleware;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using Scalar.AspNetCore;
+global using SmartClinic.API;
+global using SmartClinic.Application;
+global using SmartClinic.Domain.Entities;
+global using SmartClinic.Infrastructure;
+global using SmartClinic.Infrastructure.Data;
