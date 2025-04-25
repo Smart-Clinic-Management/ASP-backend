@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "y3XKzAxtRZg=",
+  "dgSpecHash": "a08SvMOdSxk=",
   "success": true,
-  "projectFilePath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\SmartClinic.API.csproj",
+  "projectFilePath": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\SmartClinic.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Hesham\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Hesham\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

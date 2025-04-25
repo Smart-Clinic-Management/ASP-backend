@@ -4731,11 +4731,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\SmartClinic.API.csproj",
+      "projectUniqueName": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\SmartClinic.API.csproj",
       "projectName": "SmartClinic.API",
-      "projectPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\SmartClinic.API.csproj",
+      "projectPath": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\SmartClinic.API.csproj",
       "packagesPath": "C:\\Users\\Hesham\\.nuget\\packages\\",
-      "outputPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\obj\\",
+      "outputPath": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4756,8 +4756,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj": {
-              "projectPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj"
+            "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj": {
+              "projectPath": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj"
             }
           }
         }

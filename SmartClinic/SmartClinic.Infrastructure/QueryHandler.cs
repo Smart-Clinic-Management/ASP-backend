@@ -12,18 +12,20 @@ public static class QueryHandler
         query = query.Where(criteria);
 
         #region includes
+
         if (includes.Length != 0)
             foreach (var include in includes)
                 query = query.Include(include);
+
         #endregion
 
         if (!withTracking)
             query = query.AsNoTracking();
 
-        if (pageSize is not null || pageIndex is not null)
+        if (pageSize is not null && pageIndex is not null)
         {
             pageIndex = Math.Max(1, pageIndex!.Value);
-            pageSize = pageSize > 0 && pageSize <= 20 ? pageSize : 20;
+            pageSize = pageSize > 0 && pageSize <= 20 ? pageSize : 5;
             int skip = (pageIndex.Value - 1) * pageSize.Value;
 
             query = query.Skip(skip).Take(pageSize.Value);

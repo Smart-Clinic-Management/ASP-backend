@@ -9,7 +9,6 @@ public abstract class GenericRepository<T>(ApplicationDbContext context) : IGene
 {
     private readonly DbSet<T> _db = context.Set<T>();
 
-    public async Task<T?> GetByIdAsync(int id) => await _db.FindAsync(id);
 
     public async Task AddAsync(T entity) => await _db.AddAsync(entity);
 
@@ -17,17 +16,6 @@ public abstract class GenericRepository<T>(ApplicationDbContext context) : IGene
 
     public void Delete(T entity) => _db.Remove(entity);
 
-
-    public async Task<T?> GetByIdAsync(int id, bool withTracking = true, params string[] includes)
-    {
-        IQueryable<T> query = _db;
-
-        query = query.GetQuery(withTracking: withTracking, includes: includes);
-
-
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
-
-    }
 
     public async Task<IEnumerable<T>> ListAllAsync(Expression<Func<T, bool>>? criteria = null,
         int pageSize = 20, int pageIndex = 1, bool withTracking = true, params string[] includes)

@@ -1,6 +1,4 @@
-﻿using SmartClinic.Domain.Entities;
-
-namespace SmartClinic.Infrastructure.Interfaces;
+﻿namespace SmartClinic.Infrastructure.Interfaces;
 public interface IRepository<T> where T : BaseEntity
 {
     Task<T?> GetByIdAsync(int id);
@@ -11,9 +9,9 @@ public interface IRepository<T> where T : BaseEntity
 
     Task<T?> GetByIdWithIncludesNoTrackingAsync(int id);
 
-    Task<IEnumerable<T>> LisTAsync(int pageSize = 20, int pageIndex = 1);
+    Task<IEnumerable<T>> ListAsync(int pageSize = 20, int pageIndex = 1);
 
-    Task<IEnumerable<T>> LisTNoTrackingAsync(int pageSize = 20, int pageIndex = 1);
+    Task<IEnumerable<T>> ListNoTrackingAsync(int pageSize = 20, int pageIndex = 1);
 
     Task AddAsync(T entity);
 

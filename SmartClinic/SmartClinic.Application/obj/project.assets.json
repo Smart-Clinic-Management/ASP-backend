@@ -2962,11 +2962,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
+      "projectUniqueName": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
       "projectName": "SmartClinic.Application",
-      "projectPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
+      "projectPath": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\SmartClinic.Application.csproj",
       "packagesPath": "C:\\Users\\Hesham\\.nuget\\packages\\",
-      "outputPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\obj\\",
+      "outputPath": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2987,8 +2987,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj": {
-              "projectPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj"
+            "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj": {
+              "projectPath": "d:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj"
             }
           }
         }
