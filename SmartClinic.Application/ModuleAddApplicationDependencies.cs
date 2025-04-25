@@ -1,10 +1,3 @@
-using SmartClinic.Application.Services.Implementation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Auth;
-using SmartClinic.Domain.Entities;
-
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
 {
