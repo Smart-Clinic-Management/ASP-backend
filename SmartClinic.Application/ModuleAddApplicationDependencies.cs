@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using SmartClinic.Application.Bases;
+using SmartClinic.Application.Features.Auth;
+using SmartClinic.Domain.Entities;
 
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
@@ -7,6 +11,11 @@ public static class ModuleAddApplicationDependencies
     {
 
 
+        services.AddScoped<ResponseHandler>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<UserManager<AppUser>>();
+        services.AddScoped<SignInManager<AppUser>>();
+        services.AddScoped<RoleManager<IdentityRole>>();
 
         return services;
     }

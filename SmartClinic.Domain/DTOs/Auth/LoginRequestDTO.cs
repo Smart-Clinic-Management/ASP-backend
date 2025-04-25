@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Models.DTOs.Auth
 {
     public class LoginRequestDTO
     {
         [Required]
-        public string UserName { get; set; }
+        [EmailAddress]
+        public string Email { get; set; } = null!;
         [Required]
-        public string Password { get; set; }
+        [MinLength(6)]
+        public string Password { get; set; } = null!;
     }
 }

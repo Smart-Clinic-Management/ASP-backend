@@ -1,6 +1,7 @@
 using System.Text;
 using API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -51,6 +52,16 @@ builder.Services.AddInfrastructureDependencies()
     .AddApplicationDependencies();
 
 
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder(
+            JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -72,19 +83,23 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-try
+using (var scopeeeee = app.Services.CreateScope())
 {
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    var context = scopeeeee.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-    //await context.Database.MigrateAsync();
+    var user = context.FindByEmailAsync("admin@admin.com").GetAwaiter().GetResult();
+
+    if (user != null)
+    {
+        context.AddToRoleAsync(user, "admin").GetAwaiter().GetResult();
+    }
+
+
+
 
 }
-catch (Exception ex)
-{
-    Console.WriteLine(ex);
-    throw;
-}
+
+
+
 
 app.Run();

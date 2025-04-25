@@ -1,5 +1,4 @@
-﻿using SmartClinic.Domain.Entities;
-using SmartClinic.Domain.Entities.AppointmentAggregation;
+﻿using SmartClinic.Domain.Entities.AppointmentAggregation;
 using SmartClinic.Infrastucture.Configuration;
 
 namespace SmartClinic.Infrastructure.Data;
