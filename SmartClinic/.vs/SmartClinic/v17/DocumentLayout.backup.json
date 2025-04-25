@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E80FB938-1097-4EEA-8DFF-B99318B25768}|SmartClinic.API\\SmartClinic.API.csproj|d:\\courses\\graduation project\\asp-backend\\smartclinic\\smartclinic.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E80FB938-1097-4EEA-8DFF-B99318B25768}|SmartClinic.API\\SmartClinic.API.csproj|solutionrelative:smartclinic.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E80FB938-1097-4EEA-8DFF-B99318B25768}|SmartClinic.API\\SmartClinic.API.csproj|d:\\courses\\graduation project\\asp-backend\\smartclinic\\smartclinic.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E80FB938-1097-4EEA-8DFF-B99318B25768}|SmartClinic.API\\SmartClinic.API.csproj|solutionrelative:smartclinic.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6760781-1627-47C9-AEAE-6CEC89CD1965}|SmartClinic.Application\\SmartClinic.Application.csproj|d:\\courses\\graduation project\\asp-backend\\smartclinic\\smartclinic.application\\moduleaddapplicationdependencies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6760781-1627-47C9-AEAE-6CEC89CD1965}|SmartClinic.Application\\SmartClinic.Application.csproj|solutionrelative:smartclinic.application\\moduleaddapplicationdependencies.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5FF82C95-19FF-7FD3-863C-249E3238DD2E}|SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj|d:\\courses\\graduation project\\asp-backend\\smartclinic\\smartclinic.infrastructure\\configuration\\appointmentconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5FF82C95-19FF-7FD3-863C-249E3238DD2E}|SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj|solutionrelative:smartclinic.infrastructure\\configuration\\appointmentconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF82C95-19FF-7FD3-863C-249E3238DD2E}|SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj|d:\\courses\\graduation project\\asp-backend\\smartclinic\\smartclinic.infrastructure\\configuration\\applicationuserconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5FF82C95-19FF-7FD3-863C-249E3238DD2E}|SmartClinic.Infrastructure\\SmartClinic.Infrastructure.csproj|solutionrelative:smartclinic.infrastructure\\configuration\\applicationuserconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,27 +30,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ModuleAddApplicationDependencies.cs",
-              "DocumentMoniker": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\ModuleAddApplicationDependencies.cs",
-              "RelativeDocumentMoniker": "SmartClinic.Application\\ModuleAddApplicationDependencies.cs",
-              "ToolTip": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Application\\ModuleAddApplicationDependencies.cs",
-              "RelativeToolTip": "SmartClinic.Application\\ModuleAddApplicationDependencies.cs",
-              "ViewState": "AgIAAAAAAAAAmZmZmZkOwAUAAAA/AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T18:44:13.243Z"
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\appsettings.json",
+              "RelativeDocumentMoniker": "SmartClinic.API\\appsettings.json",
+              "ToolTip": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\appsettings.json",
+              "RelativeToolTip": "SmartClinic.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-25T11:49:05.955Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\Program.cs",
-              "RelativeDocumentMoniker": "SmartClinic.API\\Program.cs",
-              "ToolTip": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.API\\Program.cs",
-              "RelativeToolTip": "SmartClinic.API\\Program.cs",
-              "ViewState": "AgIAADMAAABgm5mZmVkrwEAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "AppointmentConfiguration.cs",
+              "DocumentMoniker": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\Configuration\\AppointmentConfiguration.cs",
+              "RelativeDocumentMoniker": "SmartClinic.Infrastructure\\Configuration\\AppointmentConfiguration.cs",
+              "ToolTip": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\Configuration\\AppointmentConfiguration.cs",
+              "RelativeToolTip": "SmartClinic.Infrastructure\\Configuration\\AppointmentConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAmZmZmZkOwAkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T18:39:32.485Z",
+              "WhenOpened": "2025-04-25T03:31:55.421Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApplicationUserConfiguration.cs",
+              "DocumentMoniker": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\Configuration\\ApplicationUserConfiguration.cs",
+              "RelativeDocumentMoniker": "SmartClinic.Infrastructure\\Configuration\\ApplicationUserConfiguration.cs",
+              "ToolTip": "D:\\Courses\\Graduation Project\\ASP-backend\\SmartClinic\\SmartClinic.Infrastructure\\Configuration\\ApplicationUserConfiguration.cs",
+              "RelativeToolTip": "SmartClinic.Infrastructure\\Configuration\\ApplicationUserConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T23:31:43.321Z",
               "EditorCaption": ""
             }
           ]

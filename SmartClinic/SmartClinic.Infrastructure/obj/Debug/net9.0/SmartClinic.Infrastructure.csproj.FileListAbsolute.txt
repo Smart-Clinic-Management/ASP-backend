@@ -9,6 +9,7 @@ D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure\obj\Debug\net9.0\SmartClinic.Infrastructure.AssemblyInfoInputs.cache
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure\obj\Debug\net9.0\SmartClinic.Infrastructure.AssemblyInfo.cs
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure\obj\Debug\net9.0\SmartClinic.Infrastructure.csproj.CoreCompileInputs.cache
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure\obj\Debug\net9.0\SmartClinic.Infrastructure.sourcelink.json
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure\obj\Debug\net9.0\SmartCli.843CD3B5.Up2Date
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure\obj\Debug\net9.0\SmartClinic.Infrastructure.dll
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Infrastructure\obj\Debug\net9.0\refint\SmartClinic.Infrastructure.dll

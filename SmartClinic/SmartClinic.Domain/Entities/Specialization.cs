@@ -14,6 +14,8 @@ public class Specialization : BaseEntity
     [Column(TypeName = "VARCHAR(150)")]
     public string? Image { get; set; }
 
+    public bool IsActive { get; set; } = true;
+
     public ICollection<Doctor> Doctors { get; set; } = new HashSet<Doctor>();
     public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 }

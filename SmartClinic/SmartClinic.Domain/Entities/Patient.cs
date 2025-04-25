@@ -8,6 +8,8 @@ public class Patient : BaseEntity
     [Column(TypeName = "VARCHAR(255)")]
     public string? MedicalHistory { get; set; }
 
+    public bool IsActive { get; set; } = true;
+
     public required string UserId { get; set; }
 
     [ForeignKey(nameof(UserId))]

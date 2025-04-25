@@ -32,11 +32,12 @@ namespace SmartClinic.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "VARCHAHR(255)", nullable: false),
-                    LastName = table.Column<string>(type: "VARCHAHR(255)", nullable: true),
-                    Address = table.Column<string>(type: "VARCHAHR(255)", nullable: false),
+                    FirstName = table.Column<string>(type: "VARCHAR(255)", nullable: false),
+                    LastName = table.Column<string>(type: "VARCHAR(255)", nullable: true),
+                    Address = table.Column<string>(type: "VARCHAR(255)", nullable: false),
                     BirthDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    ProfileImage = table.Column<string>(type: "VARCHAHR(255)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    ProfileImage = table.Column<string>(type: "VARCHAR(255)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -65,7 +66,8 @@ namespace SmartClinic.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "VARCHAR(150)", nullable: false),
                     Description = table.Column<string>(type: "VARCHAR(255)", nullable: true),
-                    Image = table.Column<string>(type: "VARCHAR(150)", nullable: true)
+                    Image = table.Column<string>(type: "VARCHAR(150)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -184,9 +186,10 @@ namespace SmartClinic.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "VARCHAHR(500)", nullable: true),
+                    Description = table.Column<string>(type: "VARCHAR(500)", nullable: true),
                     WaitingTime = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -195,8 +198,7 @@ namespace SmartClinic.Infrastructure.Migrations
                         name: "FK_Doctors_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -206,6 +208,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MedicalHistory = table.Column<string>(type: "VARCHAR(255)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -215,8 +218,7 @@ namespace SmartClinic.Infrastructure.Migrations
                         name: "FK_Patients_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -238,8 +240,7 @@ namespace SmartClinic.Infrastructure.Migrations
                         name: "FK_DoctorSchedules_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -274,7 +275,6 @@ namespace SmartClinic.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
                     PatientId = table.Column<int>(type: "int", nullable: false),
-                    DoctorScheduleId = table.Column<int>(type: "int", nullable: false),
                     SpecializationId = table.Column<int>(type: "int", nullable: false),
                     AppointmentDate = table.Column<DateOnly>(type: "date", nullable: false),
                     StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
@@ -285,17 +285,10 @@ namespace SmartClinic.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Appointments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Appointments_DoctorSchedules_DoctorScheduleId",
-                        column: x => x.DoctorScheduleId,
-                        principalTable: "DoctorSchedules",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Appointments_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Appointments_Patients_PatientId",
                         column: x => x.PatientId,
@@ -306,8 +299,7 @@ namespace SmartClinic.Infrastructure.Migrations
                         name: "FK_Appointments_Specializations_SpecializationId",
                         column: x => x.SpecializationId,
                         principalTable: "Specializations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -324,11 +316,6 @@ namespace SmartClinic.Infrastructure.Migrations
                 name: "IX_Appointments_DoctorId",
                 table: "Appointments",
                 column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointments_DoctorScheduleId",
-                table: "Appointments",
-                column: "DoctorScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_PatientId",
@@ -424,10 +411,10 @@ namespace SmartClinic.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DoctorsSpecializations");
+                name: "DoctorSchedules");
 
             migrationBuilder.DropTable(
-                name: "DoctorSchedules");
+                name: "DoctorsSpecializations");
 
             migrationBuilder.DropTable(
                 name: "Patients");
@@ -436,10 +423,10 @@ namespace SmartClinic.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Specializations");
+                name: "Doctors");
 
             migrationBuilder.DropTable(
-                name: "Doctors");
+                name: "Specializations");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

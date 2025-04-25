@@ -12,5 +12,6 @@ public class DoctorScheduleConfiguration : IEntityTypeConfiguration<DoctorSchedu
             db => Enum.Parse<DaysOfWeek>(db))
             .HasColumnType("VARCHAR(50)");
 
+
     }
 }

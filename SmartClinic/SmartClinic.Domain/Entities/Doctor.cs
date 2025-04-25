@@ -6,12 +6,14 @@ public class Doctor : BaseEntity
 {
 
 
-    [Column(TypeName = "VARCHAHR(500)")]
+    [Column(TypeName = "VARCHAR(500)")]
     public string? Description { get; set; }
 
     public int? WaitingTime { get; set; }
 
     public required string UserId { get; set; }
+
+    public bool IsActive { get; set; } = true;
 
 
     [ForeignKey(nameof(UserId))]

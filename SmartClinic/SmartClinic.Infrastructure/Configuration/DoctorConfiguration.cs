@@ -11,6 +11,16 @@ public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
                .WithMany(s => s.Doctors)
                .UsingEntity("DoctorsSpecializations");
 
+        builder.HasMany(x => x.DoctorSchedules)
+            .WithOne(x => x.Doctor)
+            .HasForeignKey(x => x.DoctorId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(x => x.Appointments)
+            .WithOne(x => x.Doctor)
+            .HasForeignKey(x => x.DoctorId)
+            .OnDelete(DeleteBehavior.NoAction);
+
     }
 }
 

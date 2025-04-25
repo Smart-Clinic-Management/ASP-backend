@@ -8,7 +8,6 @@ public class Appointment : BaseEntity
 
     public int PatientId { get; set; }
 
-    public int DoctorScheduleId { get; set; }
 
     public int SpecializationId { get; set; }
 
@@ -26,9 +25,6 @@ public class Appointment : BaseEntity
     [ForeignKey(nameof(PatientId))]
     public Patient Patient { get; set; } = null!;
 
-
-    [ForeignKey(nameof(DoctorScheduleId))]
-    public DoctorSchedule DoctorSchedule { get; set; } = null!;
 
     [ForeignKey(nameof(SpecializationId))]
     public Specialization Specialization { get; set; } = null!;

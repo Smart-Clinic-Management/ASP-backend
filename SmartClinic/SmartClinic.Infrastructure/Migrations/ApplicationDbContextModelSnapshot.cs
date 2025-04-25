@@ -200,7 +200,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("VARCHAHR(255)");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<DateOnly>("BirthDate")
                         .HasColumnType("date");
@@ -218,10 +218,13 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("VARCHAHR(255)");
+                        .HasColumnType("VARCHAR(255)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("VARCHAHR(255)");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -247,7 +250,7 @@ namespace SmartClinic.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfileImage")
-                        .HasColumnType("VARCHAHR(255)");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -286,9 +289,6 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DoctorScheduleId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
@@ -302,8 +302,6 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
-
-                    b.HasIndex("DoctorScheduleId");
 
                     b.HasIndex("PatientId");
 
@@ -321,7 +319,10 @@ namespace SmartClinic.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("VARCHAHR(500)");
+                        .HasColumnType("VARCHAR(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -377,6 +378,9 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MedicalHistory")
                         .HasColumnType("VARCHAR(255)");
 
@@ -405,6 +409,9 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("VARCHAR(150)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -486,13 +493,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasOne("SmartClinic.Domain.Entities.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartClinic.Domain.Entities.DoctorSchedule", "DoctorSchedule")
-                        .WithMany("Appointments")
-                        .HasForeignKey("DoctorScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SmartClinic.Domain.Entities.Patient", "Patient")
@@ -504,7 +505,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasOne("SmartClinic.Domain.Entities.Specialization", "Specialization")
                         .WithMany("Appointments")
                         .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.OwnsOne("SmartClinic.Domain.Entities.AppointmentAggregation.AppointmentDuration", "Duration", b1 =>
@@ -530,8 +531,6 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.Navigation("Doctor");
 
-                    b.Navigation("DoctorSchedule");
-
                     b.Navigation("Duration")
                         .IsRequired();
 
@@ -545,7 +544,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasOne("SmartClinic.Domain.Entities.AppUser", "User")
                         .WithOne("Doctor")
                         .HasForeignKey("SmartClinic.Domain.Entities.Doctor", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -556,7 +555,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasOne("SmartClinic.Domain.Entities.Doctor", "Doctor")
                         .WithMany("DoctorSchedules")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -567,7 +566,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasOne("SmartClinic.Domain.Entities.AppUser", "User")
                         .WithOne("Patient")
                         .HasForeignKey("SmartClinic.Domain.Entities.Patient", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -585,11 +584,6 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("DoctorSchedules");
-                });
-
-            modelBuilder.Entity("SmartClinic.Domain.Entities.DoctorSchedule", b =>
-                {
-                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Patient", b =>

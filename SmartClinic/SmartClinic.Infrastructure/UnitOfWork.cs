@@ -19,7 +19,7 @@ public class UnitOfWork(IServiceProvider serviceProvider, ApplicationDbContext c
 
         var lazy = _repositories.GetOrAdd(key,
            _ => new Lazy<object>(() => serviceProvider.GetRequiredService<TEntity>())
-       );
+           );
 
         return (TEntity)lazy.Value;
     }

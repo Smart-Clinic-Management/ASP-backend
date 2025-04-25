@@ -9,11 +9,13 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<AppUser>
     {
         builder.HasOne(u => u.Doctor)
             .WithOne(d => d.User)
-            .HasForeignKey<Doctor>(x => x.UserId);
+            .HasForeignKey<Doctor>(x => x.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(u => u.Patient)
             .WithOne(d => d.User)
-            .HasForeignKey<Patient>(x => x.UserId);
+            .HasForeignKey<Patient>(x => x.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
 

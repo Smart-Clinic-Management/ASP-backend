@@ -6,6 +6,7 @@ D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Deb
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Debug\net9.0\SmartClinic.Domain.AssemblyInfoInputs.cache
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Debug\net9.0\SmartClinic.Domain.AssemblyInfo.cs
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Debug\net9.0\SmartClinic.Domain.csproj.CoreCompileInputs.cache
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Debug\net9.0\SmartClinic.Domain.sourcelink.json
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Debug\net9.0\SmartClinic.Domain.dll
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Debug\net9.0\refint\SmartClinic.Domain.dll
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.Domain\obj\Debug\net9.0\SmartClinic.Domain.pdb

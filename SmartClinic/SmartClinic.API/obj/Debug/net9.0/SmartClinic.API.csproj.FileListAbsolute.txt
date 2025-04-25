@@ -158,6 +158,7 @@ D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\net9.0\SmartClinic.API.csproj.CoreCompileInputs.cache
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\net9.0\SmartClinic.API.MvcApplicationPartsAssemblyInfo.cs
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\net9.0\SmartClinic.API.MvcApplicationPartsAssemblyInfo.cache
+D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\net9.0\SmartClinic.API.sourcelink.json
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\net9.0\scopedcss\bundle\SmartClinic.API.styles.css
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\net9.0\staticwebassets.build.json
 D:\Courses\Graduation Project\ASP-backend\SmartClinic\SmartClinic.API\obj\Debug\net9.0\staticwebassets.development.json
