@@ -12,7 +12,7 @@ public static class ModuleAPIDependencies
      .AddIdentityCore<AppUser>(opts =>
      {
          // password, lockout, etc.
-         opts.Password.RequireNonAlphanumeric = true;
+         opts.Password.RequireNonAlphanumeric = false;
          opts.Password.RequireUppercase = false;
          opts.Password.RequiredLength = 6;
      })

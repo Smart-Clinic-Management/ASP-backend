@@ -27,12 +27,13 @@ public class ResponseHandler
             Message = "UnAuthorized"
         };
     }
-    public Response<T> BadRequest<T>(string? Message = null)
+    public Response<T> BadRequest<T>(List<string> errors, string? Message = null)
     {
         return new Response<T>()
         {
             StatusCode = System.Net.HttpStatusCode.BadRequest,
-            Message = Message ?? "Bad Request"
+            Message = Message ?? "Bad Request",
+            Errors = errors
         };
     }
 

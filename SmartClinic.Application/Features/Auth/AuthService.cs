@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Bases;
+using SmartClinic.Domain.DTOs.Auth;
 using SmartClinic.Domain.Entities;
 
 namespace SmartClinic.Application.Features.Auth
@@ -63,12 +64,12 @@ namespace SmartClinic.Application.Features.Auth
             var userExist = await userMGR.FindByEmailAsync(user.Email);
 
             if (userExist == null)
-                return response.BadRequest<LoginResponseDTO>("invalid login attemps")!;
+                return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
 
             var sign = await signMGR.CheckPasswordSignInAsync(userExist, user.Password, false);
 
             if (!sign.Succeeded)
-                return response.BadRequest<LoginResponseDTO>("invalid login attemps")!;
+                return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
 
 
             var res = response.Success(new LoginResponseDTO() { Token = await GenerateJWT(userExist) });
@@ -76,5 +77,39 @@ namespace SmartClinic.Application.Features.Auth
             return res!;
         }
 
+        public async Task<Response<RegisterResponseDTO>> Register(RegisterRequestDTO newPatientUser)
+        {
+            var user = new AppUser()
+            {
+                UserName = newPatientUser.Email,
+                Email = newPatientUser.Email,
+                FirstName = newPatientUser.Firstname,
+                Address = newPatientUser.Address,
+            };
+
+            var result = await userMGR.CreateAsync(user, newPatientUser.Password);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description).ToList();
+                return response.BadRequest<RegisterResponseDTO>(errors)!;
+            }
+
+            var role = await userMGR.AddToRoleAsync(user, "patient");
+
+            if (!role.Succeeded)
+            {
+                var errors = role.Errors.Select(e => e.Description).ToList();
+                return response.BadRequest<RegisterResponseDTO>(errors)!;
+            }
+
+            var res = response.Success(new RegisterResponseDTO()
+            {
+                Email = user.Email,
+                Id = user.Id
+            });
+
+            return res!;
+        }
     }
 }
