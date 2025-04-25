@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using Microsoft.AspNetCore.Http;
 namespace Models.DTOs.Auth
 {
     public class RegisterRequestDTO
@@ -23,5 +23,6 @@ namespace Models.DTOs.Auth
         [Required]
         public string Address { get; set; } = null!;
 
+        public IFormFile? Image { get; set; } // Corrected type from IFormF to IFormFile  
     }
 }

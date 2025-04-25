@@ -79,6 +79,8 @@ namespace SmartClinic.Application.Features.Auth
 
         public async Task<Response<RegisterResponseDTO>> Register(RegisterRequestDTO newPatientUser)
         {
+
+
             var user = new AppUser()
             {
                 UserName = newPatientUser.Email,
@@ -86,6 +88,7 @@ namespace SmartClinic.Application.Features.Auth
                 FirstName = newPatientUser.Firstname,
                 Address = newPatientUser.Address,
             };
+
 
             var result = await userMGR.CreateAsync(user, newPatientUser.Password);
 
@@ -102,6 +105,39 @@ namespace SmartClinic.Application.Features.Auth
                 var errors = role.Errors.Select(e => e.Description).ToList();
                 return response.BadRequest<RegisterResponseDTO>(errors)!;
             }
+
+
+            if (newPatientUser.Image != null)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+
+                var fileName = Path.GetFileName(newPatientUser.Image.FileName);
+                var fileEx = Path.GetExtension(fileName);
+
+                var fileExtension = Path.GetExtension(newPatientUser.Image.FileName).ToLower();
+                if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(fileExtension))
+                {
+                    return response.BadRequest<RegisterResponseDTO>(["Invalid image file type. Only .jpg, .jpeg, .png are allowed."]);
+                }
+
+
+                var filePath = Path.Combine(uploadsFolder, $"{Guid.NewGuid()}{fileEx}");
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await newPatientUser.Image.CopyToAsync(stream);
+                }
+
+                user.ProfileImage = filePath;
+            }
+
+            await userMGR.UpdateAsync(user);
 
             var res = response.Success(new RegisterResponseDTO()
             {

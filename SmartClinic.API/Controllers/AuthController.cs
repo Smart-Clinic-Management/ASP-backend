@@ -27,7 +27,7 @@ namespace SmartClinic.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequestDTO newPatientUser)
+        public async Task<IActionResult> Register([FromForm] RegisterRequestDTO newPatientUser)
         {
             var res = await authService.Register(newPatientUser);
 
