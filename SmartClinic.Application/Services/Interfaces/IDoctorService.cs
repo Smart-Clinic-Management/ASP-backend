@@ -1,4 +1,4 @@
-﻿using SmartClinic.Application.Bases;
+﻿using SmartClinic.Application.Features.Doctors.Command.DTOs.DeleteDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
 
@@ -10,6 +10,9 @@ namespace SmartClinic.Application.Services.Interfaces
 
         Task<Response<GetDoctorByIdResponse>> GetDoctorByIdAsync(int doctorId);
 
-        Task<Response<List<GetAllDoctorsResponse>>> GetAllDoctorsAsync(int pageSize = 20, int pageIndex = 1);  // تم تعديل نوع العودة ليتناسب مع GetAllDoctorsResponse
+        Task<Response<List<GetAllDoctorsResponse>>> GetAllDoctorsAsync(int pageSize = 20, int pageIndex = 1);
+
+        Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId);
+
     }
 }

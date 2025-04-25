@@ -13,6 +13,8 @@ public interface IRepository<T> where T : BaseEntity
 
     Task<IEnumerable<T>> ListNoTrackingAsync(int pageSize = 20, int pageIndex = 1);
 
+    Task<bool> SoftDeleteAsync(int id);
+
     Task AddAsync(T entity);
 
     void Update(T entity);

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using SmartClinic.Domain.Entities;
 using SmartClinic.Infrastructure.Data;
 using SmartClinic.Infrastructure.Interfaces;
@@ -35,4 +36,23 @@ public abstract class GenericRepository<T>(ApplicationDbContext context) : IGene
 
         return await query.FirstOrDefaultAsync();
     }
+
+    public virtual async Task<bool> SoftDeleteAsync(int id)
+    {
+        var entity = await _db.FindAsync(id);
+        if (entity != null)
+        {
+            var isActiveProp = typeof(T).GetProperty("IsActive");
+            if (isActiveProp != null && isActiveProp.PropertyType == typeof(bool))
+            {
+                isActiveProp.SetValue(entity, false);
+                _db.Update(entity);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 }

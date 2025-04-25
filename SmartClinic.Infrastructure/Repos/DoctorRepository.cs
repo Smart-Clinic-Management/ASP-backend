@@ -30,4 +30,8 @@ public class DoctorRepository(ApplicationDbContext context)
         => base.ListAllAsync(x => x.IsActive, pageSize,
                   pageIndex, false,
                nameof(Doctor.User), nameof(Doctor.Specializations));
+
+
+  
+
 }
