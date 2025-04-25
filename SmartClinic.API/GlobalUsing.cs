@@ -1,6 +1,8 @@
 ﻿global using System.Text;
+global using System.Text.Json.Serialization;
 global using API.Middleware;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.IdentityModel.Tokens;
