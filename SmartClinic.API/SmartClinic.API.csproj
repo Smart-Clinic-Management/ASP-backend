@@ -20,4 +20,8 @@
     <ProjectReference Include="..\SmartClinic.Application\SmartClinic.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>

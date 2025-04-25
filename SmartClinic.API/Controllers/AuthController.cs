@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
@@ -27,13 +26,12 @@ namespace SmartClinic.API.Controllers
             return Ok(res);
         }
 
-        [HttpGet("register")]
-        [Authorize(Roles = "doctor")]
-        public async Task<IActionResult> Register()
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromForm] RegisterRequestDTO newPatientUser)
         {
-            //var res = await authService.Register(user);
+            var res = await authService.Register(newPatientUser);
 
-            return Ok();
+            return Ok(res);
 
         }
 
