@@ -9,13 +9,9 @@ builder.Services.AddControllers()
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-
 // Add database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
-
 
 // Configure JWT Authentication instead of cookies
 var key = Encoding.ASCII.GetBytes(builder.Configuration["ApiSettings:Secret"] ?? throw new Exception("secret not found"));
@@ -40,7 +36,6 @@ builder.Services.AddInfrastructureDependencies()
     .AddAPIDependencies()
     .AddApplicationDependencies();
 
-
 builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder(
@@ -49,7 +44,16 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
-
+// ? Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -62,16 +66,18 @@ if (app.Environment.IsDevelopment())
                 .WithDefaultHttpClient(ScalarTarget.Shell, ScalarClient.Httpie));
 }
 
-
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
+
+// Use CORS middleware
+app.UseCors("AllowAngularApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-
+// Admin user role setup
 using (var scopeeeee = app.Services.CreateScope())
 {
     var context = scopeeeee.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
@@ -82,13 +88,6 @@ using (var scopeeeee = app.Services.CreateScope())
     {
         context.AddToRoleAsync(user, "admin").GetAwaiter().GetResult();
     }
-
-
-
-
 }
-
-
-
 
 app.Run();
