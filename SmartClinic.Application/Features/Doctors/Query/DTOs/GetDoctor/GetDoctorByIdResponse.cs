@@ -10,12 +10,14 @@ namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor
     public record GetDoctorByIdResponse(
     [Required] string FirstName,
     [Required] string LastName,
-    [Required] string PhoneNumber,
     [EmailAddress] string Email,
+    [Required] string PhoneNumber,
     [Required] DateOnly BirthDate,
     [Required] string Address,
     string? Description,
     int? WaitingTime,
-    [Required] List<int> Specializations
+    string? ProfileImage,
+    int? SlotDuration
+// [Required] List<int> Specializations
 );
 }

@@ -52,23 +52,21 @@ namespace SmartClinic.Application.Features.Doctors.Mapper
                 Address: doctor.User.Address,
                 Description: doctor.Description,
                 WaitingTime: doctor.WaitingTime,
-                Specializations: doctor.Specializations.Select(s => s.Id).ToList()
+                ProfileImage: doctor.User.ProfileImage,
+                SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration
             );
+
         }
 
         public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)
         {
             return new GetAllDoctorsResponse(
-                Id: doctor.Id,
                 FirstName: doctor.User.FirstName,
                 LastName: doctor.User.LastName,
-                PhoneNumber: doctor.User.PhoneNumber,
-                Email: doctor.User.Email,
-                Specializations: doctor.Specializations.Select(s => s.Id).ToList()
+                ProfileImage: doctor.User.ProfileImage,
+                Specializations: doctor.Specializations.Select(s => s.Name).ToList()
             );
         }
-
-
     }
 }
 
