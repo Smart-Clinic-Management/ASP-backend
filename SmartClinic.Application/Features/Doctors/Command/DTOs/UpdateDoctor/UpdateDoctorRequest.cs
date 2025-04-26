@@ -1,25 +1,16 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor
-{
-    public class UpdateDoctorRequest
-    {
-        public int SpecializationId { get; set; }
+namespace SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor;
+public record UpdateDoctorRequest(
+  [Required] string FirstName,
+    string LastName,
+   [Required] string PhoneNumber,
+   [EmailAddress] string Email,
+   [DataType(DataType.Password)] string Password,
+    DateOnly BirthDate,
+   [Required] string Address,
+    string? Description,
+    int? WaitingTime,
+   [Required] List<int> Specializations
+    );
 
-        public string? Description { get; set; }
-
-        public int? WaitingTime { get; set; }
-
-        public string? Address { get; set; }
-
-        public DateOnly BirthDate { get; set; }
-
-        public string? FirstName { get; set; }
-
-        public string? LastName { get; set; }
-
-        public string? UserEmail { get; set; }
-
-        public string? UserPhoneNumber { get; set; }
-    }
-}

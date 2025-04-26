@@ -14,7 +14,7 @@ public interface IGenericRepository<T>
     void Update(T entity);
 
     void Delete(T entity);
-
+  
     Task<IEnumerable<T>> ListAllAsync(Expression<Func<T, bool>>? criteria = null,
         int pageSize = 20, int pageIndex = 1, bool withTracking = true,
         params string[] includes);
