@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor
 {
     public record GetDoctorByIdResponse(
-    [Required] string FirstName,
-    [Required] string LastName,
-    [EmailAddress] string Email,
-    [Required] string PhoneNumber,
-    [Required] DateOnly BirthDate,
-    [Required] string Address,
-    string? Description,
-    int? WaitingTime,
-    string? ProfileImage,
-    int? SlotDuration
-// [Required] List<int> Specializations
-);
+        [Required] string firstName,
+        [Required] string lastName,
+        [EmailAddress] string userEmail,
+        [Required] string userPhoneNumber,
+        [Required] DateOnly birthDate,
+        [Required] string address,
+        string? description,
+        int? waitingTime,
+        string? image,
+        int? SlotDuration
+    );
 }

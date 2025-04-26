@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors
 {
     public record GetAllDoctorsResponse(
-     [Required] string FirstName,
-    [Required] string LastName,
-    string? ProfileImage,
+     [Required] string firstName,
+    [Required] string lastName,
+    string? image,
    [Required] List<string> Specializations
  );
 }
