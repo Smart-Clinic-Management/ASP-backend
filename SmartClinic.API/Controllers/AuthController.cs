@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
@@ -32,7 +33,16 @@ namespace SmartClinic.API.Controllers
             var res = await authService.Register(newPatientUser);
 
             return Ok(res);
+        }
 
+        [HttpGet("GetProfileImg")]
+        [Authorize]
+        public async Task<IActionResult> GetProfileImg()
+        {
+            var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            var result = await authService.GetProfileImg(id!);
+
+            return Ok(result);
         }
 
     }

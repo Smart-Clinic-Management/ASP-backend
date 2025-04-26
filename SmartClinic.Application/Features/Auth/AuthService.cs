@@ -1,13 +1,14 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Auth;
-using SmartClinic.Application.Bases;
+using SmartClinic.Application.Features.Auth.Command;
+using SmartClinic.Application.Services.FileHandlerService;
+using SmartClinic.Application.Services.FileHandlerService.Command;
 using SmartClinic.Domain.DTOs.Auth;
-using SmartClinic.Domain.Entities;
 
 namespace SmartClinic.Application.Features.Auth
 {
@@ -17,13 +18,19 @@ namespace SmartClinic.Application.Features.Auth
         private readonly UserManager<AppUser> userMGR;
         private readonly SignInManager<AppUser> signMGR;
         private readonly ResponseHandler response;
+        private readonly IUnitOfWork uof;
+        private readonly FileHandler fileHandler;
+        private readonly IHttpContextAccessor httpContext;
 
-        public AuthService(IConfiguration configuration, UserManager<AppUser> userMGR, SignInManager<AppUser> signMGR, ResponseHandler response)
+        public AuthService(IConfiguration configuration, UserManager<AppUser> userMGR, SignInManager<AppUser> signMGR, ResponseHandler response, IUnitOfWork uof, FileHandler fileHandler, IHttpContextAccessor request)
         {
             this.configuration = configuration;
             this.userMGR = userMGR;
             this.signMGR = signMGR;
             this.response = response;
+            this.uof = uof;
+            this.fileHandler = fileHandler;
+            this.httpContext = request;
         }
 
         public async Task<string> GenerateJWT(AppUser user)
@@ -61,8 +68,8 @@ namespace SmartClinic.Application.Features.Auth
 
         public async Task<Response<LoginResponseDTO>> Login(LoginRequestDTO user)
         {
-            var userExist = await userMGR.FindByEmailAsync(user.Email);
 
+            var userExist = await userMGR.FindByEmailAsync(user.Email);
             if (userExist == null)
                 return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
 
@@ -72,14 +79,31 @@ namespace SmartClinic.Application.Features.Auth
                 return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
 
 
-            var res = response.Success(new LoginResponseDTO() { Token = await GenerateJWT(userExist) });
+            var res = response.Success(new LoginResponseDTO() { Token = await GenerateJWT(userExist) }, message: "success");
 
             return res!;
         }
 
         public async Task<Response<RegisterResponseDTO>> Register(RegisterRequestDTO newPatientUser)
         {
+            /////////////////////
 
+            var fileResult = new FileValidationResult();
+            if (newPatientUser.Image != null)
+            {
+                var validationsOptions = new FileValidation
+                {
+                    MaxSize = 2 * 1024 * 1024,
+                    AllowedExtenstions = [".jpg", ".jpeg", ".png"]
+                };
+                fileResult = await fileHandler.HanldeFile(newPatientUser.Image, validationsOptions);
+                if (!fileResult.Success)
+                {
+                    return response.BadRequest<RegisterResponseDTO>(errors: [fileResult.Error]);
+                }
+            }
+
+            ////////////////////
 
             var user = new AppUser()
             {
@@ -87,8 +111,10 @@ namespace SmartClinic.Application.Features.Auth
                 Email = newPatientUser.Email,
                 FirstName = newPatientUser.Firstname,
                 Address = newPatientUser.Address,
+                ProfileImage = fileResult.RelativeFilePath,
+                Patient = new Patient(),
             };
-
+            //////////////////
 
             var result = await userMGR.CreateAsync(user, newPatientUser.Password);
 
@@ -97,7 +123,7 @@ namespace SmartClinic.Application.Features.Auth
                 var errors = result.Errors.Select(e => e.Description).ToList();
                 return response.BadRequest<RegisterResponseDTO>(errors)!;
             }
-
+            /////////////////
             var role = await userMGR.AddToRoleAsync(user, "patient");
 
             if (!role.Succeeded)
@@ -105,39 +131,11 @@ namespace SmartClinic.Application.Features.Auth
                 var errors = role.Errors.Select(e => e.Description).ToList();
                 return response.BadRequest<RegisterResponseDTO>(errors)!;
             }
-
-
-            if (newPatientUser.Image != null)
+            if (fileResult.Success)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-
-                var fileName = Path.GetFileName(newPatientUser.Image.FileName);
-                var fileEx = Path.GetExtension(fileName);
-
-                var fileExtension = Path.GetExtension(newPatientUser.Image.FileName).ToLower();
-                if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(fileExtension))
-                {
-                    return response.BadRequest<RegisterResponseDTO>(["Invalid image file type. Only .jpg, .jpeg, .png are allowed."]);
-                }
-
-
-                var filePath = Path.Combine(uploadsFolder, $"{Guid.NewGuid()}{fileEx}");
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await newPatientUser.Image.CopyToAsync(stream);
-                }
-
-                user.ProfileImage = filePath;
+                await fileHandler.SaveFile(newPatientUser.Image!, fileResult.FullFilePath!);
             }
-
-            await userMGR.UpdateAsync(user);
+            ////////////////
 
             var res = response.Success(new RegisterResponseDTO()
             {
@@ -147,5 +145,32 @@ namespace SmartClinic.Application.Features.Auth
 
             return res!;
         }
+
+        private string GetImgUrl(string? path)
+        {
+            if (path == null) return null!;
+            var request = httpContext.HttpContext?.Request;
+            return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
+        }
+
+        public async Task<Response<ImgResponse>> GetProfileImg(string email)
+        {
+            var user = await userMGR.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return response.BadRequest<ImgResponse>(["invalid login attemps"])!;
+            }
+
+
+
+            return response.Success(new ImgResponse()
+            {
+                profileImg = GetImgUrl(user.ProfileImage!)
+            }, message: "success");
+
+        }
+
+
     }
 }

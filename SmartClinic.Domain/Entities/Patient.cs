@@ -10,11 +10,11 @@ public class Patient : BaseEntity
 
     public bool IsActive { get; set; } = true;
 
-    public required string UserId { get; set; }
+    public string UserId { get; set; }
 
     [ForeignKey(nameof(UserId))]
     public AppUser User { get; set; } = null!;
 
-    public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+    public ICollection<Appointment> Appointments { get; set; } = [];
 
 }
