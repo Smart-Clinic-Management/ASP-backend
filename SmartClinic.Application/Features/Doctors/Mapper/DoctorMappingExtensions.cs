@@ -1,33 +1,72 @@
-﻿
+﻿using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
+using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
+
 namespace SmartClinic.Application.Features.Doctors.Mapper
 {
     public static class DoctorMappingExtensions
     {
-        public static Doctor ToDoctor(this CreateDoctorRequest request, string userId)
+        public static Doctor UpdateDoctorWithRequest(this Doctor doctor, UpdateDoctorRequest request, string userId)
         {
-            return new Doctor
-            {
-                Description = request.Description,
-                WaitingTime = request.WaitingTime,
-                UserId = userId,
-                Specializations = new List<Specialization>()
-            };
+            doctor.User.FirstName = request.FirstName;
+            doctor.User.LastName = request.LastName;
+            doctor.User.PhoneNumber = request.PhoneNumber;
+            doctor.User.Email = request.Email;
+            doctor.User.BirthDate = request.BirthDate;
+            doctor.User.Address = request.Address;
+            doctor.Description = request.Description;
+            doctor.WaitingTime = request.WaitingTime;
+
+            doctor.UserId = userId;
+            doctor.Specializations.Clear();
+            //    doctor.Specializations.AddRange(request.Specializations.Select(id => new Specialization { Id = id }));
+            return doctor;
         }
 
-        public static void UpdateDoctorFromRequest(this Doctor doctor, UpdateDoctorRequest request)
+
+        public static UpdateDoctorResponse ToUpdateDoctorResponse(this Doctor doctor)
         {
-            doctor.Description = request.Description ?? doctor.Description;
-            doctor.WaitingTime = request.WaitingTime ?? doctor.WaitingTime;
+            return new UpdateDoctorResponse(
+                FirstName: doctor.User.FirstName,
+                LastName: doctor.User.LastName,
+                PhoneNumber: doctor.User.PhoneNumber,
+                Email: doctor.User.Email,
+                BirthDate: doctor.User.BirthDate,
+                Address: doctor.User.Address,
+                Description: doctor.Description,
+                WaitingTime: doctor.WaitingTime,
+                Specializations: doctor.Specializations.Select(s => s.Id).ToList()
+            );
+        }
+    
 
-            if (doctor.User != null)
-            {
-                doctor.User.FirstName = request.FirstName ?? doctor.User.FirstName;
-                doctor.User.LastName = request.LastName ?? doctor.User.LastName;
-                doctor.User.Email = request.UserEmail ?? doctor.User.Email;
-                doctor.User.PhoneNumber = request.UserPhoneNumber ?? doctor.User.PhoneNumber;
-                doctor.User.Address = request.Address ?? doctor.User.Address;
-            }
 
+
+      public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
+        {
+            return new GetDoctorByIdResponse(
+                FirstName: doctor.User.FirstName,
+                LastName: doctor.User.LastName,
+                PhoneNumber: doctor.User.PhoneNumber,
+                Email: doctor.User.Email,
+                BirthDate: doctor.User.BirthDate,
+                Address: doctor.User.Address,
+                Description: doctor.Description,
+                WaitingTime: doctor.WaitingTime,
+                ProfileImage: doctor.User.ProfileImage,
+                SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration
+            );
+
+        }
+
+        public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)
+        {
+            return new GetAllDoctorsResponse(
+                FirstName: doctor.User.FirstName,
+                LastName: doctor.User.LastName,
+                ProfileImage: doctor.User.ProfileImage,
+                Specializations: doctor.Specializations.Select(s => s.Name).ToList()
+            );
         }
     }
 }
+

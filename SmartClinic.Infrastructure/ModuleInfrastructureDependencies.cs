@@ -8,6 +8,8 @@ public static class ModuleInfrastructureDependencies
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        services.AddScoped<IPatient, PatientRepo>();
+
         services.AddScoped<IDoctorRepository, DoctorRepository>();
         services.AddScoped<ISpecializaionRepository,SpecializationRepository >();
 
