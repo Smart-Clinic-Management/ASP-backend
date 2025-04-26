@@ -37,36 +37,36 @@ namespace SmartClinic.Application.Features.Doctors.Mapper
                 Specializations: doctor.Specializations.Select(s => s.Id).ToList()
             );
         }
-    
 
 
 
-      public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
+        public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
         {
             return new GetDoctorByIdResponse(
-                FirstName: doctor.User.FirstName,
-                LastName: doctor.User.LastName,
-                PhoneNumber: doctor.User.PhoneNumber,
-                Email: doctor.User.Email,
-                BirthDate: doctor.User.BirthDate,
-                Address: doctor.User.Address,
-                Description: doctor.Description,
-                WaitingTime: doctor.WaitingTime,
-                ProfileImage: doctor.User.ProfileImage,
+                firstName: doctor.User.FirstName,
+                lastName: doctor.User.LastName,
+                userEmail: doctor.User.Email,
+                userPhoneNumber: doctor.User.PhoneNumber,
+                birthDate: doctor.User.BirthDate,
+                address: doctor.User.Address,
+                description: doctor.Description,
+                waitingTime: doctor.WaitingTime,
+                image: doctor.User.ProfileImage,
                 SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration
             );
-
         }
+
 
         public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)
         {
             return new GetAllDoctorsResponse(
-                FirstName: doctor.User.FirstName,
-                LastName: doctor.User.LastName,
-                ProfileImage: doctor.User.ProfileImage,
+                firstName: doctor.User.FirstName,
+                lastName: doctor.User.LastName,
+                image: doctor.User.ProfileImage,
                 Specializations: doctor.Specializations.Select(s => s.Name).ToList()
             );
         }
+
     }
 }
 
