@@ -9,6 +9,7 @@ public static class ModuleInfrastructureDependencies
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IDoctorRepository, DoctorRepository>();
+        services.AddScoped<ISpecializaionRepository,SpecializationRepository >();
 
         return services;
     }
