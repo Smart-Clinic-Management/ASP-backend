@@ -1,5 +1,6 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
+﻿
+
+using Microsoft.AspNetCore.Identity;
 
 namespace SmartClinic.Application.Features.Doctors.Mapper
 {
@@ -7,41 +8,40 @@ namespace SmartClinic.Application.Features.Doctors.Mapper
     {
         public static Doctor UpdateDoctorWithRequest(this Doctor doctor, UpdateDoctorRequest request, string userId)
         {
-            doctor.User.FirstName = request.FirstName;
-            doctor.User.LastName = request.LastName;
-            doctor.User.PhoneNumber = request.PhoneNumber;
+            doctor.User.FirstName = request.Fname;
+            doctor.User.LastName = request.Lname;
             doctor.User.Email = request.Email;
             doctor.User.BirthDate = request.BirthDate;
             doctor.User.Address = request.Address;
             doctor.Description = request.Description;
             doctor.WaitingTime = request.WaitingTime;
 
-            doctor.UserId = userId;
-            doctor.Specializations.Clear();
-            //    doctor.Specializations.AddRange(request.Specializations.Select(id => new Specialization { Id = id }));
             return doctor;
         }
-
 
         public static UpdateDoctorResponse ToUpdateDoctorResponse(this Doctor doctor)
         {
             return new UpdateDoctorResponse(
-                FirstName: doctor.User.FirstName,
-                LastName: doctor.User.LastName,
-                PhoneNumber: doctor.User.PhoneNumber,
+                Fname: doctor.User.FirstName,
+                Lname: doctor.User.LastName,
                 Email: doctor.User.Email,
+                Image: null, 
+                Specialization: doctor.Specializations.Select(s => s.Id).ToList(),
                 BirthDate: doctor.User.BirthDate,
                 Address: doctor.User.Address,
-                Description: doctor.Description,
                 WaitingTime: doctor.WaitingTime,
-                Specializations: doctor.Specializations.Select(s => s.Id).ToList()
+                Description: doctor.Description
             );
         }
     
 
 
+<<<<<<< Updated upstream
 
       public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
+=======
+        public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
+>>>>>>> Stashed changes
         {
             return new GetDoctorByIdResponse(
                 FirstName: doctor.User.FirstName,

@@ -1,7 +1,5 @@
-﻿using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Doctors.Command.DTOs.DeleteDoctor;
-using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
+﻿
+using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.Application.Services.Implementation
 {
@@ -10,15 +8,18 @@ namespace SmartClinic.Application.Services.Implementation
         private readonly IDoctorRepository _doctorRepo;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ISpecializaionRepository _specializationRepo;
 
         public DoctorService(
-            IDoctorRepository doctorRepo,
-            IUnitOfWork unitOfWork,
-            UserManager<AppUser> userManager)
+      IDoctorRepository doctorRepo,
+      IUnitOfWork unitOfWork,
+      UserManager<AppUser> userManager,
+      ISpecializaionRepository specializationRepo)
         {
             _doctorRepo = doctorRepo;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _specializationRepo = specializationRepo;
         }
 
         public async Task<Response<GetDoctorByIdResponse>> GetDoctorByIdAsync(int doctorId)
@@ -80,8 +81,28 @@ namespace SmartClinic.Application.Services.Implementation
             return new ResponseHandler().Success(new SoftDeleteDoctorResponse("Doctor and associated user successfully soft deleted."));
         }
 
+<<<<<<< Updated upstream
 
+=======
+        public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
+        {
+            var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
+            if (doctor is null || !doctor.IsActive)
+                return new ResponseHandler().NotFound<UpdateDoctorResponse>($"No Doctor found with id {doctorId}");
+>>>>>>> Stashed changes
+
+
+<<<<<<< Updated upstream
+    }
+}
+=======
+            await _unitOfWork.SaveChangesAsync();
+
+            var response = doctor.ToUpdateDoctorResponse();
+            return new ResponseHandler().Success(response);
+        }
 
 
     }
 }
+>>>>>>> Stashed changes
