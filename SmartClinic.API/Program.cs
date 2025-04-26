@@ -62,6 +62,7 @@ if (app.Environment.IsDevelopment())
                 .WithDefaultHttpClient(ScalarTarget.Shell, ScalarClient.Httpie));
 }
 
+app.UseStaticFiles();
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
@@ -72,21 +73,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-using (var scopeeeee = app.Services.CreateScope())
-{
-    var context = scopeeeee.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-    var user = context.FindByEmailAsync("admin@admin.com").GetAwaiter().GetResult();
-
-    if (user != null)
-    {
-        context.AddToRoleAsync(user, "admin").GetAwaiter().GetResult();
-    }
-
-
-
-
-}
 
 
 

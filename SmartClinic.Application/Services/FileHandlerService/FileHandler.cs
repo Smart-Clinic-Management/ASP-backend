@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SmartClinic.Application.Features.FileHandlerService.Command;
+using SmartClinic.Application.Services.FileHandlerService.Command;
 
-namespace SmartClinic.Application.Features.FileHandlerService
+namespace SmartClinic.Application.Services.FileHandlerService
 {
     public class FileHandler
     {

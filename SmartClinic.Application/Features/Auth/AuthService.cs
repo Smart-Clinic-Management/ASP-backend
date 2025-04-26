@@ -1,11 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Auth;
-using SmartClinic.Application.Features.FileHandlerService;
-using SmartClinic.Application.Features.FileHandlerService.Command;
+using SmartClinic.Application.Features.Auth.Command;
+using SmartClinic.Application.Services.FileHandlerService;
+using SmartClinic.Application.Services.FileHandlerService.Command;
 using SmartClinic.Domain.DTOs.Auth;
 
 namespace SmartClinic.Application.Features.Auth
@@ -18,8 +20,9 @@ namespace SmartClinic.Application.Features.Auth
         private readonly ResponseHandler response;
         private readonly IUnitOfWork uof;
         private readonly FileHandler fileHandler;
+        private readonly IHttpContextAccessor httpContext;
 
-        public AuthService(IConfiguration configuration, UserManager<AppUser> userMGR, SignInManager<AppUser> signMGR, ResponseHandler response, IUnitOfWork uof, FileHandler fileHandler)
+        public AuthService(IConfiguration configuration, UserManager<AppUser> userMGR, SignInManager<AppUser> signMGR, ResponseHandler response, IUnitOfWork uof, FileHandler fileHandler, IHttpContextAccessor request)
         {
             this.configuration = configuration;
             this.userMGR = userMGR;
@@ -27,6 +30,7 @@ namespace SmartClinic.Application.Features.Auth
             this.response = response;
             this.uof = uof;
             this.fileHandler = fileHandler;
+            this.httpContext = request;
         }
 
         public async Task<string> GenerateJWT(AppUser user)
@@ -141,5 +145,32 @@ namespace SmartClinic.Application.Features.Auth
 
             return res!;
         }
+
+        private string GetImgUrl(string? path)
+        {
+            if (path == null) return null!;
+            var request = httpContext.HttpContext?.Request;
+            return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
+        }
+
+        public async Task<Response<ImgResponse>> GetProfileImg(string email)
+        {
+            var user = await userMGR.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return response.BadRequest<ImgResponse>(["invalid login attemps"])!;
+            }
+
+
+
+            return response.Success(new ImgResponse()
+            {
+                profileImg = GetImgUrl(user.ProfileImage!)
+            }, message: "success");
+
+        }
+
+
     }
 }
