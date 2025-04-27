@@ -1,5 +1,4 @@
-﻿using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Doctors.Command.DTOs.DeleteDoctor;
+﻿using SmartClinic.Application.Features.Doctors.Command.DTOs.DeleteDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
 

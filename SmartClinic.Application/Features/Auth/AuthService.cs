@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Features.Auth.Command;
-using SmartClinic.Application.Services.FileHandlerService.Command;
+using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
 using SmartClinic.Domain.DTOs.Auth;
 
 namespace SmartClinic.Application.Features.Auth
