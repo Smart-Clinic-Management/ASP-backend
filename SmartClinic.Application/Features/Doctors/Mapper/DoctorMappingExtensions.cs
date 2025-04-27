@@ -1,45 +1,10 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
+﻿
 
 namespace SmartClinic.Application.Features.Doctors.Mapper
 {
     public static class DoctorMappingExtensions
     {
-        public static Doctor UpdateDoctorWithRequest(this Doctor doctor, UpdateDoctorRequest request, string userId)
-        {
-            doctor.User.FirstName = request.FirstName;
-            doctor.User.LastName = request.LastName;
-            doctor.User.PhoneNumber = request.PhoneNumber;
-            doctor.User.Email = request.Email;
-            doctor.User.BirthDate = request.BirthDate;
-            doctor.User.Address = request.Address;
-            doctor.Description = request.Description;
-            doctor.WaitingTime = request.WaitingTime;
-
-            doctor.UserId = userId;
-            doctor.Specializations.Clear();
-            //    doctor.Specializations.AddRange(request.Specializations.Select(id => new Specialization { Id = id }));
-            return doctor;
-        }
-
-
-        public static UpdateDoctorResponse ToUpdateDoctorResponse(this Doctor doctor)
-        {
-            return new UpdateDoctorResponse(
-                FirstName: doctor.User.FirstName,
-                LastName: doctor.User.LastName,
-                PhoneNumber: doctor.User.PhoneNumber,
-                Email: doctor.User.Email,
-                BirthDate: doctor.User.BirthDate,
-                Address: doctor.User.Address,
-                Description: doctor.Description,
-                WaitingTime: doctor.WaitingTime,
-                Specializations: doctor.Specializations.Select(s => s.Id).ToList()
-            );
-        }
-
-
-
+        
         public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
         {
             return new GetDoctorByIdResponse(
@@ -66,6 +31,32 @@ namespace SmartClinic.Application.Features.Doctors.Mapper
                 Specializations: doctor.Specializations.Select(s => s.Name).ToList()
             );
         }
+
+        public static UpdateDoctorResponse ToUpdateDoctorResponse(this Doctor doctor, IHttpContextAccessor _httpContextAccessor)
+        {
+            return new UpdateDoctorResponse(
+                Fname: doctor.User.FirstName,
+                Lname: doctor.User.LastName,
+                Email: doctor.User.Email,
+                Image: doctor.User.ProfileImage != null ? GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor) : null,
+                Specialization: doctor.Specializations.Select(s => s.Id).ToList(),
+                BirthDate: doctor.User.BirthDate,
+                Address: doctor.User.Address,
+                WaitingTime: doctor.WaitingTime,
+                Description: doctor.Description
+            );
+        }
+
+
+        public static string GetImgUrl(string? path, IHttpContextAccessor _httpContextAccessor)
+        {
+            if (path == null) return null!;
+
+            var request = _httpContextAccessor.HttpContext?.Request;
+            return $"{request!.Scheme}://{request.Host}/{path.Replace("\\", "/")}";
+        }
+
+
 
     }
 }

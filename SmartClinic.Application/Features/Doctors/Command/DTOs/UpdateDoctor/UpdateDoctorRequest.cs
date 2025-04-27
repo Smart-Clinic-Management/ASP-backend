@@ -1,16 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor;
 public record UpdateDoctorRequest(
-  [Required] string FirstName,
-    string LastName,
-   [Required] string PhoneNumber,
-   [EmailAddress] string Email,
-   [DataType(DataType.Password)] string Password,
-    DateOnly BirthDate,
-   [Required] string Address,
-    string? Description,
+    string? Fname,
+    string? Lname,
+    [EmailAddress] string? Email,
+    IFormFile? Image,
+    List<int>? Specialization,
+    DateOnly? BirthDate,
+    string? Address,
     int? WaitingTime,
-   [Required] List<int> Specializations
-    );
+    string? Description
+);
+
+
 

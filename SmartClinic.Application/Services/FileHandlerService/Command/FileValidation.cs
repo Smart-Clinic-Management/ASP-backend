@@ -5,6 +5,6 @@
         public required int MaxSize { get; set; }
 
         public required IList<string> AllowedExtenstions { get; set; } = [];
-
+        public string[] AllowedExtensions { get; internal set; }
     }
 }
