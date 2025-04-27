@@ -1,10 +1,8 @@
-﻿
-
-namespace SmartClinic.Application.Features.Doctors.Mapper
+﻿namespace SmartClinic.Application.Features.Doctors.Mapper
 {
     public static class DoctorMappingExtensions
     {
-        
+   
         public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
         {
             return new GetDoctorByIdResponse(
@@ -20,7 +18,6 @@ namespace SmartClinic.Application.Features.Doctors.Mapper
                 SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration
             );
         }
-
 
         public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)
         {
@@ -46,8 +43,6 @@ namespace SmartClinic.Application.Features.Doctors.Mapper
                 Description: doctor.Description
             );
         }
-
-
         public static string GetImgUrl(string? path, IHttpContextAccessor _httpContextAccessor)
         {
             if (path == null) return null!;
@@ -56,8 +51,31 @@ namespace SmartClinic.Application.Features.Doctors.Mapper
             return $"{request!.Scheme}://{request.Host}/{path.Replace("\\", "/")}";
         }
 
+        public static async Task<FileValidationResult> ValidateAndSaveFileAsync(IFormFile file, FileValidation validationOptions, IFileHandlerService fileHandler)
+        {
+            var fileResult = await fileHandler.HanldeFile(file, validationOptions);
+            if (!fileResult.Success)
+            {
+                return fileResult;
+            }
 
+            await fileHandler.SaveFile(file, fileResult.FullFilePath);
+            return fileResult;
+        }
 
+        public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializationService specializationService, List<int> specializationIds)
+        {
+            if (specializationIds != null && specializationIds.Any())
+            {
+                foreach (var specializationId in specializationIds)
+                {
+                    var specializationResponse = await specializationService.GetSpecializationByIdAsync(specializationId);
+                    if (specializationResponse?.Data != null)
+                    {
+                        doctor.Specializations.Add(specializationResponse.Data);
+                    }
+                }
+            }
+        }
     }
 }
-
