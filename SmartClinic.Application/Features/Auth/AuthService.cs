@@ -146,12 +146,6 @@ namespace SmartClinic.Application.Features.Auth
             return res!;
         }
 
-        private string GetImgUrl(string? path)
-        {
-            if (path == null) return null!;
-            var request = httpContext.HttpContext?.Request;
-            return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
-        }
 
         public async Task<Response<ImgResponse>> GetProfileImg(string email)
         {
@@ -162,11 +156,9 @@ namespace SmartClinic.Application.Features.Auth
                 return response.BadRequest<ImgResponse>(["invalid login attemps"])!;
             }
 
-
-
             return response.Success(new ImgResponse()
             {
-                profileImg = GetImgUrl(user.ProfileImage!)
+                profileImg = fileHandler.GetFileURL(user.ProfileImage!)
             }, message: "success");
 
         }

@@ -5,6 +5,12 @@ namespace SmartClinic.Application.Services.FileHandlerService
 {
     public class FileHandler
     {
+        private readonly IHttpContextAccessor httpContext;
+
+        public FileHandler(IHttpContextAccessor httpContext)
+        {
+            this.httpContext = httpContext;
+        }
 
         public async Task<FileValidationResult> HanldeFile(IFormFile file, FileValidation options)
         {
@@ -48,5 +54,15 @@ namespace SmartClinic.Application.Services.FileHandlerService
                 await file.CopyToAsync(stream);
             }
         }
+
+        public string GetFileURL(string path)
+        {
+
+            if (path == null) return null!;
+            var request = httpContext.HttpContext?.Request;
+            return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
+        }
+
+
     }
 }
