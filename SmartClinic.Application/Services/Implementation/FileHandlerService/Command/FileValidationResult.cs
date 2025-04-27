@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Services.FileHandlerService.Command
+﻿namespace SmartClinic.Application.Services.Implementation.FileHandlerService.Command
 {
     public class FileValidationResult
     {

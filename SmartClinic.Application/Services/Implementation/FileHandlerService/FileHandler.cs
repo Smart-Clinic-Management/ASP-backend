@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SmartClinic.Application.Services.FileHandlerService.Command;
+using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
 
-namespace SmartClinic.Application.Services.FileHandlerService
+namespace SmartClinic.Application.Services.Implementation.FileHandlerService
 {
-    public class FileHandler
+    public class FileHandler : IFileHandlerService
     {
         private readonly IHttpContextAccessor httpContext;
 
@@ -57,7 +57,6 @@ namespace SmartClinic.Application.Services.FileHandlerService
 
         public string GetFileURL(string path)
         {
-
             if (path == null) return null!;
             var request = httpContext.HttpContext?.Request;
             return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
