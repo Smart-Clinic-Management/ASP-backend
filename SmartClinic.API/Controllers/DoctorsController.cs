@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartClinic.Application.Features.Doctors.Command.DTOs.CreateDoctor;
 using SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
 using SmartClinic.Application.Services.Interfaces;
@@ -22,12 +23,11 @@ namespace SmartClinic.API.Controllers
             return Ok(await _doctorService.GetDoctorByIdAsync(id));
         }
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdateDoctor(int id, [FromBody] UpdateDoctorRequest request)
+        public async Task<IActionResult> UpdateDoctor(int id, [FromForm] UpdateDoctorRequest request)
         {
             var response = await _doctorService.UpdateDoctorAsync(id, request);
             return Ok(response);
         }
-
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllDoctors(int pageSize = 20, int pageIndex = 1)
@@ -40,5 +40,12 @@ namespace SmartClinic.API.Controllers
         {
             return Ok(await _doctorService.SoftDeleteDoctorAsync(id));
         }
+        [HttpPost("Create")]
+        public async Task<IActionResult> CreateDoctor([FromForm] CreateDoctorRequest request)
+        {
+            return Ok(await _doctorService.CreateDoctor(request));
+        }
+
+
     }
 }
