@@ -69,7 +69,7 @@ namespace SmartClinic.API.Controllers
             return Ok(res);
         }
 
-        [HttpPost("Update_Profile")]
+        [HttpPost("Update_ProfileImg")]
         [Authorize]
         public async Task<IActionResult> UpdateProfile([FromForm] ImgUpdateRequest file)
         {
