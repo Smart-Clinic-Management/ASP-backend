@@ -15,7 +15,7 @@ public class DoctorRepository(ApplicationDbContext context)
 
     public Task<Doctor?> GetByIdWithIncludesAsync(int id)
         => base.GetSingleAsync(x => x.Id == id && x.IsActive, true,
-          nameof(Doctor.User), nameof(Doctor.Specializations));
+          nameof(Doctor.User), nameof(Doctor.Specializations), nameof(Doctor.DoctorSchedules));
 
     public Task<Doctor?> GetByIdWithIncludesNoTrackingAsync(int id)
         => base.GetSingleAsync(x => x.Id == id && x.IsActive, false,

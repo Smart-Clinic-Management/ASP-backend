@@ -71,7 +71,7 @@ app.UseStaticFiles();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
-// Use CORS middleware
+
 app.UseCors("AllowAngularApp");
 
 app.UseAuthentication();
