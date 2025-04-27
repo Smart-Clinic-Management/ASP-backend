@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
+using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers
 {
@@ -12,11 +13,13 @@ namespace SmartClinic.API.Controllers
     {
         private readonly ResponseHandler response;
         private readonly IAuthService authService;
+        private readonly IProfileService profileService;
 
-        public AuthController(ResponseHandler _response, IAuthService _authService)
+        public AuthController(ResponseHandler _response, IAuthService _authService, IProfileService profileService)
         {
             response = _response;
             authService = _authService;
+            this.profileService = profileService;
         }
 
         [HttpPost("login")]
@@ -43,6 +46,18 @@ namespace SmartClinic.API.Controllers
             var result = await authService.GetProfileImg(id!);
 
             return Ok(result);
+        }
+
+        [HttpGet("profile")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile()
+        {
+            var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+
+            var res = await profileService.GetProfile(id!);
+            return Ok(res);
+
+
         }
 
     }
