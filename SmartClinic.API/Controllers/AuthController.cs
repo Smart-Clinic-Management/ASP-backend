@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
+using SmartClinic.Application.Features.Profile.Command;
 using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers
@@ -56,8 +57,26 @@ namespace SmartClinic.API.Controllers
 
             var res = await profileService.GetProfile(id!);
             return Ok(res);
+        }
 
+        [HttpDelete("remove_profileImg")]
+        [Authorize]
+        public async Task<IActionResult> RemoveProfileImg()
+        {
+            var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
 
+            var res = await profileService.RemoveImg(id!);
+            return Ok(res);
+        }
+
+        [HttpPost("Update_Profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromForm] ImgUpdateRequest file)
+        {
+            var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+
+            var res = await profileService.UpdateProfileImg(file, id);
+            return Ok(res);
         }
 
     }

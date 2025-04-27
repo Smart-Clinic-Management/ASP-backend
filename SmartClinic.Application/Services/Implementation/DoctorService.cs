@@ -1,4 +1,6 @@
 ﻿
+using SmartClinic.Application.Features.Doctors.Command.DTOs.CreateDoctor;
+
 public class DoctorService : IDoctorService
 {
     private readonly IDoctorRepository _doctorRepo;

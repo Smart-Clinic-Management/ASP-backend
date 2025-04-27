@@ -37,9 +37,9 @@ public class ResponseHandler
         };
     }
 
-    public Response<T> NotFound<T>(string? message = null)
+    public Response<T?> NotFound<T>(string? message = null)
     {
-        return new Response<T>()
+        return new Response<T?>()
         {
             StatusCode = System.Net.HttpStatusCode.NotFound,
             Message = message ?? "Not Found"

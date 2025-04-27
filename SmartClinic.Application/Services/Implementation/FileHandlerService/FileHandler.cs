@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
-
-namespace SmartClinic.Application.Services.Implementation.FileHandlerService
+﻿namespace SmartClinic.Application.Services.Implementation.FileHandlerService
 {
     public class FileHandler : IFileHandlerService
     {
@@ -62,6 +59,13 @@ namespace SmartClinic.Application.Services.Implementation.FileHandlerService
             return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
         }
 
-
+        public async Task<bool> RemoveImg(string path)
+        {
+            if (path == null)
+                return false;
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", path);
+            System.IO.File.Delete(filePath);
+            return true;
+        }
     }
 }

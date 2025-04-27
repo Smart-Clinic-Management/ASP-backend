@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
-
-namespace SmartClinic.Application.Services.Interfaces
+﻿namespace SmartClinic.Application.Services.Interfaces
 {
     public interface IFileHandlerService
     {
@@ -10,5 +7,7 @@ namespace SmartClinic.Application.Services.Interfaces
         Task SaveFile(IFormFile file, string path);
 
         string GetFileURL(string filePath);
+
+        Task<bool> RemoveImg(string path);
     }
 }
