@@ -1,10 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SmartClinic.Application.Services.FileHandlerService.Command;
+using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
 
-namespace SmartClinic.Application.Services.FileHandlerService
+namespace SmartClinic.Application.Services.Implementation.FileHandlerService
 {
-    public class FileHandler
+    public class FileHandler : IFileHandlerService
     {
+        private readonly IHttpContextAccessor httpContext;
+
+        public FileHandler(IHttpContextAccessor httpContext)
+        {
+            this.httpContext = httpContext;
+        }
 
         public async Task<FileValidationResult> HanldeFile(IFormFile file, FileValidation options)
         {
@@ -48,5 +54,14 @@ namespace SmartClinic.Application.Services.FileHandlerService
                 await file.CopyToAsync(stream);
             }
         }
+
+        public string GetFileURL(string path)
+        {
+            if (path == null) return null!;
+            var request = httpContext.HttpContext?.Request;
+            return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
+        }
+
+
     }
 }

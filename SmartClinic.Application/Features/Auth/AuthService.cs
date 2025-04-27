@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Features.Auth.Command;
-using SmartClinic.Application.Services.FileHandlerService;
 using SmartClinic.Application.Services.FileHandlerService.Command;
 using SmartClinic.Domain.DTOs.Auth;
 
@@ -19,10 +18,10 @@ namespace SmartClinic.Application.Features.Auth
         private readonly SignInManager<AppUser> signMGR;
         private readonly ResponseHandler response;
         private readonly IUnitOfWork uof;
-        private readonly FileHandler fileHandler;
+        private readonly IFileHandlerService fileHandler;
         private readonly IHttpContextAccessor httpContext;
 
-        public AuthService(IConfiguration configuration, UserManager<AppUser> userMGR, SignInManager<AppUser> signMGR, ResponseHandler response, IUnitOfWork uof, FileHandler fileHandler, IHttpContextAccessor request)
+        public AuthService(IConfiguration configuration, UserManager<AppUser> userMGR, SignInManager<AppUser> signMGR, ResponseHandler response, IUnitOfWork uof, IFileHandlerService fileHandler, IHttpContextAccessor request)
         {
             this.configuration = configuration;
             this.userMGR = userMGR;
@@ -146,12 +145,6 @@ namespace SmartClinic.Application.Features.Auth
             return res!;
         }
 
-        private string GetImgUrl(string? path)
-        {
-            if (path == null) return null!;
-            var request = httpContext.HttpContext?.Request;
-            return $"{request!.Scheme}://{request!.Host}/{path.Replace("\\", "/")}";
-        }
 
         public async Task<Response<ImgResponse>> GetProfileImg(string email)
         {
@@ -162,11 +155,9 @@ namespace SmartClinic.Application.Features.Auth
                 return response.BadRequest<ImgResponse>(["invalid login attemps"])!;
             }
 
-
-
             return response.Success(new ImgResponse()
             {
-                profileImg = GetImgUrl(user.ProfileImage!)
+                profileImg = fileHandler.GetFileURL(user.ProfileImage!)
             }, message: "success");
 
         }
