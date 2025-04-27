@@ -5,8 +5,8 @@ using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class DoctorsController : ControllerBase
     {
         private readonly IDoctorService _doctorService;
@@ -19,45 +19,26 @@ namespace SmartClinic.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _doctorService.GetDoctorByIdAsync(id);
-            if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return NotFound(result.Message);  
-            }
-            return Ok(result.Data);
+            return Ok(await _doctorService.GetDoctorByIdAsync(id));
         }
-
-    
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateDoctor(int id, [FromBody] UpdateDoctorRequest request)
         {
-            var result = await _doctorService.UpdateDoctorAsync(id, request);
-
-            return StatusCode((int)result.StatusCode, result); 
+            var response = await _doctorService.UpdateDoctorAsync(id, request);
+            return Ok(response);
         }
 
-       
-        [HttpGet]
+
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllDoctors(int pageSize = 20, int pageIndex = 1)
         {
-            var result = await _doctorService.GetAllDoctorsAsync(pageSize, pageIndex);
-            if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return NotFound(result.Message); 
-            }
-            return Ok(result.Data); 
+            return Ok(await _doctorService.GetAllDoctorsAsync());
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> SoftDeleteDoctor(int id)
         {
-            var result = await _doctorService.SoftDeleteDoctorAsync(id);
-            if (result.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return NotFound(result.Message);  
-            }
-            return Ok(result.Data);  
+            return Ok(await _doctorService.SoftDeleteDoctorAsync(id));
         }
     }
 }

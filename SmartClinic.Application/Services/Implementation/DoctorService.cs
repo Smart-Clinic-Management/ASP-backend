@@ -38,23 +38,6 @@ namespace SmartClinic.Application.Services.Implementation
             return new ResponseHandler().Success(response);
         }
 
-        public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
-        {
-            var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
-            if (doctor is null)
-                return new ResponseHandler().NotFound<UpdateDoctorResponse>($"No Doctor found with id {doctorId}");
-
-            doctor.UpdateDoctorWithRequest(request, doctor.UserId);
-
-            // var specializations = await _specializationRepo.GetByIdsAsync(request.Specializations);
-            // doctor.Specializations.Clear();
-            // doctor.Specializations.AddRange(specializations);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            var response = doctor.ToUpdateDoctorResponse();
-            return new ResponseHandler().Success(response);
-        }
 
         public async Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId)
         {
@@ -80,7 +63,26 @@ namespace SmartClinic.Application.Services.Implementation
         }
 
 
+   public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
+        {
+            var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
+            if (doctor is null || !doctor.IsActive)
+                return new ResponseHandler().NotFound<UpdateDoctorResponse>($"No Doctor found with id {doctorId}");
 
+            doctor.UpdateDoctorWithRequest(request, doctor.UserId);
+
+            //if (request.Specializations != null && request.Specializations.Any())
+            //{
+            //    var specializations = await _specializationRepo.GetByIdsAsync(request.Specializations);
+            //    doctor.Specializations.Clear();
+            //    doctor.Specializations.AddRange(specializations);
+            //}
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var response = doctor.ToUpdateDoctorResponse();
+            return new ResponseHandler().Success(response);
+        }
+    }
 
     }
-}
