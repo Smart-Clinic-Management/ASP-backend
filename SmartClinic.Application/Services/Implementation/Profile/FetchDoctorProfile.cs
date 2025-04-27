@@ -1,4 +1,4 @@
-﻿using SmartClinic.Application.Features.Profile.Query;
+﻿using SmartClinic.Application.Features.Profile.Command;
 
 namespace SmartClinic.Application.Services.Implementation.Profile
 {

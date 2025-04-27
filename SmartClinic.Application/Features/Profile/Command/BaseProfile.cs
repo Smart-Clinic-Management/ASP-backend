@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Features.Profile.Query
+﻿namespace SmartClinic.Application.Features.Profile.Command
 {
     public class BaseProfile
     {
