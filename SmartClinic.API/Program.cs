@@ -13,27 +13,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configure JWT Authentication instead of cookies
-var key = Encoding.ASCII.GetBytes(builder.Configuration["ApiSettings:Secret"] ?? throw new Exception("secret not found"));
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ClockSkew = TimeSpan.FromDays(7)
-    };
-});
 
 builder.Services.AddInfrastructureDependencies()
-    .AddAPIDependencies()
+    .AddAPIDependencies(builder.Configuration)
     .AddApplicationDependencies();
 
 var app = builder.Build();

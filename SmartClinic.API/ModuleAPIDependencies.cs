@@ -1,7 +1,7 @@
 ﻿namespace SmartClinic.API;
 public static class ModuleAPIDependencies
 {
-    public static IServiceCollection AddAPIDependencies(this IServiceCollection services)
+    public static IServiceCollection AddAPIDependencies(this IServiceCollection services, IConfiguration configuration)
     {
 
         services
@@ -45,6 +45,27 @@ public static class ModuleAPIDependencies
                       .AllowAnyHeader()
                       .AllowAnyMethod();
             });
+        });
+
+
+        // Configure JWT Authentication instead of cookies
+
+        var key = Encoding.ASCII.GetBytes(configuration["ApiSettings:Secret"] ?? throw new Exception("secret not found"));
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.FromDays(7)
+            };
         });
 
         return services;
