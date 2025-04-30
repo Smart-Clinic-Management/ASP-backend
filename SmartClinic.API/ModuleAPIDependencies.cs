@@ -27,6 +27,26 @@ public static class ModuleAPIDependencies
 
         services.AddScoped<SignInManager<AppUser>>();
 
+
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder(
+                    JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+
+        // ? Add CORS policy
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngularApp", policy =>
+            {
+                policy.WithOrigins("http://localhost:4200")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
+
         return services;
     }
 }
