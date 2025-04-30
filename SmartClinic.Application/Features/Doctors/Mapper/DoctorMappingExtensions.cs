@@ -15,13 +15,15 @@
                 description: doctor.Description,
                 waitingTime: doctor.WaitingTime,
                 image: doctor.User.ProfileImage,
-                SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration
+                SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration,
+                 Specializations: doctor.Specializations.Select(s => s.Name).ToList()
             );
         }
 
         public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)
         {
             return new GetAllDoctorsResponse(
+                    Id: doctor.Id,
                 firstName: doctor.User.FirstName,
                 lastName: doctor.User.LastName,
                 image: doctor.User.ProfileImage,
