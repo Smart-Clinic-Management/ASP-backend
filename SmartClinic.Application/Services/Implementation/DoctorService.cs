@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SmartClinic.Application.Features.Doctors.Mapper;
 using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
 
 namespace SmartClinic.Application.Services.Implementation
@@ -11,9 +12,12 @@ namespace SmartClinic.Application.Services.Implementation
         private readonly IFileHandlerService _fileHandler;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISpecializationService _specializationService;
+        private readonly ISpecializaionRepository _specialRepo;
+
 
         public DoctorService(
             IDoctorRepository doctorRepo,
+            ISpecializaionRepository specialRepo,
             IUnitOfWork unitOfWork,
             UserManager<AppUser> userManager,
             IFileHandlerService fileHandler,
@@ -21,6 +25,7 @@ namespace SmartClinic.Application.Services.Implementation
             ISpecializationService specializationService)
         {
             _doctorRepo = doctorRepo;
+            _specialRepo = specialRepo;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _fileHandler = fileHandler;
@@ -131,7 +136,7 @@ namespace SmartClinic.Application.Services.Implementation
                 IsActive = true
             };
 
-            await doctor.AddSpecializationsToDoctorAsync(_specializationService, newDoctorUser.Specialization);
+            await doctor.AddSpecializationsToDoctorAsync(_specialRepo , newDoctorUser.Specialization);
 
             await _doctorRepo.AddAsync(doctor);
 
@@ -191,7 +196,7 @@ namespace SmartClinic.Application.Services.Implementation
                 await _fileHandler.SaveFile(request.Image, fileResult.FullFilePath);
             }
 
-            await doctor.AddSpecializationsToDoctorAsync(_specializationService, request.Specialization);
+            await doctor.AddSpecializationsToDoctorAsync( _specialRepo , request.Specialization);
 
             await _unitOfWork.SaveChangesAsync();
 

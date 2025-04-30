@@ -12,7 +12,7 @@ namespace SmartClinic.Application.Services.Interfaces
     {
         Task<Response<CreateSpecializationResponse>> CreateSpecializationAsync(CreateSpecializationRequest request);
         Task<Response<CreateSpecializationResponse>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest request);
-        Task<Response<Specialization?>> GetSpecializationByIdAsync(int specializationId);
+        Task<Response<CreateSpecializationResponse?>> GetSpecializationByIdAsync(int specializationId);
         Task<Response<List<CreateSpecializationResponse>>> GetAllSpecializationsAsync(); 
         Task<Response<string>> DeleteSpecializationAsync(int specializationId);
     }

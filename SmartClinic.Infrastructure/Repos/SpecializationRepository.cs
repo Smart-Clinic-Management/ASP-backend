@@ -11,16 +11,19 @@ namespace SmartClinic.Infrastructure.Repos
     ISpecializaionRepository
     {
         public Task<Specialization?> GetByIdAsync(int id)
-            => base.GetSingleAsync(x => x.Id == id && x.IsActive,
-                includes: nameof(Specialization.Doctors));
+            => base.GetSingleAsync(x => x.Id == id && x.IsActive, true,
+                 $"{nameof(Specialization.Doctors)}.{nameof(Doctor.User)}",
+                     nameof(Specialization.Appointments));
         public Task<Specialization?> GetByIdNoTrackingAsync(int id)
             => base.GetSingleAsync(x => x.Id == id && x.IsActive, false,
                 nameof(Specialization.Doctors));
 
+       
         public Task<Specialization?> GetByIdWithIncludesAsync(int id)
         {
             return base.GetSingleAsync(x => x.Id == id && x.IsActive, true,
-              nameof(Specialization.Doctors), nameof(Specialization.Appointments));
+                  $"{nameof(Specialization.Doctors)}.{nameof(Doctor.User)}",
+                     nameof(Specialization.Appointments));
 
         }
 
@@ -37,8 +40,8 @@ namespace SmartClinic.Infrastructure.Repos
                    nameof(Specialization.Doctors));
         public Task<IEnumerable<Specialization>> ListNoTrackingAsync(int pageSize = 20, int pageIndex = 1)
             => base.ListAllAsync(x => x.IsActive, pageSize,
-                      pageIndex, false,
-                   nameof(Specialization.Doctors));
+              pageIndex, false,
+              $"{nameof(Specialization.Doctors)}.{nameof(Doctor.User)}");
 
     }
 }
