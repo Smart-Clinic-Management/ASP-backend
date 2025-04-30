@@ -2,23 +2,36 @@
 {
     public static class DoctorMappingExtensions
     {
-   
+
         public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
         {
+            var birthDate = doctor.User.BirthDate;
+            byte age = 0;
+
+            if (birthDate.Year > 1900) 
+            {
+                var today = DateTime.Today;
+                age = (byte)(today.Year - birthDate.Year);
+
+                var birthDateTime = birthDate.ToDateTime(TimeOnly.MinValue);
+                if (birthDateTime > today.AddYears(-age)) age--;
+            }
+
             return new GetDoctorByIdResponse(
                 firstName: doctor.User.FirstName,
                 lastName: doctor.User.LastName,
                 userEmail: doctor.User.Email,
                 userPhoneNumber: doctor.User.PhoneNumber,
-                birthDate: doctor.User.BirthDate,
+                age: age,
                 address: doctor.User.Address,
                 description: doctor.Description,
                 waitingTime: doctor.WaitingTime,
                 image: doctor.User.ProfileImage,
                 SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration,
-                 Specializations: doctor.Specializations.Select(s => s.Name).ToList()
+                Specializations: doctor.Specializations.Select(s => s.Name).ToList()
             );
         }
+
 
         public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)
         {

@@ -12,7 +12,7 @@ namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor
         [Required] string lastName,
         [EmailAddress] string userEmail,
         [Required] string userPhoneNumber,
-        [Required] DateOnly birthDate,
+         [Required] byte age,
         [Required] string address,
         string? description,
         int? waitingTime,
