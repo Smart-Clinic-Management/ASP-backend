@@ -6,16 +6,11 @@ using System.Threading.Tasks;
 
 namespace SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization
 {
-    public class CreateSpecializationResponse
+     public class DoctorDto
     {
         public int Id { get; set; }
-
-        public string Name { get; set; } 
-
-        public string Description { get; set; }
-
-        public string Image { get; set; }
-        public List<DoctorDto>? Doctors { get; set; }
-
+        public string? Name { get; set; } 
+        public string? Description { get; set; }
+        public bool IsActive { get; set; }
     }
 }

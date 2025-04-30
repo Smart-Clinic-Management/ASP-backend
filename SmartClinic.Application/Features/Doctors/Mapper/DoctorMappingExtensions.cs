@@ -78,16 +78,16 @@
             return fileResult;
         }
 
-        public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializationService specializationService, List<int> specializationIds)
+        public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializaionRepository specializationRepo, List<int> specializationIds)
         {
             if (specializationIds != null && specializationIds.Any())
             {
                 foreach (var specializationId in specializationIds)
                 {
-                    var specializationResponse = await specializationService.GetSpecializationByIdAsync(specializationId);
-                    if (specializationResponse?.Data != null)
+                    var specialization = await specializationRepo.GetByIdAsync(specializationId);
+                    if (specialization != null)
                     {
-                        doctor.Specializations.Add(specializationResponse.Data);
+                        doctor.Specializations.Add(specialization); // هنا بيضيف الكيان مش DTO
                     }
                 }
             }

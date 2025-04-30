@@ -66,14 +66,31 @@ namespace SmartClinic.Application.Services.Implementation
         }
 
 
-        public async Task<Response<Specialization?>> GetSpecializationByIdAsync(int specializationId)
+        public async Task<Response<CreateSpecializationResponse>> GetSpecializationByIdAsync(int specializationId)
         {
             var specialization = await _specialRepo.GetByIdWithIncludesAsync(specializationId);
 
-            if (specialization is null || !specialization.IsActive) // لازم تتأكد كمان إنه Active
-                return new ResponseHandler().NotFound<Specialization?>($"No Specialization with id {specializationId}");
+            if (specialization is null || !specialization.IsActive)
+                return new ResponseHandler().NotFound<CreateSpecializationResponse>($"No Specialization with id {specializationId}");
 
-            return new ResponseHandler().Success<Specialization?>(specialization);
+            var response = new CreateSpecializationResponse
+            {
+                Id = specialization.Id,
+                Name = specialization.Name,
+                Description = specialization.Description,
+                Image = specialization.Image,
+                Doctors = specialization.Doctors
+                    .Where(d => d.IsActive)
+                    .Select(d => new DoctorDto
+                    {
+                        Id = d.Id,
+                        Name = d.User != null ? d.User.UserName : "No User Linked",
+                        Description = d.Description,
+                        IsActive = d.IsActive
+                    }).ToList()
+            };
+
+            return new Response<CreateSpecializationResponse>(response);
         }
 
 
@@ -96,13 +113,25 @@ namespace SmartClinic.Application.Services.Implementation
             var specializations = await _specialRepo.ListNoTrackingAsync();
 
             var response = specializations
-                .Where(s => s.IsActive) // رجعي بس ال Active
+                .Where(s => s.IsActive) 
                 .Select(s => new CreateSpecializationResponse
                 {
                     Id = s.Id,
                     Name = s.Name,
                     Description = s.Description,
-                    Image = s.Image
+                    Image = s.Image,
+                    Doctors = s.Doctors
+                        .Where(d => d.IsActive) 
+                        .Select(d => new DoctorDto
+                        {
+                            Id = d.Id,
+                            Name = d.User != null
+                                ? $"{d.User.FirstName} {d.User.LastName}".Trim()
+    :                           "No User Linked",
+                            Description = d.Description,
+                            IsActive = d.IsActive
+                        })
+                        .ToList() 
                 })
                 .ToList();
 
