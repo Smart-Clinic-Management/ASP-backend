@@ -12,7 +12,7 @@ public static class ModuleInfrastructureDependencies
 
         services.AddScoped<IDoctorRepository, DoctorRepository>();
 
-      
+        services.AddScoped<IAppointment, AppointmentRepository>();
 
         services.AddScoped<ISpecializaionRepository, SpecializationRepository>();
 
