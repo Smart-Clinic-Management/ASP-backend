@@ -14,4 +14,8 @@
     <ProjectReference Include="..\SmartClinic.Infrastructure\SmartClinic.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Patients\Command\" />
+  </ItemGroup>
+
 </Project>

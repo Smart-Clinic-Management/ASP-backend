@@ -22,6 +22,7 @@ namespace SmartClinic.API.Controllers
         {
             return Ok(await _doctorService.GetDoctorByIdAsync(id));
         }
+
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateDoctor(int id, [FromForm] UpdateDoctorRequest request)
         {
@@ -32,7 +33,7 @@ namespace SmartClinic.API.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllDoctors(int pageSize = 20, int pageIndex = 1)
         {
-            return Ok(await _doctorService.GetAllDoctorsAsync());
+            return Ok(await _doctorService.GetAllDoctorsAsync(pageSize, pageIndex));
         }
 
         [HttpDelete("{id}")]
@@ -40,12 +41,11 @@ namespace SmartClinic.API.Controllers
         {
             return Ok(await _doctorService.SoftDeleteDoctorAsync(id));
         }
+
         [HttpPost("Create")]
         public async Task<IActionResult> CreateDoctor([FromForm] CreateDoctorRequest request)
         {
             return Ok(await _doctorService.CreateDoctor(request));
         }
-
-
     }
 }

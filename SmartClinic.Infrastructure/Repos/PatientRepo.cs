@@ -1,4 +1,5 @@
 ﻿
+
 namespace SmartClinic.Infrastructure.Repos
 {
     public class PatientRepo : GenericRepository<Patient>, IPatient
@@ -28,13 +29,15 @@ namespace SmartClinic.Infrastructure.Repos
         }
 
         public Task<IEnumerable<Patient>> ListAsync(int pageSize = 20, int pageIndex = 1)
-        {
-            throw new NotImplementedException();
-        }
+            => base.ListAllAsync(x => x.IsActive, pageSize, pageIndex, true,
+                nameof(Patient.User), nameof(Patient.Appointments));
 
         public Task<IEnumerable<Patient>> ListNoTrackingAsync(int pageSize = 20, int pageIndex = 1)
-        {
-            throw new NotImplementedException();
-        }
+            => base.ListAllAsync(x => x.IsActive, pageSize, pageIndex, false,
+                nameof(Patient.User),
+                nameof(Patient.Appointments),
+                "Appointments.Doctor",
+                "Appointments.Doctor.User",
+                "Appointments.Doctor.Specializations");
     }
 }

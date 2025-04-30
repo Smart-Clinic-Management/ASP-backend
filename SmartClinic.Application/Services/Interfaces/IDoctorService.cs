@@ -5,7 +5,7 @@ using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
 
 namespace SmartClinic.Application.Services.Interfaces
 {
-    public interface IDoctorService
+    public interface IDoctorService 
     {
         Task<Response<CreateDoctorResponse>> CreateDoctor(CreateDoctorRequest newDoctorUser);
         Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request);

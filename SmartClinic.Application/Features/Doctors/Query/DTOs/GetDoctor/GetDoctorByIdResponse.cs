@@ -17,6 +17,7 @@ namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor
         string? description,
         int? waitingTime,
         string? image,
-        int? SlotDuration
+        int? SlotDuration,
+        List<string> Specializations
     );
 }
