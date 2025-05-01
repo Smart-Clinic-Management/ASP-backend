@@ -1,6 +1,4 @@
-﻿
-
-namespace SmartClinic.Infrastructure.Repos;
+﻿namespace SmartClinic.Infrastructure.Repos;
 public class DoctorRepository(ApplicationDbContext context)
     : GenericRepository<Doctor>(context),
     IDoctorRepository
@@ -21,6 +19,21 @@ public class DoctorRepository(ApplicationDbContext context)
         => base.GetSingleAsync(x => x.Id == id && x.IsActive, false,
               nameof(Doctor.User), nameof(Doctor.Specializations));
 
+    public async Task<Doctor?> GetWithAppointmentsAsync(int id, DateOnly startDate)
+    {
+        var endDate = startDate.AddDays(3);
+
+        return await context.Doctors.AsNoTracking()
+            .Where(x => x.Id == id && x.IsActive)
+            .Include(x => x.Specializations)
+            .Include(x => x.DoctorSchedules)
+            .Include(x => x.User)
+            .Include(x => x.Appointments
+            .Where(a => a.AppointmentDate >= startDate &&
+                                 a.AppointmentDate < endDate))
+            .FirstOrDefaultAsync();
+    }
+
     public Task<IEnumerable<Doctor>> ListAsync(int pageSize = 20, int pageIndex = 1)
         => base.ListAllAsync(x => x.IsActive, pageSize,
                   pageIndex, true,
@@ -32,6 +45,6 @@ public class DoctorRepository(ApplicationDbContext context)
                nameof(Doctor.User), nameof(Doctor.Specializations));
 
 
-  
+
 
 }

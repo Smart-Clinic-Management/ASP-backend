@@ -1,0 +1,27 @@
+﻿namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
+public record GetDoctorWithAvailableAppointment(
+         string FirstName,
+         string? LastName,
+         string UserEmail,
+         string UserPhoneNumber,
+        byte Age,
+        string Address,
+        string? Description,
+        int? WaitingTime,
+        string Image,
+        List<string> Specializations,
+        List<AvailableSchedule> AvailableSchedule
+    );
+
+
+
+public class AvailableSchedule
+{
+    public string Day { get; set; }
+    public bool IsAvailable { get; set; }
+
+    public List<Slot> Slots { get; set; } = [];
+
+}
+
+public record Slot(TimeOnly Time, bool IsAvailable);
