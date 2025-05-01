@@ -12,8 +12,8 @@ using SmartClinic.Infrastructure.Data;
 namespace SmartClinic.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250425112235_Initial")]
-    partial class Initial
+    [Migration("20250501153640_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,21 +24,6 @@ namespace SmartClinic.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DoctorsSpecializations", b =>
-                {
-                    b.Property<int>("DoctorsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SpecializationsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DoctorsId", "SpecializationsId");
-
-                    b.HasIndex("SpecializationsId");
-
-                    b.ToTable("DoctorsSpecializations");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -327,6 +312,9 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -335,6 +323,8 @@ namespace SmartClinic.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SpecializationId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -423,21 +413,6 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specializations");
-                });
-
-            modelBuilder.Entity("DoctorsSpecializations", b =>
-                {
-                    b.HasOne("SmartClinic.Domain.Entities.Doctor", null)
-                        .WithMany()
-                        .HasForeignKey("DoctorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartClinic.Domain.Entities.Specialization", null)
-                        .WithMany()
-                        .HasForeignKey("SpecializationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -544,11 +519,19 @@ namespace SmartClinic.Infrastructure.Migrations
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Doctor", b =>
                 {
+                    b.HasOne("SmartClinic.Domain.Entities.Specialization", "Specialization")
+                        .WithMany("Doctors")
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SmartClinic.Domain.Entities.AppUser", "User")
                         .WithOne("Doctor")
                         .HasForeignKey("SmartClinic.Domain.Entities.Doctor", "UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Specialization");
 
                     b.Navigation("User");
                 });
@@ -597,6 +580,8 @@ namespace SmartClinic.Infrastructure.Migrations
             modelBuilder.Entity("SmartClinic.Domain.Entities.Specialization", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor;
 public record UpdateDoctorRequest(
@@ -7,7 +6,7 @@ public record UpdateDoctorRequest(
     string? Lname,
     [EmailAddress] string? Email,
     IFormFile? Image,
-    List<int>? Specialization,
+    int? SpecializationId,
     DateOnly? BirthDate,
     string? Address,
     int? WaitingTime,

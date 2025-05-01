@@ -1,22 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartClinic.Application.Features.Doctors.Command.DTOs.CreateDoctor
-{
-    public record CreateDoctorResponse(
-    [Required] string Fname,
-    string Lname,
-    [EmailAddress] string Email,
-    [Required]string Image,
-    [Required] List<int> Specialization,
-    DateOnly BirthDate,
-    [Required] string Address,
-    int? WaitingTime,
-    string? Description
+namespace SmartClinic.Application.Features.Doctors.Command.DTOs.CreateDoctor;
+
+public record CreateDoctorResponse(
+[Required] string Fname,
+string Lname,
+[EmailAddress] string Email,
+[Required] string Image,
+[Required] int SpecializationId,
+DateOnly BirthDate,
+[Required] string Address,
+int? WaitingTime,
+string? Description
 );
-}
