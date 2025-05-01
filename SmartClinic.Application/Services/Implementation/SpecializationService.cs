@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.UpdateSpecialization;
 using SmartClinic.Application.Features.Specializations.Mapper;
+using SmartClinic.Application.Services.Implementation.FileHandlerService;
 
 namespace SmartClinic.Application.Services.Implementation
 {
@@ -13,40 +17,49 @@ namespace SmartClinic.Application.Services.Implementation
     {
         private readonly ISpecializaionRepository _specialRepo;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IFileHandlerService _fileHandler;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
         public SpecializationService(
         ISpecializaionRepository specialRepo,
+        IFileHandlerService fileHandler,
+        IHttpContextAccessor httpContextAccessor,
         IUnitOfWork unitOfWork,
         UserManager<AppUser> userManager)
         {
             _specialRepo = specialRepo;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _fileHandler = fileHandler;
+            _httpContextAccessor = httpContextAccessor;
+
+
         }
         public async Task<Response<CreateSpecializationResponse>> CreateSpecializationAsync(CreateSpecializationRequest request)
         {
-            // جهزي اسم الصورة
-            var imageName = $"{Guid.NewGuid()}{Path.GetExtension(request.Image.FileName)}";
-
-            // مسار حفظ الصورة على السيرفر
-            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Specializations", imageName);
-
-            // تأكدي الفولدر موجود
-            var directory = Path.GetDirectoryName(imagePath);
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-
-            // احفظي الصورة
-            using (var stream = new FileStream(imagePath, FileMode.Create))
+            var fileValidationOptions = new FileValidation
             {
-                await request.Image.CopyToAsync(stream);
+                AllowedExtenstions = new[] { ".jpg", ".png", ".jpeg" },
+                MaxSize = 5 * 1024 * 1024 
+            };
+
+            var fileValidationResult = await _fileHandler.HanldeFile(request.Image, fileValidationOptions);
+
+            if (!fileValidationResult.Success)
+            {
+                var errors = new List<string>();
+                if (!string.IsNullOrEmpty(fileValidationResult.Error)) errors.Add(fileValidationResult.Error);
+                return new ResponseHandler().BadRequest<CreateSpecializationResponse>(errors: errors);
             }
 
-            // حضري URL الصورة (بعد الحفظ)
-            var imageUrl = $"https://localhost:7047/Images/Specializations/{imageName}"; // تأكدي البورت صح حسب بروجيكتك
+            if (fileValidationResult.Success)
+            {
+                await _fileHandler.SaveFile(request.Image, fileValidationResult.FullFilePath);
+            }
 
-            // استخدمي الـ mapper مع رابط الصورة
-            var specialization = request.ToSpecialization(imageUrl, "admin"); // userId حطيته مؤقتًا "admin" لو عايزة تضيفي في المستقبل
+            var imageUrl = fileValidationResult.RelativeFilePath;
+
+            var specialization = request.ToSpecialization(imageUrl, "admin");
 
             _specialRepo.AddAsync(specialization);
 
@@ -59,7 +72,7 @@ namespace SmartClinic.Application.Services.Implementation
                 Id = specialization.Id,
                 Name = specialization.Name,
                 Description = specialization.Description,
-                Image = specialization.Image
+                Image = specialization.Image, 
             };
 
             return new Response<CreateSpecializationResponse>(response);
@@ -78,7 +91,7 @@ namespace SmartClinic.Application.Services.Implementation
                 Id = specialization.Id,
                 Name = specialization.Name,
                 Description = specialization.Description,
-                Image = specialization.Image,
+                Image = _fileHandler.GetFileURL(specialization.Image),
                 Doctors = specialization.Doctors
                     .Where(d => d.IsActive)
                     .Select(d => new DoctorDto
@@ -119,7 +132,7 @@ namespace SmartClinic.Application.Services.Implementation
                     Id = s.Id,
                     Name = s.Name,
                     Description = s.Description,
-                    Image = s.Image,
+                    Image = _fileHandler.GetFileURL(s.Image),
                     Doctors = s.Doctors
                         .Where(d => d.IsActive) 
                         .Select(d => new DoctorDto
