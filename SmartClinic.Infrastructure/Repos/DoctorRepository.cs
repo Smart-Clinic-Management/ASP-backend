@@ -3,6 +3,9 @@ public class DoctorRepository(ApplicationDbContext context)
     : GenericRepository<Doctor>(context),
     IDoctorRepository
 {
+    public Task<bool> ExistsAsync(int doctorId)
+        => context.Doctors.AnyAsync(x => x.Id == doctorId && x.IsActive);
+
     public Task<Doctor?> GetByIdAsync(int id)
         => base.GetSingleAsync(x => x.Id == id && x.IsActive,
             includes: nameof(Doctor.User));
