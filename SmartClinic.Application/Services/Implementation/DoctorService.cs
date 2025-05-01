@@ -225,7 +225,7 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         AvailableSchedules = AddingDaySlots(doctor, AvailableSchedules);
 
-        var result = doctor.ToGetDoctorWithAvailableAppointment(AvailableSchedules);
+        var result = doctor.ToGetDoctorWithAvailableSchedules(AvailableSchedules);
 
         return Success(result, "Found");
     }

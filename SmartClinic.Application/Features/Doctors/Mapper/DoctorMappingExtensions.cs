@@ -5,7 +5,7 @@ namespace SmartClinic.Application.Features.Doctors.Mapper;
 public static class DoctorMappingExtensions
 {
 
-    public static GetDoctorWithAvailableAppointment ToGetDoctorWithAvailableAppointment(this Doctor doctor, List<AvailableSchedule> AvailableSchedules)
+    public static GetDoctorWithAvailableAppointment ToGetDoctorWithAvailableSchedules(this Doctor doctor, List<AvailableSchedule> AvailableSchedules)
     {
         return new GetDoctorWithAvailableAppointment
         (
