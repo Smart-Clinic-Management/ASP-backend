@@ -2,6 +2,7 @@
 using SmartClinic.API.Bases;
 using SmartClinic.Application.Features.Doctors.Command.DTOs.CreateDoctor;
 using SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor;
+using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
 using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers;
@@ -47,4 +48,13 @@ public class DoctorsController : AppControllerBase
     {
         return NewResult(await _doctorService.CreateDoctor(request));
     }
+
+    [HttpGet("schedule")]
+    [EndpointDescription("Gets the doctor with available schedule")]
+    [ProducesResponseType<GetDoctorWithAvailableAppointment>(200)]
+    public async Task<IActionResult> GetDoctorAvailableSchedules([FromQuery] int id, [FromQuery] DateOnly startDate)
+    {
+        return NewResult(await _doctorService.GetDoctorWithAvailableSchedule(id, startDate));
+    }
+
 }

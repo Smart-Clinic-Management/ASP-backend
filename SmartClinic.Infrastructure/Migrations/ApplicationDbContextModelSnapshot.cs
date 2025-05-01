@@ -34,7 +34,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasIndex("SpecializationsId");
 
-                    b.ToTable("DoctorsSpecializations");
+                    b.ToTable("DoctorsSpecializations", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -307,7 +307,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasIndex("SpecializationId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Doctor", b =>
@@ -336,7 +336,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.DoctorSchedule", b =>
@@ -367,7 +367,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorSchedules");
+                    b.ToTable("DoctorSchedules", (string)null);
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Patient", b =>
@@ -393,7 +393,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Specialization", b =>
@@ -419,7 +419,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specializations");
+                    b.ToTable("Specializations", (string)null);
                 });
 
             modelBuilder.Entity("DoctorsSpecializations", b =>
@@ -523,7 +523,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                             b1.HasKey("AppointmentId");
 
-                            b1.ToTable("Appointments");
+                            b1.ToTable("Appointments", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("AppointmentId");

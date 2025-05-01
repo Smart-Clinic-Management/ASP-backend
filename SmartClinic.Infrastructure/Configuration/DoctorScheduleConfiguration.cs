@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartClinic.Domain.Entities;
 
-namespace SmartClinic.Infrastucture.Configuration;
+namespace SmartClinic.Infrastructure.Configuration;
 
 public class DoctorScheduleConfiguration : IEntityTypeConfiguration<DoctorSchedule>
 {
@@ -9,7 +8,7 @@ public class DoctorScheduleConfiguration : IEntityTypeConfiguration<DoctorSchedu
     {
         builder.Property(ds => ds.DayOfWeek)
             .HasConversion(s => s.ToString(),
-            db => Enum.Parse<DaysOfWeek>(db))
+            db => Enum.Parse<DayOfWeek>(db))
             .HasColumnType("VARCHAR(50)");
 
 

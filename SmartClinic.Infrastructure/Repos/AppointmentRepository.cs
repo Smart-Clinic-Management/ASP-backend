@@ -25,6 +25,8 @@ public class AppointmentRepository(ApplicationDbContext context)
            nameof(Appointment.Specialization), nameof(Appointment.Doctor), nameof(Appointment.Patient));
     }
 
+
+    //for admin
     public async Task<IEnumerable<Appointment>> ListPatientAppointmentsAsync(int patientId, int pageSize = 20, int pageIndex = 1)
     {
         return await base.ListAllAsync(x => x.Patient.IsActive && x.PatientId == patientId,
@@ -34,6 +36,8 @@ public class AppointmentRepository(ApplicationDbContext context)
             nameof(Appointment.Specialization));
     }
 
+
+    //for admin
     public async Task<IEnumerable<Appointment>> ListDoctorAppointmentsAsync(int doctorId, int pageSize = 20, int pageIndex = 1)
     {
         return await base.ListAllAsync(x => x.Doctor.IsActive && x.DoctorId == doctorId,
@@ -43,6 +47,8 @@ public class AppointmentRepository(ApplicationDbContext context)
             nameof(Appointment.Specialization));
     }
 
+
+    //for admin
     public async Task<IEnumerable<Appointment>> ListAllAppointmentsAsync(int pageSize = 20, int pageIndex = 1)
     {
         return await base.ListAllAsync(

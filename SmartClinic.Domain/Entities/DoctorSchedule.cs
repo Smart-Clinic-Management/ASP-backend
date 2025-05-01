@@ -6,7 +6,7 @@ public class DoctorSchedule : BaseEntity
 
     public int DoctorId { get; set; }
 
-    public DaysOfWeek DayOfWeek { get; set; }
+    public DayOfWeek DayOfWeek { get; set; }
 
     public TimeOnly StartTime { get; set; }
 
@@ -22,13 +22,4 @@ public class DoctorSchedule : BaseEntity
 
 
 
-public enum DaysOfWeek
-{
-    Sat,
-    Sun,
-    Mon,
-    Tue,
-    Wed,
-    Thu,
-    Fri
-}
+
