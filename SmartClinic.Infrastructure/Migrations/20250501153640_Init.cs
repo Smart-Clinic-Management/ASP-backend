@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SmartClinic.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,27 +181,6 @@ namespace SmartClinic.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Doctors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "VARCHAR(500)", nullable: true),
-                    WaitingTime = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doctors", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Doctors_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
@@ -222,46 +201,28 @@ namespace SmartClinic.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DoctorSchedules",
+                name: "Doctors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    DayOfWeek = table.Column<string>(type: "VARCHAR(50)", nullable: false),
-                    StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    SlotDuration = table.Column<int>(type: "int", nullable: false)
+                    Description = table.Column<string>(type: "VARCHAR(500)", nullable: true),
+                    WaitingTime = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SpecializationId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DoctorSchedules", x => x.Id);
+                    table.PrimaryKey("PK_Doctors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DoctorSchedules_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
+                        name: "FK_Doctors_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DoctorsSpecializations",
-                columns: table => new
-                {
-                    DoctorsId = table.Column<int>(type: "int", nullable: false),
-                    SpecializationsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DoctorsSpecializations", x => new { x.DoctorsId, x.SpecializationsId });
                     table.ForeignKey(
-                        name: "FK_DoctorsSpecializations_Doctors_DoctorsId",
-                        column: x => x.DoctorsId,
-                        principalTable: "Doctors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DoctorsSpecializations_Specializations_SpecializationsId",
-                        column: x => x.SpecializationsId,
+                        name: "FK_Doctors_Specializations_SpecializationId",
+                        column: x => x.SpecializationId,
                         principalTable: "Specializations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -299,6 +260,28 @@ namespace SmartClinic.Infrastructure.Migrations
                         name: "FK_Appointments_Specializations_SpecializationId",
                         column: x => x.SpecializationId,
                         principalTable: "Specializations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DoctorSchedules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    DayOfWeek = table.Column<string>(type: "VARCHAR(50)", nullable: false),
+                    StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    SlotDuration = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoctorSchedules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DoctorSchedules_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
                         principalColumn: "Id");
                 });
 
@@ -367,6 +350,11 @@ namespace SmartClinic.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Doctors_SpecializationId",
+                table: "Doctors",
+                column: "SpecializationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Doctors_UserId",
                 table: "Doctors",
                 column: "UserId",
@@ -376,11 +364,6 @@ namespace SmartClinic.Infrastructure.Migrations
                 name: "IX_DoctorSchedules_DoctorId",
                 table: "DoctorSchedules",
                 column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DoctorsSpecializations_SpecializationsId",
-                table: "DoctorsSpecializations",
-                column: "SpecializationsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patients_UserId",
@@ -414,9 +397,6 @@ namespace SmartClinic.Infrastructure.Migrations
                 name: "DoctorSchedules");
 
             migrationBuilder.DropTable(
-                name: "DoctorsSpecializations");
-
-            migrationBuilder.DropTable(
                 name: "Patients");
 
             migrationBuilder.DropTable(
@@ -426,10 +406,10 @@ namespace SmartClinic.Infrastructure.Migrations
                 name: "Doctors");
 
             migrationBuilder.DropTable(
-                name: "Specializations");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Specializations");
         }
     }
 }

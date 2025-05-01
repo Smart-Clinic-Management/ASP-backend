@@ -18,7 +18,8 @@ public static class DoctorMappingExtensions
              doctor.Description,
             doctor.WaitingTime,
              doctor.User.ProfileImage!,
-             [.. doctor.Specializations.Select(x => x.Name)],
+             doctor.Specialization.Id,
+             doctor.Specialization.Name,
              AvailableSchedules
         );
     }
@@ -36,7 +37,7 @@ public static class DoctorMappingExtensions
             waitingTime: doctor.WaitingTime,
             image: doctor.User.ProfileImage,
             SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration,
-            Specializations: doctor.Specializations.Select(s => s.Name).ToList()
+            Specialization: doctor.Specialization.Name
         );
     }
 
@@ -48,7 +49,7 @@ public static class DoctorMappingExtensions
             firstName: doctor.User.FirstName,
             lastName: doctor.User.LastName,
             image: doctor.User.ProfileImage,
-            Specializations: doctor.Specializations.Select(s => s.Name).ToList()
+            Specialization: doctor.Specialization.Name
         );
     }
 
@@ -59,7 +60,7 @@ public static class DoctorMappingExtensions
             Lname: doctor.User.LastName,
             Email: doctor.User.Email,
             Image: doctor.User.ProfileImage != null ? GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor) : null,
-            Specialization: doctor.Specializations.Select(s => s.Id).ToList(),
+            SpecializationId: doctor.Specialization.Id,
             BirthDate: doctor.User.BirthDate,
             Address: doctor.User.Address,
             WaitingTime: doctor.WaitingTime,
@@ -86,18 +87,16 @@ public static class DoctorMappingExtensions
         return fileResult;
     }
 
-    public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializaionRepository specializationRepo, List<int> specializationIds)
+    public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializaionRepository specializationRepo, int? specializationId)
     {
-        if (specializationIds != null && specializationIds.Any())
+        if (!specializationId.HasValue) return;
+
+        var specialization = await specializationRepo.GetByIdAsync(specializationId.Value);
+        if (specialization != null)
         {
-            foreach (var specializationId in specializationIds)
-            {
-                var specialization = await specializationRepo.GetByIdAsync(specializationId);
-                if (specialization != null)
-                {
-                    doctor.Specializations.Add(specialization); // هنا بيضيف الكيان مش DTO
-                }
-            }
+            doctor.Specialization = specialization;
         }
     }
+
 }
+

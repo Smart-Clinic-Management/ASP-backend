@@ -134,7 +134,7 @@ public class DoctorService : ResponseHandler, IDoctorService
             IsActive = true
         };
 
-        await doctor.AddSpecializationsToDoctorAsync(_specialRepo, newDoctorUser.Specialization);
+        await doctor.AddSpecializationsToDoctorAsync(_specialRepo, newDoctorUser.SpecializationId);
 
         await _doctorRepo.AddAsync(doctor);
 
@@ -150,7 +150,7 @@ public class DoctorService : ResponseHandler, IDoctorService
             Lname: user.LastName,
             Email: user.Email,
             Image: fileResult.Success ? DoctorMappingExtensions.GetImgUrl(fileResult.RelativeFilePath, _httpContextAccessor) : null,
-            Specialization: doctor.Specializations.Select(s => s.Id).ToList(),
+            SpecializationId: doctor.Specialization.Id,
             BirthDate: user.BirthDate,
             Address: user.Address,
             WaitingTime: doctor.WaitingTime,
@@ -194,7 +194,7 @@ public class DoctorService : ResponseHandler, IDoctorService
             await _fileHandler.SaveFile(request.Image, fileResult.FullFilePath);
         }
 
-        await doctor.AddSpecializationsToDoctorAsync(_specialRepo, request.Specialization);
+        await doctor.AddSpecializationsToDoctorAsync(_specialRepo, request.SpecializationId);
 
         await _unitOfWork.SaveChangesAsync();
 

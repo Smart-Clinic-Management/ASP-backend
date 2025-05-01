@@ -13,16 +13,20 @@ public class Doctor : BaseEntity
 
     public string UserId { get; set; } = string.Empty;
 
+    public int SpecializationId { get; set; }
+
     public bool IsActive { get; set; } = true;
 
 
     [ForeignKey(nameof(UserId))]
     public AppUser User { get; set; } = null!;
 
+    [ForeignKey(nameof(SpecializationId))]
+    public Specialization Specialization { get; set; } = null!;
+
     public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();
 
     public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 
-    public ICollection<Specialization> Specializations { get; set; } = new HashSet<Specialization>();
 
 }

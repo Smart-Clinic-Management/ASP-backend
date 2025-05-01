@@ -22,21 +22,6 @@ namespace SmartClinic.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DoctorsSpecializations", b =>
-                {
-                    b.Property<int>("DoctorsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SpecializationsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DoctorsId", "SpecializationsId");
-
-                    b.HasIndex("SpecializationsId");
-
-                    b.ToTable("DoctorsSpecializations", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -307,7 +292,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasIndex("SpecializationId");
 
-                    b.ToTable("Appointments", (string)null);
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Doctor", b =>
@@ -324,6 +309,9 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -333,10 +321,12 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SpecializationId");
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Doctors", (string)null);
+                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.DoctorSchedule", b =>
@@ -367,7 +357,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorSchedules", (string)null);
+                    b.ToTable("DoctorSchedules");
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Patient", b =>
@@ -393,7 +383,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Specialization", b =>
@@ -419,22 +409,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specializations", (string)null);
-                });
-
-            modelBuilder.Entity("DoctorsSpecializations", b =>
-                {
-                    b.HasOne("SmartClinic.Domain.Entities.Doctor", null)
-                        .WithMany()
-                        .HasForeignKey("DoctorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartClinic.Domain.Entities.Specialization", null)
-                        .WithMany()
-                        .HasForeignKey("SpecializationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Specializations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -523,7 +498,7 @@ namespace SmartClinic.Infrastructure.Migrations
 
                             b1.HasKey("AppointmentId");
 
-                            b1.ToTable("Appointments", (string)null);
+                            b1.ToTable("Appointments");
 
                             b1.WithOwner()
                                 .HasForeignKey("AppointmentId");
@@ -541,11 +516,19 @@ namespace SmartClinic.Infrastructure.Migrations
 
             modelBuilder.Entity("SmartClinic.Domain.Entities.Doctor", b =>
                 {
+                    b.HasOne("SmartClinic.Domain.Entities.Specialization", "Specialization")
+                        .WithMany("Doctors")
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SmartClinic.Domain.Entities.AppUser", "User")
                         .WithOne("Doctor")
                         .HasForeignKey("SmartClinic.Domain.Entities.Doctor", "UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Specialization");
 
                     b.Navigation("User");
                 });
@@ -594,6 +577,8 @@ namespace SmartClinic.Infrastructure.Migrations
             modelBuilder.Entity("SmartClinic.Domain.Entities.Specialization", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
                 });
 #pragma warning restore 612, 618
         }

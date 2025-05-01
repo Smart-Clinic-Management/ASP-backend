@@ -9,7 +9,8 @@ public record GetDoctorWithAvailableAppointment(
         string? Description,
         int? WaitingTime,
         string Image,
-        List<string> Specializations,
+        int SpecializationId,
+        string Specialization,
         List<AvailableSchedule> AvailableSchedule
     );
 
@@ -25,3 +26,4 @@ public class AvailableSchedule
 }
 
 public record Slot(TimeOnly Time, bool IsAvailable);
+

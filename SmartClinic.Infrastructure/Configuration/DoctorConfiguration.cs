@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartClinic.Domain.Entities;
 
-namespace SmartClinic.Infrastucture.Configuration;
+namespace SmartClinic.Infrastructure.Configuration;
 
 public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
 {
     public void Configure(EntityTypeBuilder<Doctor> builder)
     {
-        builder.HasMany(d => d.Specializations)
+        builder.HasOne(d => d.Specialization)
                .WithMany(s => s.Doctors)
-               .UsingEntity("DoctorsSpecializations");
+               .HasForeignKey(d => d.SpecializationId);
 
         builder.HasMany(x => x.DoctorSchedules)
             .WithOne(x => x.Doctor)
