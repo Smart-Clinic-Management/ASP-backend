@@ -75,7 +75,8 @@ namespace SmartClinic.Application.Services.Implementation
                 Image = specialization.Image, 
             };
 
-            return new Response<CreateSpecializationResponse>(response);
+            return new ResponseHandler().Success(response);
+
         }
 
 
@@ -103,7 +104,8 @@ namespace SmartClinic.Application.Services.Implementation
                     }).ToList()
             };
 
-            return new Response<CreateSpecializationResponse>(response);
+            return new ResponseHandler().Success(response);
+
         }
 
 
@@ -148,7 +150,8 @@ namespace SmartClinic.Application.Services.Implementation
                 })
                 .ToList();
 
-            return new Response<List<CreateSpecializationResponse>>(response);
+            return new ResponseHandler().Success(response);
+
         }
 
 
