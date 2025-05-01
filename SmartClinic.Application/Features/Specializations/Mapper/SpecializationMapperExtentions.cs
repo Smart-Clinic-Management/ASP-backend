@@ -16,10 +16,18 @@ namespace SmartClinic.Application.Features.Specializations.Mapper
             {
                 Name = request.Name,
                 Description = request.Description,
-                Image = imageUrl, //هنا
+                Image = imageUrl,
 
             };
         }
+        public static string GetImgUrl(string? path, IHttpContextAccessor _httpContextAccessor)
+        {
+            if (path == null) return null!;
+
+            var request = _httpContextAccessor.HttpContext?.Request;
+            return $"{request!.Scheme}://{request.Host}/{path.Replace("\\", "/")}";
+        }
+
         public static void UpdateSpecializationFromRequest(this Specialization specialization, UpdateSpecializationRequest request)
         {
             specialization.Name = request.Name ?? specialization.Name;
