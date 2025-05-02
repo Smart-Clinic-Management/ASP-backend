@@ -1,11 +1,8 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Auth;
-using SmartClinic.API.Bases;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
 using SmartClinic.Application.Features.Profile.Command;
-using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers;
 
@@ -32,7 +29,9 @@ public class AuthController : AppControllerBase
         return NewResult(res);
     }
 
+
     [HttpPost("register")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> Register([FromForm] RegisterRequestDTO newPatientUser)
     {
         var res = await authService.Register(newPatientUser);

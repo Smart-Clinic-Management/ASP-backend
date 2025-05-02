@@ -146,7 +146,7 @@ public class AuthService : IAuthService
         }
         ////////////////
 
-        var res = response.Success(new RegisterResponseDTO()
+        var res = response.Created(new RegisterResponseDTO()
         {
             Email = user.Email,
             Id = user.Id
