@@ -21,4 +21,12 @@ public class PatientsController : AppControllerBase
         var response = await _patientService.GetAllPatientsAsync(pageSize, pageIndex);
         return NewResult(response);
     }
+
+    [HttpGet("GetById/{patientId}")]
+    public async Task<IActionResult> GetPatientById(int patientId)
+    {
+        var response = await _patientService.GetPatientByIdAsync(patientId);
+        return NewResult(response);
+    }
+
 }

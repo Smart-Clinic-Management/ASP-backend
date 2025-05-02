@@ -1,6 +1,4 @@
-﻿
-
-namespace SmartClinic.Infrastructure.Repos;
+﻿using SmartClinic.Infrastructure.Repos;
 
 public class PatientRepo(ApplicationDbContext context) : GenericRepository<Patient>(context), IPatient
 {
@@ -9,24 +7,40 @@ public class PatientRepo(ApplicationDbContext context) : GenericRepository<Patie
         return await context.Patients.AnyAsync(x => x.Id == patientId && x.IsActive);
     }
 
-    public Task<Patient?> GetByIdAsync(int id)
+    public async Task<Patient?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await context.Patients
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
     }
 
-    public Task<Patient?> GetByIdNoTrackingAsync(int id)
+    public async Task<Patient?> GetByIdNoTrackingAsync(int id)
     {
-        throw new NotImplementedException();
+        return await context.Patients
+            .AsNoTracking()
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
     }
 
-    public Task<Patient?> GetByIdWithIncludesAsync(int id)
+    public async Task<Patient?> GetByIdWithIncludesAsync(int id)
     {
-        throw new NotImplementedException();
+        return await context.Patients
+            .Include(p => p.User)
+            .Include(p => p.Appointments)
+            .ThenInclude(a => a.Doctor)
+            .ThenInclude(d => d.User)
+            .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
     }
 
-    public Task<Patient?> GetByIdWithIncludesNoTrackingAsync(int id)
+    public async Task<Patient?> GetByIdWithIncludesNoTrackingAsync(int id)
     {
-        throw new NotImplementedException();
+        return await context.Patients
+            .AsNoTracking()
+            .Include(p => p.User)
+            .Include(p => p.Appointments)
+            .ThenInclude(a => a.Doctor)
+            .ThenInclude(d => d.User)
+            .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
     }
 
     public Task<IEnumerable<Patient>> ListAsync(int pageSize = 20, int pageIndex = 1)
