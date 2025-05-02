@@ -7,6 +7,7 @@ namespace SmartClinic.Application.Features.Patients.Query.DTOs.GetDoctorSchedule
         [Required] int DoctorId,
         [Required] DayOfWeek DayOfWeek,
         [Required] TimeOnly StartTime,
-        [Required] TimeOnly EndTime
+        [Required] TimeOnly EndTime,
+        [Required] int SlotDuration
     );
 }
