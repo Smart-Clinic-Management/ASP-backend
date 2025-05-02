@@ -11,7 +11,8 @@ namespace SmartClinic.Application.MappingExtensions
                 DoctorId: schedule.DoctorId,
                 DayOfWeek: schedule.DayOfWeek,
                 StartTime: schedule.StartTime,
-                EndTime: schedule.EndTime
+                EndTime: schedule.EndTime,
+                SlotDuration:schedule.SlotDuration
             );
         }
 
