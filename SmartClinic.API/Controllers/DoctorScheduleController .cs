@@ -29,5 +29,20 @@ namespace SmartClinic.API.Controllers
             return NewResult(response);
         }
 
+
+        [HttpDelete("{scheduleId}")]
+        public async Task<IActionResult> DeleteScheduleById(int scheduleId)
+        {
+            var response = await _doctorScheduleService.DeleteScheduleByIdAsync(scheduleId);
+
+            if (!response.IsSuccessful)
+            {
+                return NotFound(new { message = response.Message });
+            }
+            return NewResult(new Application.Bases.Response<string> { Message = response.Message });
+        }
+
+
+
     }
 }
