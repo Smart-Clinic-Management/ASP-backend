@@ -119,6 +119,7 @@ public class AuthService : IAuthService
             UserName = newPatientUser.Email,
             Email = newPatientUser.Email,
             FirstName = newPatientUser.Firstname,
+            LastName = newPatientUser.Lastname,
             Address = newPatientUser.Address,
             ProfileImage = fileResult.RelativeFilePath,
             Patient = new Patient(),

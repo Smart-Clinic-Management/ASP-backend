@@ -3,6 +3,7 @@ using Models.DTOs.Auth;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
 using SmartClinic.Application.Features.Profile.Command;
+using SmartClinic.Domain.DTOs.Auth;
 
 namespace SmartClinic.API.Controllers;
 
