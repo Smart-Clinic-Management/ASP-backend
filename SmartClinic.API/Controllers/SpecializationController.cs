@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SmartClinic.API.Bases;
-using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
+﻿using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.UpdateSpecialization;
-using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers;
 
@@ -11,8 +8,9 @@ namespace SmartClinic.API.Controllers;
 public class SpecializationController(ISpecializationService _specializationService) : AppControllerBase
 {
     [HttpPost]
+    [Consumes("multipart/form-data")]
     [Route("Create")]
-    public async Task<IActionResult> CreateSpecialization([FromForm] CreateSpecializationRequest request, IFormFile image)
+    public async Task<IActionResult> CreateSpecialization([FromForm] CreateSpecializationRequest request)
     {
         var response = await _specializationService.CreateSpecializationAsync(request);
         return NewResult(response);

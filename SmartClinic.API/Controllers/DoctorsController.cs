@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SmartClinic.API.Bases;
-using SmartClinic.Application.Features.Doctors.Command.DTOs.CreateDoctor;
+﻿using SmartClinic.Application.Features.Doctors.Command.DTOs.CreateDoctor;
 using SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
-using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers;
 
@@ -44,6 +41,7 @@ public class DoctorsController : AppControllerBase
     }
 
     [HttpPost("Create")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateDoctor([FromForm] CreateDoctorRequest request)
     {
         return NewResult(await _doctorService.CreateDoctor(request));

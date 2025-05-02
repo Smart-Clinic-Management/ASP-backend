@@ -113,7 +113,7 @@ public class DoctorService : ResponseHandler, IDoctorService
             LastName = newDoctorUser.Lname,
             Address = newDoctorUser.Address,
             BirthDate = newDoctorUser.BirthDate,
-            ProfileImage = fileResult.RelativeFilePath
+            ProfileImage = fileResult.RelativeFilePath,
         };
 
         var userCreationResult = await _userManager.CreateAsync(user, "DefaultPassword123");
@@ -128,6 +128,7 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         var doctor = new Doctor
         {
+            Id = user.Id,
             Description = newDoctorUser.Description,
             WaitingTime = newDoctorUser.WaitingTime,
             IsActive = true
