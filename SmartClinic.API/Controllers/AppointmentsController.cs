@@ -1,40 +1,48 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartClinic.API.Bases;
-using SmartClinic.Application.Features.Appointments.Query.DTOs.AllAppointments;
+using SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
 using SmartClinic.Application.Services.Interfaces;
 
-namespace SmartClinic.API.Controllers
+namespace SmartClinic.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AppointmentsController : AppControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AppointmentsController : AppControllerBase
+    private readonly IAppointmentService _appointmentService;
+
+    public AppointmentsController(IAppointmentService appointmentService)
     {
-        private readonly IAppointmentService _appointmentService;
+        _appointmentService = appointmentService;
+    }
 
-        public AppointmentsController(IAppointmentService appointmentService)
-        {
-            _appointmentService = appointmentService;
-        }
+    [HttpGet("GetAll")]
+    public async Task<IActionResult> GetAllAppointments(int pageSize = 20, int pageIndex = 1)
+    {
+        var result = await _appointmentService.ListAllAppointmentsAsync(pageSize, pageIndex);
+        return NewResult(result);
+    }
 
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllAppointments(int pageSize = 20, int pageIndex = 1)
-        {
-            var result = await _appointmentService.ListAllAppointmentsAsync(pageSize, pageIndex);
-            return NewResult(result);
-        }
+    [HttpGet("GetDoctorAppointments/{doctorId}")]
+    public async Task<IActionResult> GetDoctorAppointments(int doctorId, int pageSize = 20, int pageIndex = 1)
+    {
+        var result = await _appointmentService.ListDoctorAppointmentsAsync(doctorId, pageSize, pageIndex);
+        return NewResult(result);
+    }
 
-        [HttpGet("GetDoctorAppointments/{doctorId}")]
-        public async Task<IActionResult> GetDoctorAppointments(int doctorId, int pageSize = 20, int pageIndex = 1)
-        {
-            var result = await _appointmentService.ListDoctorAppointmentsAsync(doctorId, pageSize, pageIndex);
-            return NewResult(result);
-        }
+    [HttpGet("GetPatientAppointments/{patientId}")]
+    public async Task<IActionResult> GetPatientAppointments(int patientId, int pageSize = 20, int pageIndex = 1)
+    {
+        var result = await _appointmentService.ListPatientAppointmentsAsync(patientId, pageSize, pageIndex);
+        return NewResult(result);
+    }
 
-        [HttpGet("GetPatientAppointments/{patientId}")]
-        public async Task<IActionResult> GetPatientAppointments(int patientId, int pageSize = 20, int pageIndex = 1)
-        {
-            var result = await _appointmentService.ListPatientAppointmentsAsync(patientId, pageSize, pageIndex);
-            return NewResult(result);
-        }
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> CreateAppointment(CreateAppointmentDto appointmentDto)
+    {
+
+        var result = await _appointmentService.CreateAppointmentAsync(appointmentDto);
+        return NewResult(result);
     }
 }

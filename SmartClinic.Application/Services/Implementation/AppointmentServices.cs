@@ -6,7 +6,9 @@ using SmartClinic.Application.Features.Appointments.Query.DTOs.PatientAppointmen
 
 namespace SmartClinic.Application.Services.Implementation;
 
-public class AppointmentService : IAppointmentService
+public class AppointmentService
+    : ResponseHandler,
+    IAppointmentService
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -15,9 +17,26 @@ public class AppointmentService : IAppointmentService
         _unitOfWork = unitOfWork;
     }
 
-    public Task<Response<string>> CreateAppointment(CreateAppointmentDto appointmentDto)
+    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentDto appointmentDto)
     {
-        throw new NotImplementedException();
+        var validator = new CreateAppointmentValidator(_unitOfWork);
+
+        var validatinResult = await validator.ValidateAsync(appointmentDto);
+
+        if (!validatinResult.IsValid)
+        {
+            List<string> errors = [.. validatinResult.Errors.Select(x => x.ErrorMessage)];
+            return BadRequest<string>(errors);
+        }
+
+        var appointment = appointmentDto.ToEntity();
+
+        await _unitOfWork.Repository<IAppointment>().AddAsync(appointment);
+
+        if (await _unitOfWork.SaveChangesAsync())
+            return Created("Created");
+
+        return BadRequest<string>(["Appointment not created"]);
     }
 
     public async Task<Response<List<AppointmentResponseDto>>> ListAllAppointmentsAsync(int pageSize = 20, int pageIndex = 1)

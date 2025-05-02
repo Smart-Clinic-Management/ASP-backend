@@ -9,36 +9,54 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
     {
         RuleFor(x => x.AppointmentDate)
             .NotEmpty()
-            .Must(ValidDate).WithMessage("Not Valid Date");
+            .Must(ValidDate).WithMessage("Not valid date , date must be at least today");
 
         RuleFor(x => x.StartTime)
          .NotEmpty();
 
+
+        RuleFor(x => x.TimeSlot)
+        .GreaterThanOrEqualTo(0)
+        .LessThanOrEqualTo(60)
+        .NotEmpty();
 
         RuleFor(x => x.DoctorId)
          .MustAsync(DoctorExists).WithMessage("Invalid Doctor Id")
          .NotEmpty();
 
 
-        RuleFor(x => x.PatientId)
-            .MustAsync(PatientExists).WithMessage("Invalid Patient Id")
-            .NotEmpty();
+
+
         RuleFor(x => x.SpecializationId)
-         .MustAsync(SpecializationExists).WithMessage("Invalid Specialization Id")
          .NotEmpty();
+
+        RuleFor(x => x)
+            .MustAsync(IsValidDoctorSpecialization).WithMessage("Invalid Doctor Specialization Id")
+            .MustAsync(ValidAppointment).WithMessage("Appointment already reserved or invalid inserted data");
 
 
         this._unitOfWork = unitOfWork;
     }
 
+
+    private async Task<bool> IsValidDoctorSpecialization(CreateAppointmentDto dto, CancellationToken token)
+        => await _unitOfWork.Repository<IDoctorRepository>().
+                     IsValidDoctorSpecialization(dto.SpecializationId, dto.DoctorId);
+
+    private async Task<bool> ValidAppointment(CreateAppointmentDto dto, CancellationToken token)
+    {
+        var doctor = await _unitOfWork.Repository<IDoctorRepository>()
+            .GetDoctorWithSpecificScheduleAsync(dto.DoctorId, dto.AppointmentDate,
+            dto.StartTime, dto.TimeSlot);
+        if (doctor is null || doctor.DoctorSchedules.Count == 0 || doctor.Appointments.Count > 0) return false;
+
+        return true;
+    }
+
     private async Task<bool> DoctorExists(int DoctorId, CancellationToken token)
          => await _unitOfWork.Repository<IDoctorRepository>().ExistsAsync(DoctorId);
 
-    private async Task<bool> SpecializationExists(int specializationId, CancellationToken token)
-         => await _unitOfWork.Repository<ISpecializaionRepository>().ExistsAsync(specializationId);
 
-    private async Task<bool> PatientExists(int patientId, CancellationToken token)
-        => await _unitOfWork.Repository<IPatient>().ExistsAsync(patientId);
 
     private bool ValidDate(DateOnly appointmentDate)
     {

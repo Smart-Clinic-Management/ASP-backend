@@ -5,9 +5,7 @@ namespace SmartClinic.Infrastructure.Repos;
 public class PatientRepo(ApplicationDbContext context) : GenericRepository<Patient>(context), IPatient
 {
     public async Task<bool> ExistsAsync(int patientId)
-    {
-        return await context.Patients.AnyAsync(x => x.Id == patientId && x.IsActive);
-    }
+        => await context.Patients.AnyAsync(x => x.Id == patientId && x.IsActive);
 
     public Task<Patient?> GetByIdAsync(int id)
     {

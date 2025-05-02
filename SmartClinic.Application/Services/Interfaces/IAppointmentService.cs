@@ -13,5 +13,5 @@ public interface IAppointmentService
 
     Task<Response<List<PatientAppointmentsWithDoctorDetailsDto>>> ListPatientAppointmentsAsync(int patientId, int pageSize = 20, int pageIndex = 1);
 
-    Task<Response<string>> CreateAppointment(CreateAppointmentDto appointmentDto);
+    Task<Response<string>> CreateAppointmentAsync(CreateAppointmentDto appointmentDto);
 }

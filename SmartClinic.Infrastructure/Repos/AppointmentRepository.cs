@@ -60,4 +60,5 @@ public class AppointmentRepository(ApplicationDbContext context)
              $"{nameof(Appointment.Doctor)}.{nameof(Appointment.Doctor.User)}",
              nameof(Appointment.Specialization));
     }
+
 }
