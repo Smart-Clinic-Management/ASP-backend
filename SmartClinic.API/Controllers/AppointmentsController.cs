@@ -37,7 +37,7 @@ public class AppointmentsController : AppControllerBase
         return NewResult(result);
     }
 
-    [Authorize]
+    [Authorize(Roles = "patient")]
     [HttpPost]
     public async Task<IActionResult> CreateAppointment(CreateAppointmentDto appointmentDto)
     {
