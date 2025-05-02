@@ -98,9 +98,13 @@ namespace SmartClinic.Application.Services.Implementation
                     .Select(d => new DoctorDto
                     {
                         Id = d.Id,
-                        Name = d.User != null ? d.User.UserName : "No User Linked",
+                        Name = d.User != null
+                                ? $"{d.User.FirstName} {d.User.LastName}".Trim()
+                                    : "No User Linked",
                         Description = d.Description,
-                        IsActive = d.IsActive
+                        IsActive = d.IsActive,
+                        Image = d.User != null ? _fileHandler.GetFileURL(d.User.ProfileImage)
+                            : null,
                     }).ToList()
             };
 
