@@ -11,6 +11,7 @@ public static class ModuleAddApplicationDependencies
         services.AddScoped<ResponseHandler>();
         services.AddScoped<IDoctorService, DoctorService>();
         services.AddScoped<IPatientService, PatientService>();
+        services.AddScoped<IDoctorScheduleService, DoctorScheduleServices>();
         services.AddScoped<IAppointmentService, AppointmentService>();
         services.AddScoped<IPatient, PatientRepo>();
 

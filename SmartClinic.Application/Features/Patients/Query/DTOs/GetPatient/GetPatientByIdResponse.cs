@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartClinic.Application.Features.Patients.Query.DTOs.GetPatient
 {
-    public record GetPatientByIdResponse(
+    public record GetDoctorSchedule(
     [Required] int id,
     [Required] string firstName,
     [Required] string lastName,

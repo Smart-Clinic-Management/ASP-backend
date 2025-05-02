@@ -14,6 +14,10 @@ public static class ModuleInfrastructureDependencies
 
         services.AddScoped<IAppointment, AppointmentRepository>();
 
+        services.AddScoped<IDoctorSchedule, DoctorScheduleRepository>();
+
+
+
         services.AddScoped<ISpecializaionRepository, SpecializationRepository>();
 
         return services;

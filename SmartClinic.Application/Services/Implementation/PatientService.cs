@@ -44,12 +44,12 @@ public class PatientService : IPatientService
 
 
 
-    public async Task<Response<GetPatientByIdResponse>> GetPatientByIdAsync(int patientId)
+    public async Task<Response<GetDoctorSchedule>> GetPatientByIdAsync(int patientId)
     {
         var patient = await _patientRepo.GetByIdWithIncludesAsync(patientId);
         if (patient == null)
         {
-            return new ResponseHandler().NotFound<GetPatientByIdResponse>($"No patient found with ID {patientId}");
+            return new ResponseHandler().NotFound<GetDoctorSchedule>($"No patient found with ID {patientId}");
         }
 
         var response = patient.ToGetPatientByIdResponse();

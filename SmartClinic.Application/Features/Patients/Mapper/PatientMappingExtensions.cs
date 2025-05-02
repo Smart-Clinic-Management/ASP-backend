@@ -17,9 +17,9 @@ public static class PatientMappingExtensions
         );
     }
 
-    public static GetPatientByIdResponse ToGetPatientByIdResponse(this Patient patient)
+    public static GetDoctorSchedule ToGetPatientByIdResponse(this Patient patient)
     {
-        return new GetPatientByIdResponse(
+        return new GetDoctorSchedule(
             id: patient.Id,
             firstName: patient.User.FirstName,
             lastName: patient.User.LastName,
