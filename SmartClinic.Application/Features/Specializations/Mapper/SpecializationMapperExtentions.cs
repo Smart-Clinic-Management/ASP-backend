@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.UpdateSpecialization;
+using SmartClinic.Domain.Entities;
 
 namespace SmartClinic.Application.Features.Specializations.Mapper
 {
@@ -32,7 +33,6 @@ namespace SmartClinic.Application.Features.Specializations.Mapper
         {
             specialization.Name = request.Name ?? specialization.Name;
             specialization.Description = request.Description ?? specialization.Description;
-            specialization.Image = request.Image ?? specialization.Image;
             specialization.IsActive = request.IsActive ?? specialization.IsActive;
         }
     }

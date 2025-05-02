@@ -29,7 +29,7 @@ public class SpecializationController(ISpecializationService _specializationServ
         return NewResult(response);
     }
     [HttpPut("Update/{id}")]
-    public async Task<IActionResult> UpdateSpecialization(int id, [FromBody] UpdateSpecializationRequest request)
+    public async Task<IActionResult> UpdateSpecialization(int id, [FromForm] UpdateSpecializationRequest request)
     {
         var response = await _specializationService.UpdateSpecializationAsync(id, request);
         return NewResult(response);
