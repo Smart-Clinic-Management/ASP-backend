@@ -4,8 +4,6 @@ public class SpecializationRepository(ApplicationDbContext context)
 : GenericRepository<Specialization>(context),
 ISpecializaionRepository
 {
-    public async Task<bool> ExistsAsync(int specializationId)
-        => await context.Specializations.AnyAsync(x => x.Id == specializationId && x.IsActive);
 
     public Task<Specialization?> GetByIdAsync(int id)
         => base.GetSingleAsync(x => x.Id == id && x.IsActive, true,

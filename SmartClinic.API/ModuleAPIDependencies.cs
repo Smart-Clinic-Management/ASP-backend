@@ -1,4 +1,7 @@
-﻿namespace SmartClinic.API;
+﻿using Microsoft.AspNetCore.Mvc;
+using SmartClinic.Application.Bases;
+
+namespace SmartClinic.API;
 public static class ModuleAPIDependencies
 {
     public static IServiceCollection AddAPIDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -67,6 +70,22 @@ public static class ModuleAPIDependencies
                 ClockSkew = TimeSpan.FromDays(7)
             };
         });
+
+
+        services.Configure<ApiBehaviorOptions>(options =>
+                  options.InvalidModelStateResponseFactory = context =>
+                        {
+                            var errors = context.ModelState
+                                .Where(x => x.Value.Errors.Count > 0)
+                                .SelectMany(x => x.Value.Errors)
+                                .Select(x => x.ErrorMessage)
+                                .ToList();
+
+                            var response = new ResponseHandler().BadRequest<string>(errors);
+
+                            return new BadRequestObjectResult(response);
+                        }
+                        );
 
         return services;
     }

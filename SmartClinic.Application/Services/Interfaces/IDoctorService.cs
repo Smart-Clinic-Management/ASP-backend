@@ -14,6 +14,4 @@ public interface IDoctorService
     Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId);
 
     Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id, DateOnly startDate);
-
-
 }
