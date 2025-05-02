@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\Specializations\" />
-    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>
