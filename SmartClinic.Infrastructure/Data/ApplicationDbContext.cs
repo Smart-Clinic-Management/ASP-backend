@@ -1,18 +1,11 @@
-﻿using SmartClinic.Domain.Entities.AppointmentAggregation;
-using SmartClinic.Infrastucture.Configuration;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 
 namespace SmartClinic.Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext<AppUser>
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<AppUser, IdentityRole<int>, int>(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
-
-    protected ApplicationDbContext()
-    {
-    }
-
     public DbSet<AppUser> ApplicationUser { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<Patient> Patients { get; set; }
@@ -26,7 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         base.OnModelCreating(builder);
         // Apply separate configuration classes
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationUserConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
     }
 

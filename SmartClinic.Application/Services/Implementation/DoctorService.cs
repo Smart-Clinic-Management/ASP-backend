@@ -71,7 +71,7 @@ public class DoctorService : ResponseHandler, IDoctorService
         doctor.IsActive = false;
         _doctorRepo.Update(doctor);
 
-        var user = await _userManager.FindByIdAsync(doctor.UserId);
+        var user = await _userManager.FindByIdAsync(doctor.Id.ToString());
         if (user != null)
         {
             user.IsActive = false;
@@ -128,7 +128,6 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         var doctor = new Doctor
         {
-            UserId = user.Id,
             Description = newDoctorUser.Description,
             WaitingTime = newDoctorUser.WaitingTime,
             IsActive = true

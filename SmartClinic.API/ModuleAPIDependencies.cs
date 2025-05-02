@@ -7,18 +7,25 @@ public static class ModuleAPIDependencies
     public static IServiceCollection AddAPIDependencies(this IServiceCollection services, IConfiguration configuration)
     {
 
-        services
-     .AddIdentityCore<AppUser>(opts =>
-     {
-         // password, lockout, etc.
-         opts.Password.RequireNonAlphanumeric = false;
-         opts.Password.RequireUppercase = false;
-         opts.Password.RequiredLength = 6;
-         opts.User.RequireUniqueEmail = true;
-     })
-     .AddRoles<IdentityRole>()                             // enable roles
-     .AddEntityFrameworkStores<ApplicationDbContext>()      // your EF store
-     .AddSignInManager();
+
+        services.AddIdentity<AppUser, IdentityRole<int>>(opts =>
+         {
+             // password, lockout, etc.
+             opts.Password.RequireNonAlphanumeric = false;
+             opts.Password.RequireUppercase = false;
+             opts.Password.RequiredLength = 6;
+             opts.User.RequireUniqueEmail = true;
+         }) // custom DbContext
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+
+
+        // adding auth services
+
+        services.AddScoped<UserManager<AppUser>>();
+        services.AddScoped<SignInManager<AppUser>>();
+        services.AddScoped<RoleManager<IdentityRole<int>>>();
 
 
         // Add OpenAPI with Bearer Authentication Support
@@ -26,9 +33,6 @@ public static class ModuleAPIDependencies
         {
             options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
         });
-
-
-        services.AddScoped<SignInManager<AppUser>>();
 
 
         services.AddAuthorization(options =>
@@ -53,11 +57,17 @@ public static class ModuleAPIDependencies
 
         // Configure JWT Authentication instead of cookies
 
+        #region Jwt Configuration
         var key = Encoding.ASCII.GetBytes(configuration["ApiSettings:Secret"] ?? throw new Exception("secret not found"));
         services.AddAuthentication(options =>
         {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.RequireAuthenticatedSignIn = true;
+            options.DefaultAuthenticateScheme =
+            options.DefaultSignInScheme =
+            options.DefaultSignOutScheme =
+            options.DefaultChallengeScheme =
+            options.DefaultForbidScheme =
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(options =>
         {
@@ -67,26 +77,32 @@ public static class ModuleAPIDependencies
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ClockSkew = TimeSpan.FromDays(7)
+                ClockSkew = TimeSpan.FromDays(7),
+                ValidateLifetime = true,
             };
         });
 
+        #endregion
 
+        //fluent validation configuration
+
+        #region Fluent Validation
         services.Configure<ApiBehaviorOptions>(options =>
-                  options.InvalidModelStateResponseFactory = context =>
-                        {
-                            var errors = context.ModelState
-                                .Where(x => x.Value.Errors.Count > 0)
-                                .SelectMany(x => x.Value.Errors)
-                                .Select(x => x.ErrorMessage)
-                                .ToList();
+                 options.InvalidModelStateResponseFactory = context =>
+                       {
+                           var errors = context.ModelState
+                               .Where(x => x.Value.Errors.Count > 0)
+                               .SelectMany(x => x.Value.Errors)
+                               .Select(x => x.ErrorMessage)
+                               .ToList();
 
-                            var response = new ResponseHandler().BadRequest<string>(errors);
+                           var response = new ResponseHandler().BadRequest<string>(errors);
 
-                            return new BadRequestObjectResult(response);
-                        }
-                        );
+                           return new BadRequestObjectResult(response);
+                       }
+                       );
 
+        #endregion
         return services;
     }
 }

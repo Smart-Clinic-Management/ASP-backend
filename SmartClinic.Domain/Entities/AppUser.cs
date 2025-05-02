@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SmartClinic.Domain.Entities;
 
-public class AppUser : IdentityUser
+public class AppUser : IdentityUser<int>
 {
     [Column(TypeName = "VARCHAR(255)")]
     public required string FirstName { get; set; }

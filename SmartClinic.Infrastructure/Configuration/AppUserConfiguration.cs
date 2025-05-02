@@ -1,20 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartClinic.Domain.Entities;
 
-namespace SmartClinic.Infrastucture.Configuration;
+namespace SmartClinic.Infrastructure.Configuration;
 
-public class ApplicationUserConfiguration : IEntityTypeConfiguration<AppUser>
+public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
 {
     public void Configure(EntityTypeBuilder<AppUser> builder)
     {
         builder.HasOne(u => u.Doctor)
             .WithOne(d => d.User)
-            .HasForeignKey<Doctor>(x => x.UserId)
+            .HasForeignKey<Doctor>(x => x.Id)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(u => u.Patient)
             .WithOne(d => d.User)
-            .HasForeignKey<Patient>(x => x.UserId)
+            .HasForeignKey<Patient>(x => x.Id)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

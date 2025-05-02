@@ -1,12 +1,11 @@
-﻿namespace SmartClinic.Domain.DTOs.Auth
+﻿namespace SmartClinic.Domain.DTOs.Auth;
+
+public class RegisterResponseDTO
 {
-    public class RegisterResponseDTO
-    {
 
-        public string Id { get; set; } = null!;
+    public int Id { get; set; }
 
-        public string Email { get; set; } = null!;
+    public string Email { get; set; } = null!;
 
 
-    }
 }
