@@ -225,8 +225,9 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         AvailableSchedules = AddingDaySlots(doctor, AvailableSchedules);
 
-        var result = doctor.ToGetDoctorWithAvailableSchedules(AvailableSchedules);
+        doctor.User.ProfileImage = _fileHandler.GetFileURL(doctor.User.ProfileImage!);
 
+        var result = doctor.ToGetDoctorWithAvailableSchedules(AvailableSchedules);
         return Success(result, "Found");
     }
 

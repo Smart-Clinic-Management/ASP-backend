@@ -1,12 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Features.Auth.Command;
-using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
 using SmartClinic.Domain.DTOs.Auth;
 
 namespace SmartClinic.Application.Features.Auth
@@ -38,11 +37,22 @@ namespace SmartClinic.Application.Features.Auth
             var userRoles = await userMGR.GetRolesAsync(user);
 
 
+            var q = await userMGR.Users
+                .Include(u => u.Patient)
+                .Include(u => u.Doctor)
+                .Where(u => u.Id == user.Id)
+                .Select(u => new
+                {
+                    Id = (int?)u.Patient.Id ?? u.Doctor.Id
+                }).FirstOrDefaultAsync();
+
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id) ,
+                new Claim("id" , q?.Id.ToString() ?? "") ,
             };
 
             claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
@@ -68,6 +78,7 @@ namespace SmartClinic.Application.Features.Auth
         public async Task<Response<LoginResponseDTO>> Login(LoginRequestDTO user)
         {
 
+
             var userExist = await userMGR.FindByEmailAsync(user.Email);
             if (userExist == null)
                 return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
@@ -76,7 +87,6 @@ namespace SmartClinic.Application.Features.Auth
 
             if (!sign.Succeeded)
                 return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
-
 
             var res = response.Success(new LoginResponseDTO() { Token = await GenerateJWT(userExist) }, message: "success");
 

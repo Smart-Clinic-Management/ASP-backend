@@ -2,7 +2,7 @@
 {
     public class BaseProfile
     {
-
+        public int? Id { get; set; }
         public string Email { get; set; } = null!;
 
         public string FirstName { get; set; } = null!;
