@@ -24,9 +24,6 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
          .MustAsync(DoctorExists).WithMessage("Invalid Doctor Id")
          .NotEmpty();
 
-
-
-
         RuleFor(x => x.SpecializationId)
          .NotEmpty();
 
