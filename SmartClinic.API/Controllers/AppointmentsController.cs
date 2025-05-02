@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SmartClinic.API.Bases;
-using SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
-using SmartClinic.Application.Services.Interfaces;
+﻿
 
 namespace SmartClinic.API.Controllers;
 
@@ -41,8 +38,8 @@ public class AppointmentsController : AppControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAppointment(CreateAppointmentDto appointmentDto)
     {
-
-        var result = await _appointmentService.CreateAppointmentAsync(appointmentDto);
+        var patientId = User.GetUserId();
+        var result = await _appointmentService.CreateAppointmentAsync(appointmentDto, patientId);
         return NewResult(result);
     }
 }

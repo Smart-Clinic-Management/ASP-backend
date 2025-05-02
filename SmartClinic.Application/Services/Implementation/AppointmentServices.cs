@@ -17,7 +17,7 @@ public class AppointmentService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentDto appointmentDto)
+    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentDto appointmentDto, int patientId)
     {
         var validator = new CreateAppointmentValidator(_unitOfWork);
 
@@ -29,7 +29,7 @@ public class AppointmentService
             return BadRequest<string>(errors);
         }
 
-        var appointment = appointmentDto.ToEntity();
+        var appointment = appointmentDto.ToEntity(patientId);
 
         await _unitOfWork.Repository<IAppointment>().AddAsync(appointment);
 

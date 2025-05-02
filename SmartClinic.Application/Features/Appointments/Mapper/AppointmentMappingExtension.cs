@@ -57,14 +57,14 @@ public static class AppointmentMappingExtension
         );
     }
 
-    public static Appointment ToEntity(this CreateAppointmentDto appointmentDto)
+    public static Appointment ToEntity(this CreateAppointmentDto appointmentDto, int patientId)
         => new()
         {
             Duration = new(appointmentDto.StartTime,
             appointmentDto.StartTime.AddMinutes(appointmentDto.TimeSlot)),
             AppointmentDate = appointmentDto.AppointmentDate,
             DoctorId = appointmentDto.DoctorId,
-            PatientId = appointmentDto.PatientId,
+            PatientId = patientId,
             SpecializationId = appointmentDto.SpecializationId,
         };
 }

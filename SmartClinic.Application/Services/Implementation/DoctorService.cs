@@ -264,8 +264,11 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         foreach (var day in newAvailableDays.Where(x => x.IsAvailable))
         {
+
             var scheduleDay = doctor.DoctorSchedules
                 .FirstOrDefault(x => x.DayOfWeek.ToString().Equals(day.Day))!;
+
+            day.TimeSlot = scheduleDay.SlotDuration;
 
             var dayAppointments = doctor.Appointments
                 .Where(x => x.AppointmentDate.DayOfWeek.ToString().Equals(day.Day))
