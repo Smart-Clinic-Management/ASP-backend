@@ -16,7 +16,7 @@ public class ResponseHandler
         {
             Data = entity,
             StatusCode = System.Net.HttpStatusCode.OK,
-            Message = message ?? "Added Successfully",
+            Message = message ?? "Found Successfully",
         };
     }
     public Response<T> Unauthorized<T>()
