@@ -108,19 +108,52 @@ namespace SmartClinic.Application.Services.Implementation
 
         }
 
-
-        public async Task<Response<CreateSpecializationResponse>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest request)
+        public async Task<Response<UpdateSpecializationResponse>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest request)
         {
             var specialization = await _specialRepo.GetByIdWithIncludesAsync(specializationId)
                       ?? throw new Exception("Specialization not found");
-            specialization.UpdateSpecializationFromRequest(request);
+
+            if (request.Image != null)
+            {
+                var validationOptions = new FileValidation
+                {
+                    MaxSize = 2 * 1024 * 1024,
+                    AllowedExtenstions = [".jpg", ".jpeg", ".png"]
+                };
+
+                var fileResult = await _fileHandler.HanldeFile(request.Image, validationOptions);
+
+                if (!fileResult.Success)
+                {
+                    var errors = new List<string> { fileResult.Error };
+                    return new ResponseHandler().BadRequest<UpdateSpecializationResponse>(errors);
+                }
+
+                specialization.Image = fileResult.RelativeFilePath;
+                await _fileHandler.SaveFile(request.Image, fileResult.FullFilePath);
+            }
+
+            specialization.UpdateSpecializationFromRequest(request); 
+
             _specialRepo.Update(specialization);
+
             var success = await _unitOfWork.SaveChangesAsync();
             if (!success)
                 throw new Exception("Error updating specialization.");
-            var response = MapSpecializationToResponse(specialization);
-            return new Response<CreateSpecializationResponse>(response);
 
+            // Get full URL
+            var imageUrl = SpecializationMapperExtentions.GetImgUrl(specialization.Image, _httpContextAccessor);
+
+            var response = new UpdateSpecializationResponse
+            {
+                Id = specialization.Id,
+                Name = specialization.Name,
+                Description = specialization.Description,
+                IsActive = specialization.IsActive,
+                Image = imageUrl
+            };
+
+            return new ResponseHandler().Success(response, message: "Specialization updated successfully");
         }
 
         public async Task<Response<List<CreateSpecializationResponse>>> GetAllSpecializationsAsync()
