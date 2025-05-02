@@ -1,11 +1,9 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
 using SmartClinic.Application.Bases;
 
 namespace SmartClinic.API.Bases;
 [Route("api/[controller]")]
 [Produces("application/json")]
-[Consumes("application/json")]
 [ApiController]
 public class AppControllerBase : ControllerBase
 {
