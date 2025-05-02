@@ -1,6 +1,4 @@
-using SmartClinic.Application.Services.Implementation.FileHandlerService;
 using SmartClinic.Application.Services.Implementation.Profile;
-using SmartClinic.Infrastructure.Repos;
 
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
@@ -18,9 +16,6 @@ public static class ModuleAddApplicationDependencies
 
 
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<UserManager<AppUser>>();
-        services.AddScoped<SignInManager<AppUser>>();
-        services.AddScoped<RoleManager<IdentityRole>>();
         services.AddHttpContextAccessor();
 
 

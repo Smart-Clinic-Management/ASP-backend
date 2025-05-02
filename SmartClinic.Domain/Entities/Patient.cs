@@ -10,9 +10,6 @@ public class Patient : BaseEntity
 
     public bool IsActive { get; set; } = true;
 
-    public string UserId { get; set; }
-
-    [ForeignKey(nameof(UserId))]
     public AppUser User { get; set; } = null!;
 
     public ICollection<Appointment> Appointments { get; set; } = [];
