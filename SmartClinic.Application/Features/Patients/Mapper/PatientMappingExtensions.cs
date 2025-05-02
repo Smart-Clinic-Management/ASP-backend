@@ -1,40 +1,35 @@
 ﻿using SmartClinic.Application.Features.Patients.Query.DTOs;
+using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatient;
+using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatients;
 
-namespace SmartClinic.Application.Features.Patients.Mapper;
+namespace SmartClinic.Application.Mapping;
 
 public static class PatientMappingExtensions
 {
-    public static GetAllPatientsResponse ToGetAllPatientsResponse(this Patient patient, IHttpContextAccessor httpContextAccessor)
-    {
-        var appointmentsDto = patient.Appointments.Select(appt =>
-        {
-            var doctor = appt.Doctor;
-            var imageUrl = DoctorMappingExtensions.GetImgUrl(doctor.User.ProfileImage, httpContextAccessor);
-
-            var specializationName = doctor.Specialization.Name;
-
-            var doctorDto = new DoctorInAppointmentDto(
-                doctor.Id,
-                doctor.User.FirstName,
-                doctor.User.LastName,
-                imageUrl,
-                specializationName
-            );
-
-            return new PatientAppointmentDto(
-                appt.AppointmentDate,
-                appt.Duration,
-                appt.Status,
-                doctorDto
-            );
-        }).ToList();
-
+    public static GetAllPatientsResponse ToGetAllPatientsResponse(this Patient patient)
+    { 
         return new GetAllPatientsResponse(
-            patient.Id,
-            patient.User.FirstName,
-            patient.User.LastName,
-            patient.MedicalHistory,
-            appointmentsDto
+            id: patient.Id,
+            firstName: patient.User?.FirstName ?? "",
+            lastName: patient.User?.LastName ?? "",
+            userPhoneNumber: patient.User?.PhoneNumber ?? "",
+            age: patient.User.Age 
         );
     }
+
+    public static GetPatientByIdResponse ToGetPatientByIdResponse(this Patient patient)
+    {
+        return new GetPatientByIdResponse(
+            id: patient.Id,
+            firstName: patient.User.FirstName,
+            lastName: patient.User.LastName,
+            userEmail: patient.User.Email,
+            userPhoneNumber: patient.User.PhoneNumber,
+            age: patient.User.Age,
+            address: patient.User.Address,
+            image: patient.User.ProfileImage, 
+            medicalHistory: patient.MedicalHistory 
+        );
+    }
+
 }

@@ -1,4 +1,7 @@
 ﻿using SmartClinic.Application.Features.Patients.Query.DTOs;
+using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatient;
+using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatients;
+using SmartClinic.Application.Mapping;
 
 namespace SmartClinic.Application.Services.Implementation;
 
@@ -26,45 +29,32 @@ public class PatientService : IPatientService
         _httpContextAccessor = httpContextAccessor;
         _specializationService = specializationService;
     }
-    public async Task<Response<List<GetAllPatientsResponse>>> GetAllPatientsAsync(int pageSize = 20, int pageIndex = 1)
+
+   
+       public async Task<Response<List<GetAllPatientsResponse>>> GetAllPatientsAsync(int pageSize = 20, int pageIndex = 1)
     {
-        var patients = await _patientRepo.ListNoTrackingAsync(pageSize, pageIndex);
-
-        //var invalidAppointments = new List<string>();
-
-        //foreach (var patient in patients)
-        //{
-        //    foreach (var appointment in patient.Appointments)
-        //    {
-        //        if (appointment.Doctor == null)
-        //        {
-        //            invalidAppointments.Add($"Appointment for patient {patient.Id} is missing a Doctor.");
-        //        }
-
-        //        if (appointment.Doctor?.Specializations == null || !appointment.Doctor.Specializations.Any())
-        //        {
-        //            invalidAppointments.Add($"Appointment for patient {patient.Id} is missing a Specialization.");
-        //        }
-
-        //    }
-        //}
-
-        //if (invalidAppointments.Any())
-        //{
-        //    return new Response<List<GetAllPatientsResponse>>()
-        //    {
-        //        Message = string.Join("\n", invalidAppointments)
-        //    };
-        //}
-
-        var response = patients
-            .Select(p => p.ToGetAllPatientsResponse(_httpContextAccessor))
-            .ToList();
+        var patients = await _patientRepo.ListAsync(pageSize, pageIndex);
+        var response = patients.Select(patient =>
+        {
+            return patient.ToGetAllPatientsResponse();
+        }).ToList();
 
         return new ResponseHandler().Success(response);
     }
 
 
 
+    public async Task<Response<GetPatientByIdResponse>> GetPatientByIdAsync(int patientId)
+    {
+        var patient = await _patientRepo.GetByIdWithIncludesAsync(patientId);
+        if (patient == null)
+        {
+            return new ResponseHandler().NotFound<GetPatientByIdResponse>($"No patient found with ID {patientId}");
+        }
+
+        var response = patient.ToGetPatientByIdResponse();
+
+        return new ResponseHandler().Success(response);
+    }
 
 }
