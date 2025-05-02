@@ -12,5 +12,6 @@ namespace SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSp
         public string? Name { get; set; } 
         public string? Description { get; set; }
         public bool IsActive { get; set; }
+        public string? Image { get; set; }
     }
 }
