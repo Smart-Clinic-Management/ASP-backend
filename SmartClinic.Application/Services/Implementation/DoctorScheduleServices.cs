@@ -4,6 +4,7 @@ using SmartClinic.Application.Services.Interfaces;
 using SmartClinic.Infrastructure.Interfaces;
 using SmartClinic.Application.MappingExtensions;
 using SmartClinic.Application.Features.Patients.Query.DTOs.GetDoctorSchedule;
+using SmartClinic.Application.Features.DoctorSchedule.Command.DeleteDoctorSchedule;
 
 namespace SmartClinic.Application.Services.Implementation
 {
@@ -29,6 +30,20 @@ namespace SmartClinic.Application.Services.Implementation
 
             return new Response<IEnumerable<GetDoctorSchedule>>(scheduleDtos);
         }
+
+
+        public async Task<DeleteSchedulesResponse> DeleteScheduleByIdAsync(int scheduleId)
+        {
+            var isDeleted = await _doctorScheduleRepo.SoftDeleteAsync(scheduleId);
+
+            if (!isDeleted)
+            {
+                return new DeleteSchedulesResponse(false, $"No schedule found with ID {scheduleId}.");
+            }
+
+            return new DeleteSchedulesResponse(true, $"Schedule with ID {scheduleId} was deleted successfully.");
+        }
+
 
 
     }
