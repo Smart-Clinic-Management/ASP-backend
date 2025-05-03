@@ -20,7 +20,6 @@ public class AvailableSchedule
 {
     public string Day { get; set; }
     public bool IsAvailable { get; set; }
-    public int TimeSlot { get; set; }
     public List<Slot> Slots { get; set; } = [];
 
 }

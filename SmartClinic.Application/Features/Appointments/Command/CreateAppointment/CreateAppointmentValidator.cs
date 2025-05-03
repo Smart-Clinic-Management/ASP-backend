@@ -23,7 +23,7 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
          .NotEmpty();
 
         RuleFor(x => x)
-            .MustAsync(IsValidDoctorSpecialization).WithMessage("Invalid Doctor Specialization Id")
+            .MustAsync(IsValidDoctorSpecialization).WithMessage("Invalid Doctor Specialization Id");
 
         this._unitOfWork = unitOfWork;
     }
