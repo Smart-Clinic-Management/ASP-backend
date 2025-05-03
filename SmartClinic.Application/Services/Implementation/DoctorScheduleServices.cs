@@ -1,13 +1,12 @@
 ﻿using SmartClinic.Application.Features.DoctorSchedule.Command.CreateDoctorSchedule;
 using SmartClinic.Application.Features.DoctorSchedule.Command.DeleteDoctorSchedule;
 using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule;
-using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule.SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule;
 using SmartClinic.Application.Features.DoctorSchedule.Query.DTOs.GetDoctorSchedule;
 using SmartClinic.Application.Features.DoctorsSchedules.Mapper;
 
 namespace SmartClinic.Application.Services.Implementation;
 
-public class DoctorScheduleServices : IDoctorScheduleService
+public class DoctorScheduleServices : ResponseHandler, IDoctorScheduleService
 {
     private readonly IDoctorSchedule _doctorScheduleRepo;
     private readonly IUnitOfWork _unitOfWork;
@@ -23,71 +22,49 @@ public class DoctorScheduleServices : IDoctorScheduleService
         var schedules = await _doctorScheduleRepo.GetByDoctorIdAsync(doctorId);
 
         if (schedules == null || !schedules.Any())
-        {
-            return new Response<IEnumerable<GetDoctorSchedule>>(null, "No schedules found for the doctor.");
-        }
+            return NotFound<IEnumerable<GetDoctorSchedule>>();
 
         var scheduleDtos = schedules.Select(schedule => schedule.ToGetDoctorScheduleDto()).ToList();
 
-        return new Response<IEnumerable<GetDoctorSchedule>>(scheduleDtos);
+        return Success<IEnumerable<GetDoctorSchedule>>(scheduleDtos);
     }
 
-    public async Task<DeleteSchedulesResponse> DeleteScheduleByIdAsync(int scheduleId)
+    public async Task<Response<DeleteSchedulesResponse>> DeleteScheduleByIdAsync(int scheduleId)
     {
         var isDeleted = await _doctorScheduleRepo.SoftDeleteAsync(scheduleId);
 
         if (!isDeleted)
-        {
-            return new DeleteSchedulesResponse(false, $"No schedule found with ID {scheduleId}.");
-        }
+            return NotFound<DeleteSchedulesResponse>($"No schedule found with ID {scheduleId}.");
 
-        return new DeleteSchedulesResponse(true, $"Schedule with ID {scheduleId} was deleted successfully.");
+        return Deleted<DeleteSchedulesResponse>();
     }
 
-    public async Task<CreateDoctorScheduleResponse> CreateAsync(CreateDoctorScheduleRequest request)
+    public async Task<Response<GetDoctorSchedule>> CreateAsync(CreateDoctorScheduleRequest request)
     {
         var schedule = request.ToEntity();
 
-        try
-        {
-            await _doctorScheduleRepo.AddAsync(schedule);
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new ApplicationException("An error occurred while creating the schedule.", ex);
-        }
+        await _doctorScheduleRepo.AddAsync(schedule);
+        await _unitOfWork.SaveChangesAsync();
 
-        return new CreateDoctorScheduleResponse(schedule.Id);
+        return Created(schedule.ToGetDoctorScheduleDto());
+
     }
 
 
 
-    public async Task<UpdateDoctorScheduleResponse> UpdateAsync(UpdateDoctorScheduleRequest request)
+    public async Task<Response<GetDoctorSchedule>> UpdateAsync(UpdateDoctorScheduleRequest request)
     {
         var schedule = await _doctorScheduleRepo.GetByIdAsync(request.Id);
 
         if (schedule is null)
-        {
-            return new UpdateDoctorScheduleResponse(
-                Message: $"Schedule with ID {request.Id} not found."
-            );
-        }
+            return BadRequest<GetDoctorSchedule>([$"Schedule with ID {request.Id} not found."]);
 
         schedule.UpdateFromRequest(request);
 
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception)
-        {
-            return new UpdateDoctorScheduleResponse(
-                Message: "An error occurred while updating the schedule."
-            );
-        }
+        await _unitOfWork.SaveChangesAsync();
 
-        return new UpdateDoctorScheduleResponse();
+        return Success(schedule.ToGetDoctorScheduleDto());
+
     }
 
 
