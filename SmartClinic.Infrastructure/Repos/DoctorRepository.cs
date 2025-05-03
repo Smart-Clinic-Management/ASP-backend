@@ -22,13 +22,12 @@ public class DoctorRepository(ApplicationDbContext context)
         => base.GetSingleAsync(x => x.Id == id && x.IsActive, false,
               nameof(Doctor.User), nameof(Doctor.Specialization));
 
-    public async Task<Doctor?> GetDoctorWithSpecificScheduleAsync(int doctorId, DateOnly appointmentDate, TimeOnly startTime, int timeSlot)
+    public async Task<Doctor?> GetDoctorWithSpecificScheduleAsync(int doctorId, DateOnly appointmentDate, TimeOnly startTime)
     {
         return await context.Doctors.AsNoTracking()
                 .Where(x => x.Id == doctorId && x.IsActive)
                 .Include(x => x.DoctorSchedules
                             .Where(s => s.DayOfWeek == appointmentDate.DayOfWeek &&
-                            s.SlotDuration == timeSlot &&
                              s.StartTime <= startTime &&
                              s.EndTime >= startTime.AddMinutes(s.SlotDuration)))
                 .Include(x => x.Appointments
@@ -36,6 +35,7 @@ public class DoctorRepository(ApplicationDbContext context)
                             a.Duration.StartTime <= startTime &&
                             a.Duration.EndTime > startTime))
                 .FirstOrDefaultAsync();
+
     }
 
     public async Task<Doctor?> GetWithAppointmentsAsync(int id, DateOnly startDate)

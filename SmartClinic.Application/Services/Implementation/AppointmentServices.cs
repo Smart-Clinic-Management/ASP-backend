@@ -29,7 +29,18 @@ public class AppointmentService
             return BadRequest<string>(errors);
         }
 
-        var appointment = appointmentDto.ToEntity(patientId);
+        var doctor = await _unitOfWork.Repository<IDoctorRepository>()
+           .GetDoctorWithSpecificScheduleAsync(appointmentDto.DoctorId, appointmentDto.AppointmentDate,
+           appointmentDto.StartTime);
+
+
+        if (doctor is null || doctor.DoctorSchedules.Count == 0 || doctor.Appointments.Count > 0)
+            return BadRequest<string>(["Appointment already reserved or invalid inserted data"]);
+
+
+        var scheduleTimeSlot = doctor.DoctorSchedules.FirstOrDefault()!.SlotDuration;
+
+        var appointment = appointmentDto.ToEntity(patientId, scheduleTimeSlot);
 
         await _unitOfWork.Repository<IAppointment>().AddAsync(appointment);
 
