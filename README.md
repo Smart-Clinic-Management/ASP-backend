@@ -48,14 +48,7 @@ Smart Clinic is a comprehensive medical appointment and diagnosis system designe
 - .NET 9 SDK (Preview)
 - SQL Server
 - Visual Studio 2022 or later
-
-### Installation Steps
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Smart-Clinic-Management/ASP-backend.git
-   cd ASP-backend
-   ### Project Structure (Clean Architecture)
+### Project Structure (Clean Architecture)
    /SmartClinic
 │
 ├── SmartClinic.API             → Web API (Controllers, Middleware, Authentication)
@@ -65,6 +58,14 @@ Smart Clinic is a comprehensive medical appointment and diagnosis system designe
 ├── SmartClinic.Domain          → Core entities and interfaces
 │
 └── SmartClinic.Infrastructure  → Data access layer (EF Core, Repositories, Configs)
+
+### Installation Steps
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Smart-Clinic-Management/ASP-backend.git
+   cd ASP-backend
+
 ###Update the database connection
 Open appsettings.json and update your SQL Server connection string.
 dotnet ef database update
