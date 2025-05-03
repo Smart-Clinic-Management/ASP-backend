@@ -52,7 +52,9 @@ public class DoctorScheduleController : AppControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateDoctorSchedule([FromForm] CreateDoctorScheduleRequest request)
+    [ProducesResponseType<Response<string>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateDoctorSchedule([FromBody] CreateDoctorScheduleRequest request)
     {
         var response = await _doctorScheduleService.CreateAsync(request);
 
