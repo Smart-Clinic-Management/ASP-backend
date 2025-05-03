@@ -13,9 +13,7 @@ global using SmartClinic.Application.Services.Implementation;
 global using SmartClinic.Application.Services.Implementation.FileHandlerService;
 global using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
 global using SmartClinic.Application.Services.Interfaces;
-global using SmartClinic.Application.Services.Implementation;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Domain.Entities.AppointmentAggregation;
 global using SmartClinic.Infrastructure.Interfaces;
-
 

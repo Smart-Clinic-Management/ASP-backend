@@ -1,5 +1,5 @@
 ﻿using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Patients.Query.DTOs.GetDoctorSchedule;
+using SmartClinic.Application.Features.DoctorSchedule.Query.DTOs.GetDoctorSchedule;
 using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatients;
 
 namespace SmartClinic.API.Controllers;
