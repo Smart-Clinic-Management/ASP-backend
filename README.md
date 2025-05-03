@@ -49,21 +49,34 @@ Smart Clinic is a comprehensive medical appointment and diagnosis system designe
 - SQL Server
 - Visual Studio 2022 or later
 ### Installation Steps
+
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/Smart-Clinic-Management/ASP-backend.git
    cd ASP-backend
+   ```
+
 2. **Update the database connection:**
-Open appsettings.json and update your SQL Server connection string.
-"ConnectionStrings": {
-  "DefaultConnection": "Server=your_server;Database=your_db;User Id=your_username;Password=your_password;"
-}
-dotnet ef database update
-3. **### Run the project**
-dotnet run
-4. ### Access API documentation
-Open your browser and navigate to:
-https://localhost:7047/scalar/v1
+   Open `appsettings.json` and update your SQL Server connection string.
+   ```json
+   "ConnectionStrings": {
+     "DefaultConnection": "Server=your_server;Database=your_db;User Id=your_username;Password=your_password;"
+   }
+   ```
+
+   Then, apply the database migrations:
+   ```bash
+   dotnet ef database update
+   ```
+
+3. **Run the project:**
+   ```bash
+   dotnet run
+   ```
+
+4. **Access API documentation:**
+   Open your browser and navigate to:
+   [https://localhost:7047/scalar/v1](https://localhost:7047/scalar/v1)
 
 
 
