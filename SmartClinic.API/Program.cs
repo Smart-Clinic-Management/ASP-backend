@@ -16,7 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddInfrastructureDependencies()
     .AddAPIDependencies(builder.Configuration)
-    .AddApplicationDependencies();
+    .AddApplicationDependencies(builder.Configuration);
 
 var app = builder.Build();
 
