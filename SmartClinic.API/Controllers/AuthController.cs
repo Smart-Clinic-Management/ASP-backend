@@ -2,7 +2,9 @@
 using Models.DTOs.Auth;
 using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Auth;
+using SmartClinic.Application.Features.Auth.Command;
 using SmartClinic.Application.Features.Profile.Command;
+using SmartClinic.Application.Features.Profile.Query;
 using SmartClinic.Domain.DTOs.Auth;
 
 namespace SmartClinic.API.Controllers;
@@ -23,6 +25,9 @@ public class AuthController : AppControllerBase
     }
 
     [HttpPost("login")]
+    [ProducesResponseType<Response<LoginResponseDTO>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<LoginResponseDTO>>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<Response<LoginResponseDTO>>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] LoginRequestDTO user)
     {
         Response<LoginResponseDTO> res = await authService.Login(user);
@@ -33,6 +38,8 @@ public class AuthController : AppControllerBase
 
     [HttpPost("register")]
     [Consumes("multipart/form-data")]
+    [ProducesResponseType<Response<RegisterResponseDTO>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<Response<RegisterResponseDTO>>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromForm] RegisterRequestDTO newPatientUser)
     {
         var res = await authService.Register(newPatientUser);
@@ -42,6 +49,9 @@ public class AuthController : AppControllerBase
 
     [HttpGet("GetProfileImg")]
     [Authorize]
+    [ProducesResponseType<Response<ImgResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<ImgResponse>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetProfileImg()
     {
         var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
@@ -52,6 +62,9 @@ public class AuthController : AppControllerBase
 
     [HttpGet("profile")]
     [Authorize]
+    [ProducesResponseType<Response<ProfileResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<ProfileResponse>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetProfile()
     {
         var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
@@ -62,6 +75,9 @@ public class AuthController : AppControllerBase
 
     [HttpDelete("remove_profileImg")]
     [Authorize]
+    [ProducesResponseType<Response<ProfileResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<ProfileResponse>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> RemoveProfileImg()
     {
         var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
@@ -72,6 +88,9 @@ public class AuthController : AppControllerBase
 
     [HttpPost("Update_ProfileImg")]
     [Authorize]
+    [ProducesResponseType<Response<ImgResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<ImgResponse>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateProfile([FromForm] ImgUpdateRequest file)
     {
         var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
