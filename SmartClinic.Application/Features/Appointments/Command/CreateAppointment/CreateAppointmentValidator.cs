@@ -15,11 +15,6 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
          .NotEmpty();
 
 
-        RuleFor(x => x.TimeSlot)
-        .GreaterThanOrEqualTo(0)
-        .LessThanOrEqualTo(60)
-        .NotEmpty();
-
         RuleFor(x => x.DoctorId)
          .MustAsync(DoctorExists).WithMessage("Invalid Doctor Id")
          .NotEmpty();
@@ -29,8 +24,6 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
 
         RuleFor(x => x)
             .MustAsync(IsValidDoctorSpecialization).WithMessage("Invalid Doctor Specialization Id")
-            .MustAsync(ValidAppointment).WithMessage("Appointment already reserved or invalid inserted data");
-
 
         this._unitOfWork = unitOfWork;
     }
@@ -40,15 +33,7 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
         => await _unitOfWork.Repository<IDoctorRepository>().
                      IsValidDoctorSpecialization(dto.SpecializationId, dto.DoctorId);
 
-    private async Task<bool> ValidAppointment(CreateAppointmentDto dto, CancellationToken token)
-    {
-        var doctor = await _unitOfWork.Repository<IDoctorRepository>()
-            .GetDoctorWithSpecificScheduleAsync(dto.DoctorId, dto.AppointmentDate,
-            dto.StartTime, dto.TimeSlot);
-        if (doctor is null || doctor.DoctorSchedules.Count == 0 || doctor.Appointments.Count > 0) return false;
 
-        return true;
-    }
 
     private async Task<bool> DoctorExists(int DoctorId, CancellationToken token)
          => await _unitOfWork.Repository<IDoctorRepository>().ExistsAsync(DoctorId);
