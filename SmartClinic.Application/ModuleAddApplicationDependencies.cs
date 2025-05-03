@@ -1,9 +1,11 @@
+using Microsoft.Extensions.Configuration;
+using SmartClinic.Application.Models;
 using SmartClinic.Application.Services.Implementation.Profile;
 
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
 {
-    public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
+    public static IServiceCollection AddApplicationDependencies(this IServiceCollection services, IConfiguration configuration)
     {
 
         services.AddScoped<IDoctorService, DoctorService>();
@@ -15,6 +17,8 @@ public static class ModuleAddApplicationDependencies
         services.AddScoped<IAppointmentService, AppointmentService>();
         services.AddScoped<IPatient, PatientRepo>();
 
+
+        services.Configure<EmailSettings>(configuration.GetRequiredSection("EmailSettings"));
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddHttpContextAccessor();
