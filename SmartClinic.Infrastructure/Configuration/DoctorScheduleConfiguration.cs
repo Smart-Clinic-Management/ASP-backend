@@ -6,6 +6,9 @@ public class DoctorScheduleConfiguration : IEntityTypeConfiguration<DoctorSchedu
 {
     public void Configure(EntityTypeBuilder<DoctorSchedule> builder)
     {
+        builder.HasIndex(x => x.StartTime);
+        builder.HasIndex(x => x.DayOfWeek);
+
         builder.Property(ds => ds.DayOfWeek)
             .HasConversion(s => s.ToString(),
             db => Enum.Parse<DayOfWeek>(db))

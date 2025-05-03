@@ -6,6 +6,8 @@ public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
 {
     public void Configure(EntityTypeBuilder<Doctor> builder)
     {
+        builder.HasIndex(x => x.IsActive);
+
         builder.HasOne(d => d.Specialization)
                .WithMany(s => s.Doctors)
                .HasForeignKey(d => d.SpecializationId);
@@ -22,4 +24,3 @@ public class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
 
     }
 }
-
