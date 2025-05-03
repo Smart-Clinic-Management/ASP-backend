@@ -10,9 +10,9 @@ public class DoctorScheduleConfiguration : IEntityTypeConfiguration<DoctorSchedu
         builder.HasIndex(x => x.DayOfWeek);
 
         builder.Property(ds => ds.DayOfWeek)
-            .HasConversion(s => s.ToString(),
-            db => Enum.Parse<DayOfWeek>(db))
-            .HasColumnType("VARCHAR(50)");
+     .HasConversion((DayOfWeek d) => (byte)d,
+     i => (DayOfWeek)i)
+     .HasColumnType("tinyint");
 
 
     }
