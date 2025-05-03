@@ -8,6 +8,8 @@ namespace SmartClinic.API.Controllers;
 [Route("api/[controller]")]
 public class SpecializationController(ISpecializationService _specializationService) : AppControllerBase
 {
+
+    [Authorize(Roles = "admin")]
     [HttpPost]
     [Consumes("multipart/form-data")]
     [Route("Create")]
@@ -18,6 +20,9 @@ public class SpecializationController(ISpecializationService _specializationServ
         var response = await _specializationService.CreateSpecializationAsync(request);
         return NewResult(response);
     }
+
+
+
     [HttpGet("{id}")]
     [ProducesResponseType<Response<CreateSpecializationResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<CreateSpecializationResponse>>(StatusCodes.Status404NotFound)]
@@ -25,6 +30,9 @@ public class SpecializationController(ISpecializationService _specializationServ
     {
         return NewResult(await _specializationService.GetSpecializationByIdAsync(id));
     }
+
+
+
     [HttpGet("GetAll")]
     [ProducesResponseType<Response<List<CreateSpecializationResponse>>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllSpecializations()
@@ -32,6 +40,9 @@ public class SpecializationController(ISpecializationService _specializationServ
         var response = await _specializationService.GetAllSpecializationsAsync();
         return NewResult(response);
     }
+
+
+    [Authorize(Roles = "admin")]
     [HttpPut("Update/{id}")]
     [ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status400BadRequest)]
@@ -42,6 +53,8 @@ public class SpecializationController(ISpecializationService _specializationServ
         return NewResult(response);
     }
 
+
+    [Authorize(Roles = "admin")]
     [HttpDelete("Delete/{id}")]
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<string>>(StatusCodes.Status404NotFound)]

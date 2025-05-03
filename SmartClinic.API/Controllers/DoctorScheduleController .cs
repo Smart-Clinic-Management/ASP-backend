@@ -33,6 +33,8 @@ public class DoctorScheduleController : AppControllerBase
         return NewResult(response);
     }
 
+
+    [Authorize(Roles = "doctor")]
     [HttpDelete("{scheduleId}")]
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -51,6 +53,8 @@ public class DoctorScheduleController : AppControllerBase
         });
     }
 
+
+    [Authorize(Roles = "doctor")]
     [HttpPost]
     public async Task<IActionResult> CreateDoctorSchedule([FromBody] CreateDoctorScheduleRequest request)
     {
@@ -63,6 +67,8 @@ public class DoctorScheduleController : AppControllerBase
         });
     }
 
+
+    [Authorize(Roles = "doctor")]
     [HttpPut("{scheduleId}")]
     public async Task<IActionResult> UpdateDoctorSchedule(int scheduleId, [FromBody] UpdateDoctorScheduleRequest request)
     {
