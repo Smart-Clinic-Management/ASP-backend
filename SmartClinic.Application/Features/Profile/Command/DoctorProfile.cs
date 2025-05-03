@@ -2,6 +2,6 @@
 
 public class DoctorProfile : BaseProfile
 {
-    public Specialization Specialization { get; set; }
+    public string Specialization { get; set; } = null!;
 
 }

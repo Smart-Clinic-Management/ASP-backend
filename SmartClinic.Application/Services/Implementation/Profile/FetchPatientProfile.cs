@@ -22,7 +22,7 @@ namespace SmartClinic.Application.Services.Implementation.Profile
 
             return new PatientProfile
             {
-                Id = user.Patient?.Id,
+                Id = user.Id,
                 Email = user.Email!,
                 Address = user.Address!,
                 FirstName = user.FirstName!,

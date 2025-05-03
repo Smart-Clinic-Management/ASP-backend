@@ -20,13 +20,14 @@ public class FetchDoctorProfile : IFetchProfile
 
         return new DoctorProfile
         {
+            Id = user.Id,
             Email = user.Email!,
             Address = user.Address!,
             FirstName = user.FirstName!,
             LastName = user.LastName!,
             PhoneNumber = user.PhoneNumber!,
             ProfileImage = img!,
-            Specialization = user.Doctor?.Specialization!,
+            Specialization = user.Doctor?.Specialization.Name!,
         };
 
     }

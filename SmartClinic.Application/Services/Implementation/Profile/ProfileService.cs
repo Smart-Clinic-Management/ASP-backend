@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.Auth.Command;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartClinic.Application.Features.Auth.Command;
 using SmartClinic.Application.Features.Profile.Command;
 using SmartClinic.Application.Features.Profile.Query;
 
@@ -22,21 +23,39 @@ namespace SmartClinic.Application.Services.Implementation.Profile
 
         public async Task<Response<ProfileResponse>> GetProfile(string userId)
         {
-            var user = await userMGR.FindByEmailAsync(userId);
+            //var user = await userMGR.Users.Include( user => user. )
 
-            if (user == null)
+
+
+            var userExist = await userMGR.FindByEmailAsync(userId);
+
+            if (userExist == null)
             {
                 return response.NotFound<ProfileResponse>();
             }
 
-            var role = await userMGR.GetRolesAsync(user);
+            var role = await userMGR.GetRolesAsync(userExist);
 
+            var userWithInlcude = userMGR.Users.Where(user => user.Id == userExist.Id).AsQueryable();
+
+            foreach (var item in role)
+            {
+                switch (item)
+                {
+                    case "patient":
+                        userWithInlcude = userWithInlcude.Include(user => user.Patient);
+                        break;
+                    case "doctor":
+                        userWithInlcude = userWithInlcude.Include(user => user.Doctor).ThenInclude(doctor => doctor!.Specialization);
+                        break;
+                }
+            }
 
             profiles.TryGetValue(role.FirstOrDefault()!, out var fetcher);
 
             var result = new ProfileResponse
             {
-                details = await fetcher!.FetchAsync(user)
+                details = await fetcher!.FetchAsync(userWithInlcude.FirstOrDefault()!)
             };
 
             return response.Success<ProfileResponse>(result);
