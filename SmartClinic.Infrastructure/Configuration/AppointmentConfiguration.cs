@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartClinic.Domain.Entities.AppointmentAggregation;
 
-namespace SmartClinic.Infrastucture.Configuration;
+namespace SmartClinic.Infrastructure.Configuration;
 
 public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
 {
@@ -13,6 +12,7 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
             {
                 d.Property(x => x.StartTime).HasColumnName("StartTime");
                 d.Property(x => x.EndTime).HasColumnName("EndTime");
+                d.HasIndex(x => x.StartTime);
             });
 
 

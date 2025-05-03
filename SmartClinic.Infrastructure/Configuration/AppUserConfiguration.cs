@@ -6,6 +6,8 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
 {
     public void Configure(EntityTypeBuilder<AppUser> builder)
     {
+        builder.HasIndex(x => x.IsActive);
+
         builder.HasOne(u => u.Doctor)
             .WithOne(d => d.User)
             .HasForeignKey<Doctor>(x => x.Id)
