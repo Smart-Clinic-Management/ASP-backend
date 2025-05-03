@@ -4,7 +4,9 @@ using SmartClinic.Application.Features.Patients.Query.DTOs.GetDoctorSchedule;
 using SmartClinic.Application.Features.DoctorSchedule.Command.CreateDoctorSchedule;
 using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule; // إضافة هذا الـ namespace
 using SmartClinic.API.Bases;
+using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule.SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule;
+
 
 namespace SmartClinic.API.Controllers
 {
@@ -20,6 +22,8 @@ namespace SmartClinic.API.Controllers
         }
 
         [HttpGet("GetByDoctor/{doctorId}")]
+        [ProducesResponseType<Response<IEnumerable<GetDoctorSchedule>>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetScheduleForDoctor(int doctorId)
         {
             var response = await _doctorScheduleService.GetSchedulesForDoctorAsync(doctorId);
@@ -33,6 +37,8 @@ namespace SmartClinic.API.Controllers
         }
 
         [HttpDelete("{scheduleId}")]
+        [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteScheduleById(int scheduleId)
         {
             var response = await _doctorScheduleService.DeleteScheduleByIdAsync(scheduleId);
