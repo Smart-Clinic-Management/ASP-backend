@@ -34,8 +34,11 @@ public class AppointmentService
            appointmentDto.StartTime);
 
 
-        if (doctor is null || doctor.DoctorSchedules.Count == 0 || doctor.Appointments.Count > 0)
-            return BadRequest<string>(["Appointment already reserved or invalid inserted data"]);
+        if (doctor is null || doctor.DoctorSchedules.Count == 0)
+            return BadRequest<string>(["Invalid inserted data"]);
+
+        if (doctor.Appointments.Count > 0)
+            return BadRequest<string>(["Appointment already reserved"]);
 
 
         var scheduleTimeSlot = doctor.DoctorSchedules.FirstOrDefault()!.SlotDuration;

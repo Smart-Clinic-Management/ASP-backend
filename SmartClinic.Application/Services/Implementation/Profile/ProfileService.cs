@@ -27,7 +27,7 @@ namespace SmartClinic.Application.Services.Implementation.Profile
 
 
 
-            var userExist = await userMGR.FindByEmailAsync(userId);
+            var userExist = await userMGR.FindByIdAsync(userId);
 
             if (userExist == null)
             {
@@ -65,7 +65,7 @@ namespace SmartClinic.Application.Services.Implementation.Profile
         public async Task<Response<ProfileResponse>> RemoveImg(string id)
         {
 
-            var user = await userMGR.FindByEmailAsync(id);
+            var user = await userMGR.FindByIdAsync(id);
             if (user == null)
             {
                 return response.NotFound<ProfileResponse>("User not found")!;
@@ -90,7 +90,7 @@ namespace SmartClinic.Application.Services.Implementation.Profile
         public async Task<Response<ImgResponse>> UpdateProfileImg(ImgUpdateRequest request, string userid)
         {
 
-            var user = await userMGR.FindByEmailAsync(userid!);
+            var user = await userMGR.FindByIdAsync(userid!);
 
             if (user == null)
             {

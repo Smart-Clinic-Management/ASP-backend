@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SmartClinic.Application.Bases;
+﻿using SmartClinic.Application.Bases;
 
 namespace SmartClinic.API;
 public static class ModuleAPIDependencies

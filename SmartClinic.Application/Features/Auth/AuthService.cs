@@ -49,9 +49,9 @@ public class AuthService : IAuthService
 
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, user.Email!),
+            new(JwtRegisteredClaimNames.Email, user.Email!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()) ,
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()) ,
             new("id" , q?.Id.ToString() ?? "") ,
         };
 
@@ -157,9 +157,9 @@ public class AuthService : IAuthService
     }
 
 
-    public async Task<Response<ImgResponse>> GetProfileImg(string email)
+    public async Task<Response<ImgResponse>> GetProfileImg(string id)
     {
-        var user = await userMGR.FindByEmailAsync(email);
+        var user = await userMGR.FindByIdAsync(id);
 
         if (user == null)
         {
