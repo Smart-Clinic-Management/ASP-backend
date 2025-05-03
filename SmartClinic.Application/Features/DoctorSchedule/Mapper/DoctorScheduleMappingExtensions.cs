@@ -1,5 +1,8 @@
 ﻿using SmartClinic.Domain.Entities;
 using SmartClinic.Application.Features.Patients.Query.DTOs.GetDoctorSchedule;
+using SmartClinic.Application.Features.DoctorSchedule.Command.CreateDoctorSchedule;
+using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule;
+using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule.SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule;
 
 namespace SmartClinic.Application.MappingExtensions
 {
@@ -12,7 +15,7 @@ namespace SmartClinic.Application.MappingExtensions
                 DayOfWeek: schedule.DayOfWeek,
                 StartTime: schedule.StartTime,
                 EndTime: schedule.EndTime,
-                SlotDuration:schedule.SlotDuration
+                SlotDuration: schedule.SlotDuration
             );
         }
 
@@ -27,5 +30,42 @@ namespace SmartClinic.Application.MappingExtensions
                 .Where(schedule => schedule.DoctorId == doctorId)
                 .ToGetDoctorScheduleDtoList();
         }
+
+        public static DoctorSchedule ToEntity(this CreateDoctorScheduleRequest request)
+        {
+            return new DoctorSchedule
+            {
+                DoctorId = request.DoctorId,
+                DayOfWeek = request.DayOfWeek,
+                StartTime = request.StartTime,
+                EndTime = request.EndTime,
+                SlotDuration = request.SlotDuration
+            };
+        }
+
+        public static void UpdateFromRequest(this DoctorSchedule entity, UpdateDoctorScheduleRequest request)
+        {
+            if (request.Day.HasValue)
+            {
+                entity.DayOfWeek = request.Day.Value;
+            }
+
+            if (request.StartTime.HasValue)
+            {
+                entity.StartTime = request.StartTime.Value;
+            }
+
+            if (request.EndTime.HasValue)
+            {
+                entity.EndTime = request.EndTime.Value;
+            }
+
+            entity.DoctorId = request.DoctorId;
+            entity.SlotDuration = request.SlotDuration;
+        }
+
+
+
+
     }
 }
