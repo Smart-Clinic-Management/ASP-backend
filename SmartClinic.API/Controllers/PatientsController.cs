@@ -1,5 +1,5 @@
 ﻿using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.DoctorSchedule.Query.DTOs.GetDoctorSchedule;
+using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatient;
 using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatients;
 
 namespace SmartClinic.API.Controllers;
@@ -15,6 +15,8 @@ public class PatientsController : AppControllerBase
         _patientService = patientService;
     }
 
+
+    [Authorize(Roles = "admin")]
     [HttpGet("GetAll")]
     [ProducesResponseType<Response<List<GetAllPatientsResponse>>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllPatients(int pageSize = 20, int pageIndex = 1)
@@ -23,9 +25,11 @@ public class PatientsController : AppControllerBase
         return NewResult(response);
     }
 
+
+    [Authorize(Roles = "admin,doctor")]
     [HttpGet("GetById/{patientId}")]
-    [ProducesResponseType<Response<GetDoctorSchedule>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<Response<GetDoctorSchedule>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<Response<GetPatientByIdResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<GetPatientByIdResponse>>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetPatientById(int patientId)
     {
         var response = await _patientService.GetPatientByIdAsync(patientId);

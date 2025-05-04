@@ -16,6 +16,8 @@ public class AppointmentsController : AppControllerBase
         _appointmentService = appointmentService;
     }
 
+
+    [Authorize(Roles = "admin")]
     [HttpGet("GetAll")]
     [ProducesResponseType<Response<List<AppointmentResponseDto>>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<List<AppointmentResponseDto>>>(StatusCodes.Status404NotFound)]
@@ -25,21 +27,26 @@ public class AppointmentsController : AppControllerBase
         return NewResult(result);
     }
 
-    [HttpGet("GetDoctorAppointments/{doctorId}")]
+    [Authorize(Roles = "doctor")]
+    [HttpGet("GetDoctorAppointments")]
     [ProducesResponseType<Response<List<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<List<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDoctorAppointments(int doctorId, int pageSize = 20, int pageIndex = 1)
+    public async Task<IActionResult> GetDoctorAppointments(int pageSize = 20, int pageIndex = 1)
     {
-        var result = await _appointmentService.ListDoctorAppointmentsAsync(doctorId, pageSize, pageIndex);
+        var result = await _appointmentService
+            .ListDoctorAppointmentsAsync(User.GetUserId(), pageSize, pageIndex);
         return NewResult(result);
     }
 
-    [HttpGet("GetPatientAppointments/{patientId}")]
+
+    [Authorize(Roles = "patient")]
+    [HttpGet("GetPatientAppointments")]
     [ProducesResponseType<Response<List<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<List<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPatientAppointments(int patientId, int pageSize = 20, int pageIndex = 1)
+    public async Task<IActionResult> GetPatientAppointments(int pageSize = 20, int pageIndex = 1)
     {
-        var result = await _appointmentService.ListPatientAppointmentsAsync(patientId, pageSize, pageIndex);
+        var result = await _appointmentService
+            .ListPatientAppointmentsAsync(User.GetUserId(), pageSize, pageIndex);
         return NewResult(result);
     }
 
@@ -53,4 +60,23 @@ public class AppointmentsController : AppControllerBase
         var result = await _appointmentService.CreateAppointmentAsync(appointmentDto, patientId);
         return NewResult(result);
     }
+
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "doctor")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+    public IActionResult UpdateAppointment(int id)
+    {
+        return NewResult(new ResponseHandler().Success(""));
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "patient")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+    public IActionResult DeleteAppointment(int id)
+    {
+        return NewResult(new ResponseHandler().Deleted<string>());
+    }
+
+
 }

@@ -27,13 +27,15 @@ public class DoctorsController : AppControllerBase
         return NewResult(await _doctorService.GetDoctorByIdAsync(id));
     }
 
-    [HttpPut("Update/{id}")]
+
+    [Authorize(Roles = "doctor")]
+    [HttpPut("Update")]
     [ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateDoctor(int id, [FromForm] UpdateDoctorRequest request)
+    public async Task<IActionResult> UpdateDoctor([FromForm] UpdateDoctorRequest request)
     {
-        var response = await _doctorService.UpdateDoctorAsync(id, request);
+        var response = await _doctorService.UpdateDoctorAsync(User.GetUserId(), request);
         return NewResult(response);
     }
 
@@ -44,6 +46,8 @@ public class DoctorsController : AppControllerBase
         return NewResult(await _doctorService.GetAllDoctorsAsync(pageSize, pageIndex));
     }
 
+
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     [ProducesResponseType<Response<SoftDeleteDoctorResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<SoftDeleteDoctorResponse>>(StatusCodes.Status404NotFound)]
@@ -52,6 +56,8 @@ public class DoctorsController : AppControllerBase
         return NewResult(await _doctorService.SoftDeleteDoctorAsync(id));
     }
 
+
+    [Authorize(Roles = "admin")]
     [HttpPost("Create")]
     [Consumes("multipart/form-data")]
     [ProducesResponseType<Response<CreateDoctorResponse>>(StatusCodes.Status201Created)]

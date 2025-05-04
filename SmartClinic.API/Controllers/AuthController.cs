@@ -67,9 +67,7 @@ public class AuthController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetProfile()
     {
-        var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-
-        var res = await profileService.GetProfile(id!);
+        var res = await profileService.GetProfile(User.GetUserId().ToString());
         return NewResult(res);
     }
 
@@ -80,9 +78,7 @@ public class AuthController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> RemoveProfileImg()
     {
-        var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-
-        var res = await profileService.RemoveImg(id!);
+        var res = await profileService.RemoveImg(User.GetUserId().ToString());
         return NewResult(res);
     }
 
@@ -93,9 +89,7 @@ public class AuthController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateProfile([FromForm] ImgUpdateRequest file)
     {
-        var id = User.FindAll(ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-
-        var res = await profileService.UpdateProfileImg(file, id);
+        var res = await profileService.UpdateProfileImg(file, User.GetUserId().ToString());
         return NewResult(res);
     }
 
