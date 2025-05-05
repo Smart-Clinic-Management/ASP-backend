@@ -12,8 +12,8 @@ using SmartClinic.Infrastructure.Data;
 namespace SmartClinic.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250503002128_AddingIndxing")]
-    partial class AddingIndxing
+    [Migration("20250505062736_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -337,9 +337,8 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DayOfWeek")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(50)");
+                    b.Property<byte>("DayOfWeek")
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
@@ -404,6 +403,8 @@ namespace SmartClinic.Infrastructure.Migrations
                         .HasColumnType("VARCHAR(150)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsActive");
 
                     b.ToTable("Specializations");
                 });

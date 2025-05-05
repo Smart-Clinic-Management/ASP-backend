@@ -268,7 +268,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
-                    DayOfWeek = table.Column<string>(type: "VARCHAR(50)", nullable: false),
+                    DayOfWeek = table.Column<byte>(type: "tinyint", nullable: false),
                     StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     SlotDuration = table.Column<int>(type: "int", nullable: false)
@@ -309,6 +309,11 @@ namespace SmartClinic.Infrastructure.Migrations
                 column: "SpecializationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Appointments_StartTime",
+                table: "Appointments",
+                column: "StartTime");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -341,6 +346,11 @@ namespace SmartClinic.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_IsActive",
+                table: "AspNetUsers",
+                column: "IsActive");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -348,14 +358,39 @@ namespace SmartClinic.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Doctors_IsActive",
+                table: "Doctors",
+                column: "IsActive");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Doctors_SpecializationId",
                 table: "Doctors",
                 column: "SpecializationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DoctorSchedules_DayOfWeek",
+                table: "DoctorSchedules",
+                column: "DayOfWeek");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DoctorSchedules_DoctorId",
                 table: "DoctorSchedules",
                 column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorSchedules_StartTime",
+                table: "DoctorSchedules",
+                column: "StartTime");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_IsActive",
+                table: "Patients",
+                column: "IsActive");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Specializations_IsActive",
+                table: "Specializations",
+                column: "IsActive");
         }
 
         /// <inheritdoc />
