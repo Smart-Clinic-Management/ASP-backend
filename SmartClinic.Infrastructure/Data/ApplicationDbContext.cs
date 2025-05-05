@@ -18,9 +18,51 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
         // Apply separate configuration classes
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+    }
+
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+
+
+        #region Doctor
+        foreach (var entry in base.ChangeTracker.Entries<Doctor>()
+            .Where(x => x.State.Equals(EntityState.Deleted)))
+        {
+            entry.State = EntityState.Modified;
+            entry.Entity.IsActive = false;
+            entry.Entity.User.IsActive = false;
+            entry.Entity.User.Email = null;
+        }
+        #endregion
+
+        #region Patient
+        foreach (var entry in base.ChangeTracker.Entries<Patient>()
+            .Where(x => x.State.Equals(EntityState.Deleted)))
+        {
+            entry.State = EntityState.Modified;
+            entry.Entity.IsActive = false;
+            entry.Entity.User.IsActive = false;
+            entry.Entity.User.Email = null;
+        }
+        #endregion
+
+        #region Specialization
+        foreach (var entry in base.ChangeTracker.Entries<Specialization>()
+            .Where(x => x.State.Equals(EntityState.Deleted)))
+        {
+            entry.State = EntityState.Modified;
+            entry.Entity.IsActive = false;
+        }
+        #endregion
+
+
+
+        return base.SaveChangesAsync(cancellationToken);
     }
 
 }

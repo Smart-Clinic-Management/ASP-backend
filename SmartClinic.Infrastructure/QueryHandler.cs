@@ -7,7 +7,7 @@ public static class QueryHandler
 {
     public static IQueryable<T> GetQuery<T>(this IQueryable<T> query, Expression<Func<T, bool>>? criteria = null,
         int? pageSize = null, int? pageIndex = null, bool withTracking = true, string? orderBy = null,
-        bool descending = true, bool isDistinct = false, params string[] includes)
+        bool descending = false, bool isDistinct = false, params string[] includes)
         where T : BaseEntity
     {
 
@@ -60,7 +60,7 @@ public static class QueryHandler
 
     public static IQueryable<TResult> GetQuery<T, TResult>(this IQueryable<T> query, Expression<Func<T, bool>>? criteria = null,
          Expression<Func<T, TResult>> select = null!, int? pageSize = null, int? pageIndex = null, string? orderBy = null,
-        bool descending = true, bool isDistinct = false)
+        bool descending = false, bool isDistinct = false)
         where T : BaseEntity
     {
         query = query.GetQuery(criteria, pageSize, pageIndex, false, orderBy, descending
