@@ -1,6 +1,6 @@
 ﻿namespace SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
-public interface IDoctorSchedule : IRepository<DoctorSchedule>
+public interface IDoctorSchedule // : IRepository<DoctorSchedule>
 {
-    Task<IEnumerable<DoctorSchedule>> GetByDoctorIdAsync(int doctorId);
+    //Task<IEnumerable<DoctorSchedule>> GetByDoctorIdAsync(int doctorId);
 }

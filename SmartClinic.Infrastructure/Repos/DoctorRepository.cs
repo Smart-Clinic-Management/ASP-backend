@@ -1,17 +1,24 @@
-﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+﻿using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Http;
+using SmartClinic.Application.Features.Doctors.Mapper;
+using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
+using SmartClinic.Application.Services.Interfaces;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Infrastructure.Repos;
-public class DoctorRepository(ApplicationDbContext context)
+public class DoctorRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
     : GenericRepository<Doctor>(context),
     IDoctorRepository
 {
-    public Task<int> CountAsync()
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
+    public async Task<int> CountAsync(ISpecification<Doctor> specification)
     {
-        throw new NotImplementedException();
+        return await base.CountAsync(specification.Criteria);
     }
 
-    public Task<bool> ExistsAsync(int doctorId)
-        => context.Doctors.AnyAsync(x => x.Id == doctorId && x.IsActive);
+    public override Task<bool> ExistsAsync(int doctorId)
+      => context.Doctors.AnyAsync(x => x.Id == doctorId && x.IsActive);
 
     public Task<Doctor?> GetByIdAsync(int id)
         => base.GetSingleAsync(x => x.Id == id && x.IsActive,
@@ -65,18 +72,32 @@ public class DoctorRepository(ApplicationDbContext context)
         => await context.Doctors.AsNoTracking().AnyAsync(x => x.Id == doctorId &&
                   x.SpecializationId == specializationId && x.IsActive);
 
-    public Task<IEnumerable<Doctor>> ListAsync(int pageSize = 20, int pageIndex = 1)
-        => base.ListAllAsync(x => x.IsActive, pageSize,
-                  pageIndex, true,
-               nameof(Doctor.User), nameof(Doctor.Specialization));
 
-    public Task<IEnumerable<Doctor>> ListNoTrackingAsync(int pageSize = 20, int pageIndex = 1)
-        => base.ListAllAsync(x => x.IsActive, pageSize,
-                  pageIndex, false,
-               nameof(Doctor.User), nameof(Doctor.Specialization));
-
-    public Task<IEnumerable<TDto>> ListNoTrackingAsync<TDto>(int pageSize = 20, int pageIndex = 1, string? orderBy = null, bool descending = false, bool isDistinct = false)
+    public async Task<IEnumerable<GetAllDoctorsResponse>> ListNoTrackingAsync(GetAllDoctorsParams doctorsParams, ISpecification<Doctor> specification)
     {
-        throw new NotImplementedException();
+        var result = await base.ListAllAsync(x => new GetAllDoctorsResponse()
+        {
+            Id = x.Id,
+            Age = x.User.Age,
+            FirstName = x.User.FirstName,
+            LastName = x.User.LastName,
+            Image = DoctorMappingExtensions.GetImgUrl(x.User.ProfileImage, _httpContextAccessor),
+            Specialization = x.Specialization.Name,
+            Description = x.Specialization.Description,
+            WaitingTime = x.WaitingTime
+        }
+        ,
+        specification.Criteria,
+
+          doctorsParams.PageSize,
+          doctorsParams.PageIndex,
+          doctorsParams.OrderBy,
+          doctorsParams.IsDescending
+        );
+        return result;
     }
+
+
+
 }
+

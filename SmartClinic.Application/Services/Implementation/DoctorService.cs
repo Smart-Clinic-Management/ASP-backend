@@ -1,4 +1,4 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
+﻿using SmartClinic.Application.Services.Implementation.Specifications;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
@@ -11,6 +11,7 @@ public class DoctorService : ResponseHandler, IDoctorService
     private readonly IFileHandlerService _fileHandler;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ISpecializationService _specializationService;
+    private readonly IPagedCreator<Doctor> _pagedCreator;
     private readonly ISpecializationRepository _specialRepo;
 
 
@@ -21,7 +22,9 @@ public class DoctorService : ResponseHandler, IDoctorService
         UserManager<AppUser> userManager,
         IFileHandlerService fileHandler,
         IHttpContextAccessor httpContextAccessor,
-        ISpecializationService specializationService)
+        ISpecializationService specializationService,
+        IPagedCreator<Doctor> pagedCreator
+        )
     {
         _doctorRepo = doctorRepo;
         _specialRepo = specialRepo;
@@ -30,6 +33,7 @@ public class DoctorService : ResponseHandler, IDoctorService
         _fileHandler = fileHandler;
         _httpContextAccessor = httpContextAccessor;
         _specializationService = specializationService;
+        this._pagedCreator = pagedCreator;
     }
 
     public async Task<Response<GetDoctorByIdResponse>> GetDoctorByIdAsync(int doctorId)
@@ -46,19 +50,22 @@ public class DoctorService : ResponseHandler, IDoctorService
         return new ResponseHandler().Success(response);
     }
 
-    public async Task<Response<List<GetAllDoctorsResponse>>> GetAllDoctorsAsync(int pageSize = 20, int pageIndex = 1)
+    public async Task<Response<Pagination<GetAllDoctorsResponse>>> GetAllDoctorsAsync(GetAllDoctorsParams allDoctorsParams)
     {
-        var doctors = await _doctorRepo.ListAsync(pageSize, pageIndex);
+        var repo = _unitOfWork.Repository<IDoctorRepository>();
 
-        var response = doctors.Select(doctor =>
-        {
-            var imageUrl = DoctorMappingExtensions.GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor);
+        var specs = new DoctorSpecifications(allDoctorsParams);
 
-            var doctorResponse = doctor.ToGetAllDoctorsResponse();
-            return doctorResponse with { image = imageUrl };
-        }).ToList();
+        var doctors = await repo
+            .ListNoTrackingAsync(allDoctorsParams, specs);
 
-        return new ResponseHandler().Success(response);
+        var TotalCount = await repo.CountAsync(specs);
+
+        var reslult = _pagedCreator
+             .CreatePagedResult([.. doctors], allDoctorsParams.PageIndex,
+             allDoctorsParams.PageSize, TotalCount);
+
+        return Success(reslult);
     }
 
     public async Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId)
@@ -84,210 +91,210 @@ public class DoctorService : ResponseHandler, IDoctorService
         return new ResponseHandler().Success(new SoftDeleteDoctorResponse("Doctor and associated user successfully soft deleted."));
     }
 
-    public async Task<Response<CreateDoctorResponse>> CreateDoctor(CreateDoctorRequest newDoctorUser)
-    {
-        if (newDoctorUser.Image == null)
-        {
-            return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors: ["No image uploaded"]);
-        }
+    //public async Task<Response<CreateDoctorResponse>> CreateDoctor(CreateDoctorRequest newDoctorUser)
+    //{
+    //    if (newDoctorUser.Image == null)
+    //    {
+    //        return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors: ["No image uploaded"]);
+    //    }
 
-        var validationOptions = new FileValidation
-        {
-            MaxSize = 2 * 1024 * 1024,
-            AllowedExtenstions = [".jpg", ".jpeg", ".png"]
-        };
+    //    var validationOptions = new FileValidation
+    //    {
+    //        MaxSize = 2 * 1024 * 1024,
+    //        AllowedExtenstions = [".jpg", ".jpeg", ".png"]
+    //    };
 
-        var fileResult = await _fileHandler.HanldeFile(newDoctorUser.Image, validationOptions);
+    //    var fileResult = await _fileHandler.HanldeFile(newDoctorUser.Image, validationOptions);
 
-        if (!fileResult.Success)
-        {
-            var errors = new List<string>();
-            if (!string.IsNullOrEmpty(fileResult.Error)) errors.Add(fileResult.Error);
-            return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors: errors);
-        }
+    //    if (!fileResult.Success)
+    //    {
+    //        var errors = new List<string>();
+    //        if (!string.IsNullOrEmpty(fileResult.Error)) errors.Add(fileResult.Error);
+    //        return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors: errors);
+    //    }
 
-        var user = new AppUser
-        {
-            UserName = newDoctorUser.Email,
-            Email = newDoctorUser.Email,
-            FirstName = newDoctorUser.Fname,
-            LastName = newDoctorUser.Lname,
-            Address = newDoctorUser.Address,
-            BirthDate = newDoctorUser.BirthDate,
-            ProfileImage = fileResult.RelativeFilePath,
-        };
+    //    var user = new AppUser
+    //    {
+    //        UserName = newDoctorUser.Email,
+    //        Email = newDoctorUser.Email,
+    //        FirstName = newDoctorUser.Fname,
+    //        LastName = newDoctorUser.Lname,
+    //        Address = newDoctorUser.Address,
+    //        BirthDate = newDoctorUser.BirthDate,
+    //        ProfileImage = fileResult.RelativeFilePath,
+    //    };
 
-        var userCreationResult = await _userManager.CreateAsync(user, "DefaultPassword123");
+    //    var userCreationResult = await _userManager.CreateAsync(user, "DefaultPassword123");
 
-        if (!userCreationResult.Succeeded)
-        {
-            var errors = userCreationResult.Errors.Select(e => e.Description).ToList();
-            return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors);
-        }
+    //    if (!userCreationResult.Succeeded)
+    //    {
+    //        var errors = userCreationResult.Errors.Select(e => e.Description).ToList();
+    //        return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors);
+    //    }
 
-        await _userManager.AddToRoleAsync(user, "Doctor");
+    //    await _userManager.AddToRoleAsync(user, "Doctor");
 
-        var doctor = new Doctor
-        {
-            Id = user.Id,
-            Description = newDoctorUser.Description,
-            WaitingTime = newDoctorUser.WaitingTime,
-            IsActive = true
-        };
+    //    var doctor = new Doctor
+    //    {
+    //        Id = user.Id,
+    //        Description = newDoctorUser.Description,
+    //        WaitingTime = newDoctorUser.WaitingTime,
+    //        IsActive = true
+    //    };
 
-        await doctor.AddSpecializationsToDoctorAsync(_specialRepo, newDoctorUser.SpecializationId);
+    //    await doctor.AddSpecializationsToDoctorAsync(_specialRepo, newDoctorUser.SpecializationId);
 
-        await _doctorRepo.AddAsync(doctor);
+    //    await _doctorRepo.AddAsync(doctor);
 
-        if (fileResult.Success)
-        {
-            await _fileHandler.SaveFile(newDoctorUser.Image, fileResult.FullFilePath);
-        }
+    //    if (fileResult.Success)
+    //    {
+    //        await _fileHandler.SaveFile(newDoctorUser.Image, fileResult.FullFilePath);
+    //    }
 
-        await _unitOfWork.SaveChangesAsync();
+    //    await _unitOfWork.SaveChangesAsync();
 
-        var response = new CreateDoctorResponse(
-            Fname: user.FirstName,
-            Lname: user.LastName,
-            Email: user.Email,
-            Image: fileResult.Success ? DoctorMappingExtensions.GetImgUrl(fileResult.RelativeFilePath, _httpContextAccessor) : null,
-            SpecializationId: doctor.Specialization.Id,
-            BirthDate: user.BirthDate,
-            Address: user.Address,
-            WaitingTime: doctor.WaitingTime,
-            Description: doctor.Description
-        );
+    //    var response = new CreateDoctorResponse(
+    //        Fname: user.FirstName,
+    //        Lname: user.LastName,
+    //        Email: user.Email,
+    //        Image: fileResult.Success ? DoctorMappingExtensions.GetImgUrl(fileResult.RelativeFilePath, _httpContextAccessor) : null,
+    //        SpecializationId: doctor.Specialization.Id,
+    //        BirthDate: user.BirthDate,
+    //        Address: user.Address,
+    //        WaitingTime: doctor.WaitingTime,
+    //        Description: doctor.Description
+    //    );
 
-        return new ResponseHandler().Success(response, message: "Doctor Created Successfully");
-    }
+    //    return new ResponseHandler().Success(response, message: "Doctor Created Successfully");
+    //}
 
-    public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
-    {
-        var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
-        if (doctor == null || !doctor.IsActive)
-        {
-            return new ResponseHandler().NotFound<UpdateDoctorResponse>($"No Doctor found with id {doctorId}");
-        }
+    //public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
+    //{
+    //    var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
+    //    if (doctor == null || !doctor.IsActive)
+    //    {
+    //        return new ResponseHandler().NotFound<UpdateDoctorResponse>($"No Doctor found with id {doctorId}");
+    //    }
 
-        var user = doctor.User;
-        user.FirstName = request.Fname ?? user.FirstName;
-        user.LastName = request.Lname ?? user.LastName;
-        user.Email = request.Email ?? user.Email;
-        user.Address = request.Address ?? user.Address;
+    //    var user = doctor.User;
+    //    user.FirstName = request.Fname ?? user.FirstName;
+    //    user.LastName = request.Lname ?? user.LastName;
+    //    user.Email = request.Email ?? user.Email;
+    //    user.Address = request.Address ?? user.Address;
 
-        if (request.Image != null)
-        {
-            var validationOptions = new FileValidation
-            {
-                MaxSize = 2 * 1024 * 1024,
-                AllowedExtenstions = [".jpg", ".jpeg", ".png"]
-            };
+    //    if (request.Image != null)
+    //    {
+    //        var validationOptions = new FileValidation
+    //        {
+    //            MaxSize = 2 * 1024 * 1024,
+    //            AllowedExtenstions = [".jpg", ".jpeg", ".png"]
+    //        };
 
-            var fileResult = await _fileHandler.HanldeFile(request.Image, validationOptions);
+    //        var fileResult = await _fileHandler.HanldeFile(request.Image, validationOptions);
 
-            if (!fileResult.Success)
-            {
-                var errors = new List<string> { fileResult.Error };
-                return new ResponseHandler().BadRequest<UpdateDoctorResponse>(errors);
-            }
+    //        if (!fileResult.Success)
+    //        {
+    //            var errors = new List<string> { fileResult.Error };
+    //            return new ResponseHandler().BadRequest<UpdateDoctorResponse>(errors);
+    //        }
 
-            user.ProfileImage = fileResult.RelativeFilePath;
-            await _fileHandler.SaveFile(request.Image, fileResult.FullFilePath);
-        }
+    //        user.ProfileImage = fileResult.RelativeFilePath;
+    //        await _fileHandler.SaveFile(request.Image, fileResult.FullFilePath);
+    //    }
 
-        await doctor.AddSpecializationsToDoctorAsync(_specialRepo, request.SpecializationId);
+    //    await doctor.AddSpecializationsToDoctorAsync(_specialRepo, request.SpecializationId);
 
-        await _unitOfWork.SaveChangesAsync();
+    //    await _unitOfWork.SaveChangesAsync();
 
-        var imageUrl = DoctorMappingExtensions.GetImgUrl(user.ProfileImage, _httpContextAccessor);
+    //    var imageUrl = DoctorMappingExtensions.GetImgUrl(user.ProfileImage, _httpContextAccessor);
 
-        var response = doctor.ToUpdateDoctorResponse(_httpContextAccessor) with { Image = imageUrl };
+    //    var response = doctor.ToUpdateDoctorResponse(_httpContextAccessor) with { Image = imageUrl };
 
-        return new ResponseHandler().Success(response, message: "Doctor updated successfully");
-    }
+    //    return new ResponseHandler().Success(response, message: "Doctor updated successfully");
+    //}
 
-    public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,
-        DateOnly startDate)
-    {
-        var doctor = await _unitOfWork.Repository<IDoctorRepository>()
-            .GetWithAppointmentsAsync(id, startDate);
+    //public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,
+    //    DateOnly startDate)
+    //{
+    //    var doctor = await _unitOfWork.Repository<IDoctorRepository>()
+    //        .GetWithAppointmentsAsync(id, startDate);
 
-        if (doctor is null) return NotFound<GetDoctorWithAvailableAppointment>($"No Doctor with id : {id}");
+    //    if (doctor is null) return NotFound<GetDoctorWithAvailableAppointment>($"No Doctor with id : {id}");
 
-        // get requested dates
+    //    // get requested dates
 
-        HashSet<DayOfWeek> requestedDates = GetRequestedDates(startDate);
+    //    HashSet<DayOfWeek> requestedDates = GetRequestedDates(startDate);
 
-        List<DayOfWeek> DoctorSchedulesDays = [.. doctor!.DoctorSchedules.Select(x => x.DayOfWeek)];
+    //    List<DayOfWeek> DoctorSchedulesDays = [.. doctor!.DoctorSchedules.Select(x => x.DayOfWeek)];
 
-        List<AvailableSchedule> AvailableSchedules = AddingSchudlesDays(requestedDates, DoctorSchedulesDays);
+    //    List<AvailableSchedule> AvailableSchedules = AddingSchudlesDays(requestedDates, DoctorSchedulesDays);
 
-        // create the slots
+    //    // create the slots
 
-        AvailableSchedules = AddingDaySlots(doctor, AvailableSchedules);
+    //    AvailableSchedules = AddingDaySlots(doctor, AvailableSchedules);
 
-        doctor.User.ProfileImage = _fileHandler.GetFileURL(doctor.User.ProfileImage!);
+    //    doctor.User.ProfileImage = _fileHandler.GetFileURL(doctor.User.ProfileImage!);
 
-        var result = doctor.ToGetDoctorWithAvailableSchedules(AvailableSchedules);
-        return Success(result, "Found");
-    }
+    //    var result = doctor.ToGetDoctorWithAvailableSchedules(AvailableSchedules);
+    //    return Success(result, "Found");
+    //}
 
-    private static HashSet<DayOfWeek> GetRequestedDates(DateOnly startDate)
-    {
-        HashSet<DayOfWeek> requestedDates = [];
+    //private static HashSet<DayOfWeek> GetRequestedDates(DateOnly startDate)
+    //{
+    //    HashSet<DayOfWeek> requestedDates = [];
 
-        for (int i = 0; i < 3; i++)
-            requestedDates.Add(startDate.AddDays(i).DayOfWeek);
-        return requestedDates;
-    }
+    //    for (int i = 0; i < 3; i++)
+    //        requestedDates.Add(startDate.AddDays(i).DayOfWeek);
+    //    return requestedDates;
+    //}
 
-    private static List<AvailableSchedule> AddingSchudlesDays(HashSet<DayOfWeek> requestedDates, List<DayOfWeek> DoctorSchedulesDays)
-    {
-        List<AvailableSchedule> AvailableDays = [];
+    //private static List<AvailableSchedule> AddingSchudlesDays(HashSet<DayOfWeek> requestedDates, List<DayOfWeek> DoctorSchedulesDays)
+    //{
+    //    List<AvailableSchedule> AvailableDays = [];
 
-        foreach (var day in requestedDates)
-        {
-            if (DoctorSchedulesDays.Contains(day))
-                AvailableDays.Add(new() { Day = day.ToString()!, IsAvailable = true });
-            else
-                AvailableDays.Add(new() { Day = day.ToString()! });
-        }
+    //    foreach (var day in requestedDates)
+    //    {
+    //        if (DoctorSchedulesDays.Contains(day))
+    //            AvailableDays.Add(new() { Day = day.ToString()!, IsAvailable = true });
+    //        else
+    //            AvailableDays.Add(new() { Day = day.ToString()! });
+    //    }
 
-        return AvailableDays;
-    }
+    //    return AvailableDays;
+    //}
 
 
 
-    private static List<AvailableSchedule> AddingDaySlots(Doctor doctor, List<AvailableSchedule> AvailableDays)
-    {
-        List<AvailableSchedule> newAvailableDays = AvailableDays;
+    //private static List<AvailableSchedule> AddingDaySlots(Doctor doctor, List<AvailableSchedule> AvailableDays)
+    //{
+    //    List<AvailableSchedule> newAvailableDays = AvailableDays;
 
-        List<TimeOnly> reservedSlots = [.. doctor.Appointments.Select(x => x.Duration.StartTime)];
+    //    List<TimeOnly> reservedSlots = [.. doctor.Appointments.Select(x => x.Duration.StartTime)];
 
-        foreach (var day in newAvailableDays.Where(x => x.IsAvailable))
-        {
+    //    foreach (var day in newAvailableDays.Where(x => x.IsAvailable))
+    //    {
 
-            var scheduleDay = doctor.DoctorSchedules
-                .FirstOrDefault(x => x.DayOfWeek.ToString().Equals(day.Day))!;
+    //        var scheduleDay = doctor.DoctorSchedules
+    //            .FirstOrDefault(x => x.DayOfWeek.ToString().Equals(day.Day))!;
 
-            var dayAppointments = doctor.Appointments
-                .Where(x => x.AppointmentDate.DayOfWeek.ToString().Equals(day.Day))
-                .Select(x => x.Duration.StartTime).ToList();
+    //        var dayAppointments = doctor.Appointments
+    //            .Where(x => x.AppointmentDate.DayOfWeek.ToString().Equals(day.Day))
+    //            .Select(x => x.Duration.StartTime).ToList();
 
-            while (scheduleDay.StartTime < scheduleDay.EndTime)
-            {
-                if (!dayAppointments.Contains(scheduleDay.StartTime))
-                    day.Slots.Add(new(scheduleDay.StartTime, true));
-                else
-                    day.Slots.Add(new(scheduleDay.StartTime, false));
+    //        while (scheduleDay.StartTime < scheduleDay.EndTime)
+    //        {
+    //            if (!dayAppointments.Contains(scheduleDay.StartTime))
+    //                day.Slots.Add(new(scheduleDay.StartTime, true));
+    //            else
+    //                day.Slots.Add(new(scheduleDay.StartTime, false));
 
-                scheduleDay.StartTime = scheduleDay.StartTime.AddMinutes(scheduleDay.SlotDuration);
-            }
+    //            scheduleDay.StartTime = scheduleDay.StartTime.AddMinutes(scheduleDay.SlotDuration);
+    //        }
 
-        }
+    //    }
 
-        return newAvailableDays;
-    }
+    //    return newAvailableDays;
+    //}
 
 
 }

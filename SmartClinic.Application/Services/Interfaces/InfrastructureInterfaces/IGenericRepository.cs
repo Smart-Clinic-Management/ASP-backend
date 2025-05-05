@@ -15,18 +15,15 @@ public interface IGenericRepository<T>
 
     void Delete(T entity);
 
-    Task<IEnumerable<T>> ListAllAsync(Expression<Func<T, bool>>? criteria = null,
-        int pageSize = 20, int pageIndex = 1, bool withTracking = true,
-        params string[] includes);
 
     Task<IEnumerable<T>> ListAllAsync(Expression<Func<T, bool>>? criteria = null,
       int pageSize = 20, int pageIndex = 1, string? orderBy = null,
       bool descending = false, bool isDistinct = false,
       params string[] includes);
 
-    Task<IEnumerable<TResult>> ListAllAsync<TResult>(Expression<Func<T, bool>>? criteria = null,
-         Expression<Func<T, TResult>> select = null!, int? pageSize = null, int? pageIndex = null, string? orderBy = null,
-        bool descending = false, bool isDistinct = false);
+    Task<IEnumerable<TResult>> ListAllAsync<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>>? criteria = null,
+         int? pageSize = null, int? pageIndex = null, string? orderBy = null,
+        bool descending = false, bool isDistinct = false) where TResult : IDto, new();
 
 
     Task<bool> ExistsAsync(int id);

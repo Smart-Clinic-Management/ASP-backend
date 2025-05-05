@@ -4,7 +4,7 @@ public record GetDoctorWithAvailableAppointment(
          string? LastName,
          string UserEmail,
          string UserPhoneNumber,
-        byte Age,
+        int Age,
         string Address,
         string? Description,
         int? WaitingTime,
