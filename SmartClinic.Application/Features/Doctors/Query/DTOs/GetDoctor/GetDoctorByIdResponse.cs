@@ -7,7 +7,7 @@ public record GetDoctorByIdResponse(
     [Required] string lastName,
     [EmailAddress] string userEmail,
     [Required] string userPhoneNumber,
-     [Required] byte age,
+     [Required] int age,
     [Required] string address,
     string? description,
     int? waitingTime,

@@ -18,7 +18,7 @@ public class AppUser : IdentityUser<int>
 
     public DateOnly BirthDate { get; set; }
 
-    public byte Age => (byte)(DateOnly.FromDateTime(DateTime.Now).Year - BirthDate.Year);
+    public byte Age { get; private set; }
 
     public bool IsActive { get; set; } = true;
 

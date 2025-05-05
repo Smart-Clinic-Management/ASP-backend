@@ -1,7 +1,4 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
-
-namespace SmartClinic.Application.Features.Doctors.Mapper;
+﻿namespace SmartClinic.Application.Features.Doctors.Mapper;
 
 public static class DoctorMappingExtensions
 {
@@ -45,13 +42,16 @@ public static class DoctorMappingExtensions
 
     public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)
     {
-        return new GetAllDoctorsResponse(
-                Id: doctor.Id,
-            firstName: doctor.User.FirstName,
-            lastName: doctor.User.LastName,
-            image: doctor.User.ProfileImage,
-            Specialization: doctor.Specialization.Name
-        );
+        return new GetAllDoctorsResponse
+        {
+            Id = doctor.Id,
+            FirstName = doctor.User.FirstName,
+            Age = doctor.User.Age,
+            Specialization = doctor.Specialization.Name,
+            Image = doctor.User.ProfileImage,
+            LastName = doctor.User.LastName
+
+        };
     }
 
     public static UpdateDoctorResponse ToUpdateDoctorResponse(this Doctor doctor, IHttpContextAccessor _httpContextAccessor)
@@ -88,16 +88,16 @@ public static class DoctorMappingExtensions
         return fileResult;
     }
 
-    public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializationRepository specializationRepo, int? specializationId)
-    {
-        if (!specializationId.HasValue) return;
+    //public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializationRepository specializationRepo, int? specializationId)
+    //{
+    //    if (!specializationId.HasValue) return;
 
-        var specialization = await specializationRepo.GetByIdAsync(specializationId.Value);
-        if (specialization != null)
-        {
-            doctor.Specialization = specialization;
-        }
-    }
+    //    var specialization = await specializationRepo.GetByIdAsync(specializationId.Value);
+    //    if (specialization != null)
+    //    {
+    //        doctor.Specialization = specialization;
+    //    }
+    //}
 
 }
 

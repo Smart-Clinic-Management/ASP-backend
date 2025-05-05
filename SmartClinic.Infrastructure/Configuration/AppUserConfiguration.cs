@@ -17,6 +17,11 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne(d => d.User)
             .HasForeignKey<Patient>(x => x.Id)
             .OnDelete(DeleteBehavior.NoAction);
+
+
+        builder.Property(x => x.Age)
+            .HasComputedColumnSql("DATEDIFF(YEAR, BirthDate, GETDATE())", stored: false);
+
     }
 }
 

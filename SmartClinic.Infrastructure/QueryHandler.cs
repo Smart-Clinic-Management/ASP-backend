@@ -1,6 +1,7 @@
 ﻿using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Reflection;
+using SmartClinic.Application.Bases;
 
 namespace SmartClinic.Infrastructure;
 public static class QueryHandler
@@ -58,17 +59,57 @@ public static class QueryHandler
 
 
 
-    public static IQueryable<TResult> GetQuery<T, TResult>(this IQueryable<T> query, Expression<Func<T, bool>>? criteria = null,
-         Expression<Func<T, TResult>> select = null!, int? pageSize = null, int? pageIndex = null, string? orderBy = null,
+    public static IQueryable<TResult> GetQuery<T, TResult>(this IQueryable<T> query, Expression<Func<T, TResult>> select, Expression<Func<T, bool>>? criteria = null,
+         int? pageSize = null, int? pageIndex = null, string? orderBy = null,
         bool descending = false, bool isDistinct = false)
         where T : BaseEntity
+        where TResult : IDto
     {
-        query = query.GetQuery(criteria, pageSize, pageIndex, false, orderBy, descending
-          , isDistinct);
+        criteria ??= x => true;
+        query = query.Where(criteria);
 
-        return query.Select(select);
+
+        var result = query.Select(select);
+
+
+        #region Order
+
+
+        var orderDirection = descending ? " descending" : string.Empty;
+
+        if (ValidDtoProperty<TResult>(orderBy))
+            result = result.OrderBy(orderBy + orderDirection);
+        else
+            result = descending ? result.OrderByDescending(x => x.Id) : result.OrderBy(x => x.Id);
+
+        #endregion
+
+        if (isDistinct)
+            result = result.Distinct();
+
+        #region Paging
+        if (pageSize is not null && pageIndex is not null)
+        {
+            pageIndex = Math.Max(1, pageIndex!.Value);
+            pageSize = pageSize > 0 && pageSize <= 20 ? pageSize : 5;
+            int skip = (pageIndex.Value - 1) * pageSize.Value;
+
+            result = result.Skip(skip).Take(pageSize.Value);
+        }
+        #endregion
+
+
+
+        return result;
     }
 
+
+    private static bool ValidDtoProperty<TResult>(string? orderBy)
+    {
+        return !string.IsNullOrWhiteSpace(orderBy)
+                && typeof(TResult).GetProperty(orderBy, BindingFlags.IgnoreCase
+                | BindingFlags.Public | BindingFlags.Instance) is not null;
+    }
 
 
     private static bool ValidProperty<T>(string? orderBy) where T : BaseEntity
@@ -77,4 +118,6 @@ public static class QueryHandler
                 && typeof(T).GetProperty(orderBy, BindingFlags.IgnoreCase
                 | BindingFlags.Public | BindingFlags.Instance) is not null;
     }
+
+
 }

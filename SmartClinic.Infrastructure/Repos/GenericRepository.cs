@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using SmartClinic.Application.Bases;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Infrastructure.Repos;
@@ -15,15 +16,15 @@ public abstract class GenericRepository<T>(ApplicationDbContext context) : IGene
     public void Delete(T entity) => _db.Remove(entity);
 
 
-    public async Task<IEnumerable<T>> ListAllAsync(Expression<Func<T, bool>>? criteria = null,
-        int pageSize = 20, int pageIndex = 1, bool withTracking = true, params string[] includes)
-    {
-        IQueryable<T> query = _db;
+    //public async Task<IEnumerable<T>> ListAllAsync(Expression<Func<T, bool>>? criteria = null,
+    //    int pageSize = 20, int pageIndex = 1, bool withTracking = true, params string[] includes)
+    //{
+    //    IQueryable<T> query = _db;
 
-        query = query.GetQuery(criteria, pageSize, pageIndex, withTracking, includes: includes);
+    //    query = query.GetQuery(criteria, pageSize, pageIndex, withTracking, includes: includes);
 
-        return await query.ToListAsync();
-    }
+    //    return await query.ToListAsync();
+    //}
 
     public async Task<T?> GetSingleAsync(Expression<Func<T, bool>>? criteria = null, bool withTracking = true, params string[] includes)
     {
@@ -60,16 +61,19 @@ public abstract class GenericRepository<T>(ApplicationDbContext context) : IGene
         return await query.ToListAsync();
     }
 
-    public async Task<IEnumerable<TResult>> ListAllAsync<TResult>(Expression<Func<T, bool>>? criteria = null, Expression<Func<T, TResult>> select = null!,
-        int? pageSize = null, int? pageIndex = null, string? orderBy = null, bool descending = false, bool isDistinct = false)
+    public async Task<IEnumerable<TResult>> ListAllAsync<TResult>(Expression<Func<T, TResult>> select,
+        Expression<Func<T, bool>>? criteria = null,
+        int? pageSize = null, int? pageIndex = null,
+        string? orderBy = null, bool descending = false, bool isDistinct = false)
+        where TResult : IDto, new()
     {
         IQueryable<T> query = _db;
 
-        IQueryable<TResult> result = query.GetQuery(criteria, select, pageSize, pageIndex,
-             orderBy, descending, isDistinct);
+        var result = query.GetQuery(select, criteria, pageSize, pageIndex, orderBy, descending, isDistinct);
 
         return await result.ToListAsync();
     }
+
 
     virtual public async Task<bool> ExistsAsync(int id)
          => await _db.AnyAsync(x => x.Id == id);
@@ -80,4 +84,6 @@ public abstract class GenericRepository<T>(ApplicationDbContext context) : IGene
 
         return await _db.CountAsync(criteria);
     }
+
+
 }

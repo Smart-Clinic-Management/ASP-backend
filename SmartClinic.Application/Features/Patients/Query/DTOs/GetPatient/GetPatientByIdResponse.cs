@@ -8,7 +8,7 @@ public record GetPatientByIdResponse(
 [Required] string lastName,
 [EmailAddress] string userEmail,
 [Required] string userPhoneNumber,
-[Required] byte age,
+[Required] int age,
 [Required] string address,
 string? image,
 string? medicalHistory

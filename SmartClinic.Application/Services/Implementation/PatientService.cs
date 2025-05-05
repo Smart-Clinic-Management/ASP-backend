@@ -1,8 +1,4 @@
-﻿using SmartClinic.Application.Features.Patients.Query.DTOs;
-using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatient;
-using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatients;
-using SmartClinic.Application.Mapping;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
 
@@ -31,31 +27,31 @@ public class PatientService : IPatientService
         _specializationService = specializationService;
     }
 
-   
-       public async Task<Response<List<GetAllPatientsResponse>>> GetAllPatientsAsync(int pageSize = 20, int pageIndex = 1)
-    {
-        var patients = await _patientRepo.ListAsync(pageSize, pageIndex);
-        var response = patients.Select(patient =>
-        {
-            return patient.ToGetAllPatientsResponse();
-        }).ToList();
 
-        return new ResponseHandler().Success(response);
-    }
+    //   public async Task<Response<List<GetAllPatientsResponse>>> GetAllPatientsAsync(int pageSize = 20, int pageIndex = 1)
+    //{
+    //    var patients = await _patientRepo.ListAsync(pageSize, pageIndex);
+    //    var response = patients.Select(patient =>
+    //    {
+    //        return patient.ToGetAllPatientsResponse();
+    //    }).ToList();
+
+    //    return new ResponseHandler().Success(response);
+    //}
 
 
 
-    public async Task<Response<GetPatientByIdResponse>> GetPatientByIdAsync(int patientId)
-    {
-        var patient = await _patientRepo.GetByIdWithIncludesAsync(patientId);
-        if (patient == null)
-        {
-            return new ResponseHandler().NotFound<GetPatientByIdResponse>($"No patient found with ID {patientId}");
-        }
+    //public async Task<Response<GetPatientByIdResponse>> GetPatientByIdAsync(int patientId)
+    //{
+    //    var patient = await _patientRepo.GetByIdWithIncludesAsync(patientId);
+    //    if (patient == null)
+    //    {
+    //        return new ResponseHandler().NotFound<GetPatientByIdResponse>($"No patient found with ID {patientId}");
+    //    }
 
-        var response = patient.ToGetPatientByIdResponse();
+    //    var response = patient.ToGetPatientByIdResponse();
 
-        return new ResponseHandler().Success(response);
-    }
+    //    return new ResponseHandler().Success(response);
+    //}
 
 }
