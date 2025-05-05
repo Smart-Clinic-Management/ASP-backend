@@ -401,6 +401,8 @@ namespace SmartClinic.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsActive");
+
                     b.ToTable("Specializations");
                 });
 

@@ -1,8 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using SmartClinic.Domain.Entities;
-using SmartClinic.Infrastructure.Data;
-using SmartClinic.Infrastructure.Interfaces;
 
 namespace SmartClinic.Infrastructure.Repos;
 
@@ -23,7 +19,7 @@ public abstract class GenericRepository<T>(ApplicationDbContext context) : IGene
     {
         IQueryable<T> query = _db;
 
-        query = query.GetQuery(criteria, pageSize, pageIndex, withTracking, includes);
+        query = query.GetQuery(criteria, pageSize, pageIndex, withTracking, includes: includes);
 
         return await query.ToListAsync();
     }
