@@ -9,13 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartClinic.API", "SmartCli
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartClinic.Application", "SmartClinic.Application\SmartClinic.Application.csproj", "{D6760781-1627-47C9-AEAE-6CEC89CD1965}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5FF82C95-19FF-7FD3-863C-249E3238DD2E} = {5FF82C95-19FF-7FD3-863C-249E3238DD2E}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartClinic.Domain", "SmartClinic.Domain\SmartClinic.Domain.csproj", "{03DC6205-75CB-454E-A1BF-C69D2F370112}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartClinic.Infrastructure", "SmartClinic.Infrastructure\SmartClinic.Infrastructure.csproj", "{5FF82C95-19FF-7FD3-863C-249E3238DD2E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D6760781-1627-47C9-AEAE-6CEC89CD1965} = {D6760781-1627-47C9-AEAE-6CEC89CD1965}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{73FD3D66-670E-4838-865A-BAE3ABB4E57D}"
 EndProject

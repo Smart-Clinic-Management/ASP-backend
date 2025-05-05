@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.Infrastructure.Repos;
+﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+
+namespace SmartClinic.Infrastructure.Repos;
 public class AppointmentRepository(ApplicationDbContext context)
     : GenericRepository<Appointment>(context),
     IAppointment

@@ -1,4 +1,5 @@
 ﻿using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
 
@@ -10,12 +11,12 @@ public class DoctorService : ResponseHandler, IDoctorService
     private readonly IFileHandlerService _fileHandler;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ISpecializationService _specializationService;
-    private readonly ISpecializaionRepository _specialRepo;
+    private readonly ISpecializationRepository _specialRepo;
 
 
     public DoctorService(
         IDoctorRepository doctorRepo,
-        ISpecializaionRepository specialRepo,
+        ISpecializationRepository specialRepo,
         IUnitOfWork unitOfWork,
         UserManager<AppUser> userManager,
         IFileHandlerService fileHandler,

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTOs.Auth;
 using SmartClinic.Application.Features.Auth.Command;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 using SmartClinic.Domain.DTOs.Auth;
 
 namespace SmartClinic.Application.Features.Auth;

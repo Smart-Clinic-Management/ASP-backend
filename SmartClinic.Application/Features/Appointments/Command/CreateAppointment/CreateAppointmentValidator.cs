@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
 public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto>

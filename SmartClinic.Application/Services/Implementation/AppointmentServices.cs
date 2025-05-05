@@ -3,6 +3,7 @@ using SmartClinic.Application.Features.Appointments.Mapper;
 using SmartClinic.Application.Features.Appointments.Query.DTOs.AllAppointments;
 using SmartClinic.Application.Features.Appointments.Query.DTOs.DoctorAppointments;
 using SmartClinic.Application.Features.Appointments.Query.DTOs.PatientAppointments;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
 

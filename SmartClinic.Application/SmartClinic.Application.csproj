@@ -9,16 +9,17 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartClinic.Infrastructure\SmartClinic.Infrastructure.csproj" />
+    <Folder Include="Features\Patients\Command\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Patients\Command\" />
+    <ProjectReference Include="..\SmartClinic.Domain\SmartClinic.Domain.csproj" />
   </ItemGroup>
 
 </Project>

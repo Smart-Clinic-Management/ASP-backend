@@ -1,6 +1,4 @@
-﻿
-
-namespace SmartClinic.Infrastructure.Interfaces;
+﻿namespace SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 public interface IAppointment
 {
     Task<IEnumerable<Appointment>> ListPatientAppointmentsAsync(int patientId, int pageSize = 20, int pageIndex = 1);

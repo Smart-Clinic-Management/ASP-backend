@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.Application.Services.Implementation;
+﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+
+namespace SmartClinic.Application.Services.Implementation;
 public class PagedCreator<T> : IPagedCreator<T>
     where T : BaseEntity
 {

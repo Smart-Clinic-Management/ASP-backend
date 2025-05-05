@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -18,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartClinic.Application\SmartClinic.Application.csproj" />
+    <ProjectReference Include="..\SmartClinic.Infrastructure\SmartClinic.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

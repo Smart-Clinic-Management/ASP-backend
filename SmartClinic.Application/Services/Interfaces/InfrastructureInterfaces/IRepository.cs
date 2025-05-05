@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Infrastructure.Interfaces;
+﻿namespace SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 public interface IRepository<T> where T : BaseEntity
 {
     Task<T?> GetByIdAsync(int id);
@@ -19,6 +19,8 @@ public interface IRepository<T> where T : BaseEntity
     Task<bool> SoftDeleteAsync(int id);
 
     Task<int> CountAsync();
+
+    Task<bool> ExistsAsync(int id);
 
     Task AddAsync(T entity);
 

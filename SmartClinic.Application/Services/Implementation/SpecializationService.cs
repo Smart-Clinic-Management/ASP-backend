@@ -10,18 +10,19 @@ using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecia
 using SmartClinic.Application.Features.Specializations.Command.DTOs.UpdateSpecialization;
 using SmartClinic.Application.Features.Specializations.Mapper;
 using SmartClinic.Application.Services.Implementation.FileHandlerService;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation
 {
     public class SpecializationService : ISpecializationService
     {
-        private readonly ISpecializaionRepository _specialRepo;
+        private readonly ISpecializationRepository _specialRepo;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileHandlerService _fileHandler;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
         public SpecializationService(
-        ISpecializaionRepository specialRepo,
+        ISpecializationRepository specialRepo,
         IFileHandlerService fileHandler,
         IHttpContextAccessor httpContextAccessor,
         IUnitOfWork unitOfWork,

@@ -3,6 +3,7 @@ using SmartClinic.Application.Features.DoctorSchedule.Command.DeleteDoctorSchedu
 using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule;
 using SmartClinic.Application.Features.DoctorSchedule.Query.DTOs.GetDoctorSchedule;
 using SmartClinic.Application.Features.DoctorsSchedules.Mapper;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
 

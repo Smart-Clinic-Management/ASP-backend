@@ -1,88 +1,93 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SmartClinic.Domain.Entities;
-using SmartClinic.Infrastructure.Data;
-using SmartClinic.Infrastructure.Interfaces;
-using System.Linq.Expressions;
+﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
-namespace SmartClinic.Infrastructure.Repos
+namespace SmartClinic.Infrastructure.Repos;
+
+public class DoctorScheduleRepository : GenericRepository<DoctorSchedule>, IDoctorSchedule
 {
-    public class DoctorScheduleRepository : GenericRepository<DoctorSchedule>, IDoctorSchedule
+    private readonly ApplicationDbContext _context;
+
+    public DoctorScheduleRepository(ApplicationDbContext context)
+        : base(context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public DoctorScheduleRepository(ApplicationDbContext context)
-            : base(context)
+    public async Task<DoctorSchedule?> GetByIdAsync(int id)
+    {
+        return await GetSingleAsync(ds => ds.Id == id, true,
+            nameof(DoctorSchedule.Doctor),
+            "Doctor.User");
+    }
+
+    public async Task<DoctorSchedule?> GetByIdNoTrackingAsync(int id)
+    {
+        return await GetSingleAsync(ds => ds.Id == id, false);
+    }
+
+    public async Task<IEnumerable<DoctorSchedule>> GetByDoctorIdAsync(int doctorId)
+    {
+        var schedules = await _context.DoctorSchedules
+            .Where(ds => ds.DoctorId == doctorId)
+            .Include(ds => ds.Doctor)
+            .ThenInclude(d => d.User)
+            .ToListAsync();
+
+        if (schedules == null || !schedules.Any())
         {
-            _context = context;
+            throw new KeyNotFoundException($"No schedules found for doctor with ID {doctorId}");
         }
 
-        public async Task<DoctorSchedule?> GetByIdAsync(int id)
-        {
-            return await GetSingleAsync(ds => ds.Id == id, true,
-                nameof(DoctorSchedule.Doctor),
-                "Doctor.User");
-        }
+        return schedules;
+    }
 
-        public async Task<DoctorSchedule?> GetByIdNoTrackingAsync(int id)
-        {
-            return await GetSingleAsync(ds => ds.Id == id, false);
-        }
+    public async Task<DoctorSchedule?> GetByDoctorAndDayAsync(int doctorId, DayOfWeek day)
+    {
+        return await _context.DoctorSchedules
+            .FirstOrDefaultAsync(ds => ds.DoctorId == doctorId && ds.DayOfWeek == day);
+    }
 
-        public async Task<IEnumerable<DoctorSchedule>> GetByDoctorIdAsync(int doctorId)
-        {
-            var schedules = await _context.DoctorSchedules
-                .Where(ds => ds.DoctorId == doctorId)
-                .Include(ds => ds.Doctor)
-                .ThenInclude(d => d.User)
-                .ToListAsync();
+    public async Task<bool> SoftDeleteAsync(int id)
+    {
+        var entity = await _context.DoctorSchedules.FindAsync(id);
+        if (entity == null)
+            return false;
 
-            if (schedules == null || !schedules.Any())
-            {
-                throw new KeyNotFoundException($"No schedules found for doctor with ID {doctorId}");
-            }
+        _context.DoctorSchedules.Remove(entity);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 
-            return schedules;
-        }
+    public Task<IEnumerable<DoctorSchedule>> ListAsync(int pageSize = 20, int pageIndex = 1)
+    {
+        return ListAllAsync(null, pageSize, pageIndex, true,
+            nameof(DoctorSchedule.Doctor),
+            "Doctor.User");
+    }
 
-        public async Task<DoctorSchedule?> GetByDoctorAndDayAsync(int doctorId, DayOfWeek day)
-        {
-            return await _context.DoctorSchedules
-                .FirstOrDefaultAsync(ds => ds.DoctorId == doctorId && ds.DayOfWeek == day);
-        }
+    public Task<IEnumerable<DoctorSchedule>> ListNoTrackingAsync(int pageSize = 20, int pageIndex = 1)
+    {
+        return ListAllAsync(null, pageSize, pageIndex, false,
+            nameof(DoctorSchedule.Doctor),
+            "Doctor.User");
+    }
 
-        public async Task<bool> SoftDeleteAsync(int id)
-        {
-            var entity = await _context.DoctorSchedules.FindAsync(id);
-            if (entity == null)
-                return false;
+    public Task<DoctorSchedule?> GetByIdWithIncludesAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 
-            _context.DoctorSchedules.Remove(entity);
-            await _context.SaveChangesAsync();
-            return true;
-        }
+    public Task<DoctorSchedule?> GetByIdWithIncludesNoTrackingAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task<IEnumerable<DoctorSchedule>> ListAsync(int pageSize = 20, int pageIndex = 1)
-        {
-            return ListAllAsync(null, pageSize, pageIndex, true,
-                nameof(DoctorSchedule.Doctor),
-                "Doctor.User");
-        }
+    public Task<IEnumerable<TDto>> ListNoTrackingAsync<TDto>(int pageSize = 20, int pageIndex = 1, string? orderBy = null, bool descending = false, bool isDistinct = false)
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task<IEnumerable<DoctorSchedule>> ListNoTrackingAsync(int pageSize = 20, int pageIndex = 1)
-        {
-            return ListAllAsync(null, pageSize, pageIndex, false,
-                nameof(DoctorSchedule.Doctor),
-                "Doctor.User");
-        }
-
-        public Task<DoctorSchedule?> GetByIdWithIncludesAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<DoctorSchedule?> GetByIdWithIncludesNoTrackingAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<int> CountAsync()
+    {
+        throw new NotImplementedException();
     }
 }

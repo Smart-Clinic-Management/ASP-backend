@@ -15,7 +15,7 @@ public static class ModuleAddApplicationDependencies
         services.AddScoped<IPatientService, PatientService>();
         services.AddScoped<IDoctorScheduleService, DoctorScheduleServices>();
         services.AddScoped<IAppointmentService, AppointmentService>();
-        services.AddScoped<IPatient, PatientRepo>();
+
 
 
         services.Configure<EmailSettings>(configuration.GetRequiredSection("EmailSettings"));

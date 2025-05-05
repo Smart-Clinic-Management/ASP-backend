@@ -2,6 +2,7 @@
 using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatient;
 using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatients;
 using SmartClinic.Application.Mapping;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
 

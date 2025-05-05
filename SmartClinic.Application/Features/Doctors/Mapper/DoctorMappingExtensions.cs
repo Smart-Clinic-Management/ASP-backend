@@ -1,4 +1,5 @@
 ﻿using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Features.Doctors.Mapper;
 
@@ -87,7 +88,7 @@ public static class DoctorMappingExtensions
         return fileResult;
     }
 
-    public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializaionRepository specializationRepo, int? specializationId)
+    public static async Task AddSpecializationsToDoctorAsync(this Doctor doctor, ISpecializationRepository specializationRepo, int? specializationId)
     {
         if (!specializationId.HasValue) return;
 

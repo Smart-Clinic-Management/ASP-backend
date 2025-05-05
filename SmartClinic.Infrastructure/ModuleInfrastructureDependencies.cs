@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 using SmartClinic.Infrastructure.Repos;
 
 namespace SmartClinic.Infrastructure;
@@ -16,9 +17,9 @@ public static class ModuleInfrastructureDependencies
 
         services.AddScoped<IDoctorSchedule, DoctorScheduleRepository>();
 
+        services.AddScoped<IPatient, PatientRepo>();
 
-
-        services.AddScoped<ISpecializaionRepository, SpecializationRepository>();
+        services.AddScoped<ISpecializationRepository, SpecializationRepository>();
 
         return services;
     }

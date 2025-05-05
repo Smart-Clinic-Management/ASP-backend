@@ -1,8 +1,15 @@
-﻿namespace SmartClinic.Infrastructure.Repos;
+﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+
+namespace SmartClinic.Infrastructure.Repos;
 public class DoctorRepository(ApplicationDbContext context)
     : GenericRepository<Doctor>(context),
     IDoctorRepository
 {
+    public Task<int> CountAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<bool> ExistsAsync(int doctorId)
         => context.Doctors.AnyAsync(x => x.Id == doctorId && x.IsActive);
 
@@ -68,7 +75,8 @@ public class DoctorRepository(ApplicationDbContext context)
                   pageIndex, false,
                nameof(Doctor.User), nameof(Doctor.Specialization));
 
-
-
-
+    public Task<IEnumerable<TDto>> ListNoTrackingAsync<TDto>(int pageSize = 20, int pageIndex = 1, string? orderBy = null, bool descending = false, bool isDistinct = false)
+    {
+        throw new NotImplementedException();
+    }
 }
