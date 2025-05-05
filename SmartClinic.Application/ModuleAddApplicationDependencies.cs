@@ -28,6 +28,11 @@ public static class ModuleAddApplicationDependencies
         services.AddScoped<IFetchProfile, FetchDoctorProfile>();
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IFileHandlerService, FileHandler>();
+
+        services.AddTransient(typeof(IPagedCreator<>), typeof(PagedCreator<>));
+
+
+
         return services;
     }
 }
