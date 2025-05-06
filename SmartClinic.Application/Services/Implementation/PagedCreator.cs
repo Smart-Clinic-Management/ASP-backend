@@ -1,16 +1,32 @@
-﻿namespace SmartClinic.Application.Services.Implementation;
+﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+
+namespace SmartClinic.Application.Services.Implementation;
 public class PagedCreator<T> : IPagedCreator<T>
     where T : BaseEntity
 {
 
-
-    Pagination<T> IPagedCreator<T>.CreatePagedResult(IReadOnlyList<T> data, int pageIndex, int pageSize, int count
-       )
+    public async Task<Pagination<T>> CreatePagedResult(IGenericRepo<T> repo,
+               ISpecification<T> spec, int pageIndex, int pageSize)
     {
-        return new Pagination<T>(pageIndex, pageSize, count, data);
+        var items = await repo.ListAsync(spec);
+        var count = await repo.CountAsync(spec);
+
+        var pagination = new Pagination<T>(pageIndex, pageSize, count, items);
+
+        return pagination;
     }
 
-    Pagination<TDto> IPagedCreator<T>.CreatePagedResult<TDto>(IReadOnlyList<TDto> data, int pageIndex, int pageSize,
-       int count)
-       => new(pageIndex, pageSize, count, data);
+
+    public async Task<Pagination<TDto>> CreatePagedResult<TDto>(IGenericRepo<T> repo,
+      ISpecification<T, TDto> spec, int pageIndex, int pageSize)
+    {
+        var items = await repo.ListAsync(spec);
+        var count = await repo.CountAsync(spec);
+
+        List<TDto> dtoItems = [.. items];
+
+        var pagination = new Pagination<TDto>(pageIndex, pageSize, count, dtoItems);
+
+        return pagination;
+    }
 }

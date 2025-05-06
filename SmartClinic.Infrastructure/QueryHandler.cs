@@ -1,110 +1,89 @@
 ﻿using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
 using System.Reflection;
-using SmartClinic.Application.Bases;
+using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.Infrastructure;
-public static class QueryHandler
+
+public class SpecificationEvaluator<T>
+     where T : BaseEntity
 {
-    public static IQueryable<T> GetQuery<T>(this IQueryable<T> query, Expression<Func<T, bool>>? criteria = null,
-        int? pageSize = null, int? pageIndex = null, bool withTracking = true, string? orderBy = null,
-        bool descending = false, bool isDistinct = false, params string[] includes)
-        where T : BaseEntity
+
+    public static IQueryable<T> GetQuery(IQueryable<T> query, ISpecification<T> spec)
     {
+        if (spec.Criteria is not null)
+            query = query.Where(spec.Criteria);
 
-        criteria ??= x => true;
-        query = query.Where(criteria);
+        #region Ordering
 
-        #region includes
-
-        if (includes.Length != 0)
-            foreach (var include in includes)
-                query = query.Include(include);
-
-        #endregion
-
-        if (!withTracking)
-            query = query.AsNoTracking();
-
-
-        #region Order
-
-
-        var orderDirection = descending ? " descending" : string.Empty;
-
-        if (ValidProperty<T>(orderBy))
-            query = query.OrderBy(orderBy + orderDirection);
+        #region Asc
+        if (ValidProperty(spec.OrderBy))
+            query = query.OrderBy(spec.OrderBy!);
         else
-            query = descending ? query.OrderByDescending(c => c.Id) : query.OrderBy(c => c.Id);
+            query = query.OrderBy(x => x.Id);
+        #endregion
+
+        #region Desc
+        if (ValidProperty(spec.OrderByDescending))
+            query = query.OrderBy(spec.OrderByDescending!);
+        else
+            query = query.OrderByDescending(x => x.Id);
+        #endregion
 
         #endregion
 
 
-        if (isDistinct)
+        if (spec.IsDistinct)
             query = query.Distinct();
 
-        #region Paging
-        if (pageSize is not null && pageIndex is not null)
-        {
-            pageIndex = Math.Max(1, pageIndex!.Value);
-            pageSize = pageSize > 0 && pageSize <= 20 ? pageSize : 5;
-            int skip = (pageIndex.Value - 1) * pageSize.Value;
+        if (spec.IsPagingEnabled)
+            query = query.Skip(spec.Skip).Take(spec.Take);
 
-            query = query.Skip(skip).Take(pageSize.Value);
-        }
-        #endregion
+        query = spec.Includes.Aggregate(query, (current, include)
+            => current.Include(include));
+
+        query = spec.IncludeStrings.Aggregate(query, (current, include)
+            => current.Include(include));
 
         return query;
     }
 
-
-
-    public static IQueryable<TResult> GetQuery<T, TResult>(this IQueryable<T> query, Expression<Func<T, TResult>> select, Expression<Func<T, bool>>? criteria = null,
-         int? pageSize = null, int? pageIndex = null, string? orderBy = null,
-        bool descending = false, bool isDistinct = false)
-        where T : BaseEntity
-        where TResult : IDto
+    public static IQueryable<TResult> GetQuery<TResult>(IQueryable<T> query, ISpecification<T, TResult> spec)
     {
-        criteria ??= x => true;
-        query = query.Where(criteria);
+        if (spec.Criteria is not null)
+            query = query.Where(spec.Criteria);
 
+        var selectQuery = query as IQueryable<TResult>;
 
-        var result = query.Select(select);
+        selectQuery = query.Select(spec.Select);
 
+        #region Ordering
 
-        #region Order
+        #region Asc
+        if (ValidProperty<TResult>(spec.OrderBy))
+            selectQuery = selectQuery.OrderBy(spec.OrderBy!);
+        //else
+        //    selectQuery = selectQuery.OrderBy();
+        #endregion
 
-
-        var orderDirection = descending ? " descending" : string.Empty;
-
-        if (ValidDtoProperty<TResult>(orderBy))
-            result = result.OrderBy(orderBy + orderDirection);
-        else
-            result = descending ? result.OrderByDescending(x => x.Id) : result.OrderBy(x => x.Id);
+        #region Desc
+        if (ValidProperty(spec.OrderByDescending))
+            selectQuery = selectQuery.OrderBy(spec.OrderByDescending!);
+        //else
+        //    selectQuery = selectQuery.OrderByDescending();
+        #endregion
 
         #endregion
 
-        if (isDistinct)
-            result = result.Distinct();
+        if (spec.IsDistinct)
+            selectQuery = selectQuery?.Distinct();
 
-        #region Paging
-        if (pageSize is not null && pageIndex is not null)
-        {
-            pageIndex = Math.Max(1, pageIndex!.Value);
-            pageSize = pageSize > 0 && pageSize <= 20 ? pageSize : 5;
-            int skip = (pageIndex.Value - 1) * pageSize.Value;
+        if (spec.IsPagingEnabled)
+            selectQuery = selectQuery?.Skip(spec.Skip).Take(spec.Take);
 
-            result = result.Skip(skip).Take(pageSize.Value);
-        }
-        #endregion
-
-
-
-        return result;
+        return selectQuery ?? query.Cast<TResult>();
     }
 
-
-    private static bool ValidDtoProperty<TResult>(string? orderBy)
+    private static bool ValidProperty<TResult>(string? orderBy)
     {
         return !string.IsNullOrWhiteSpace(orderBy)
                 && typeof(TResult).GetProperty(orderBy, BindingFlags.IgnoreCase
@@ -112,12 +91,11 @@ public static class QueryHandler
     }
 
 
-    private static bool ValidProperty<T>(string? orderBy) where T : BaseEntity
+    private static bool ValidProperty(string? orderBy)
     {
         return !string.IsNullOrWhiteSpace(orderBy)
                 && typeof(T).GetProperty(orderBy, BindingFlags.IgnoreCase
                 | BindingFlags.Public | BindingFlags.Instance) is not null;
     }
-
 
 }

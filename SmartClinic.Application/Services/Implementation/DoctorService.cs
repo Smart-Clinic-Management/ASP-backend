@@ -1,95 +1,88 @@
-﻿using SmartClinic.Application.Services.Implementation.Specifications;
+﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
 
 public class DoctorService : ResponseHandler, IDoctorService
 {
-    private readonly IDoctorRepository _doctorRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<AppUser> _userManager;
     private readonly IFileHandlerService _fileHandler;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ISpecializationService _specializationService;
     private readonly IPagedCreator<Doctor> _pagedCreator;
-    private readonly ISpecializationRepository _specialRepo;
 
 
     public DoctorService(
-        IDoctorRepository doctorRepo,
-        ISpecializationRepository specialRepo,
         IUnitOfWork unitOfWork,
         UserManager<AppUser> userManager,
         IFileHandlerService fileHandler,
         IHttpContextAccessor httpContextAccessor,
-        ISpecializationService specializationService,
         IPagedCreator<Doctor> pagedCreator
         )
     {
-        _doctorRepo = doctorRepo;
-        _specialRepo = specialRepo;
         _unitOfWork = unitOfWork;
         _userManager = userManager;
         _fileHandler = fileHandler;
         _httpContextAccessor = httpContextAccessor;
-        _specializationService = specializationService;
         this._pagedCreator = pagedCreator;
     }
 
-    public async Task<Response<GetDoctorByIdResponse>> GetDoctorByIdAsync(int doctorId)
-    {
-        var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
-        if (doctor == null)
-            return new ResponseHandler().NotFound<GetDoctorByIdResponse>($"No doctor found with ID {doctorId}");
+    //public async Task<Response<GetDoctorByIdResponse>> GetDoctorByIdAsync(int doctorId)
+    //{
+    //    var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
+    //    if (doctor == null)
+    //        return new ResponseHandler().NotFound<GetDoctorByIdResponse>($"No doctor found with ID {doctorId}");
 
-        var imageUrl = DoctorMappingExtensions.GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor);
+    //    var imageUrl = DoctorMappingExtensions.GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor);
 
-        var response = doctor.ToGetDoctorByIdResponse();
-        response = response with { image = imageUrl };
+    //    var response = doctor.ToGetDoctorByIdResponse();
+    //    response = response with { image = imageUrl };
 
-        return new ResponseHandler().Success(response);
-    }
+    //    return new ResponseHandler().Success(response);
+    //}
 
     public async Task<Response<Pagination<GetAllDoctorsResponse>>> GetAllDoctorsAsync(GetAllDoctorsParams allDoctorsParams)
     {
-        var repo = _unitOfWork.Repository<IDoctorRepository>();
+        var validator = new GetAllDoctorsValidator();
 
-        var specs = new DoctorSpecifications(allDoctorsParams);
+        var ValidationResult = await validator.ValidateAsync(allDoctorsParams);
 
-        var doctors = await repo
-            .ListNoTrackingAsync(allDoctorsParams, specs);
+        if (!ValidationResult.IsValid)
+            return BadRequest<Pagination<GetAllDoctorsResponse>>([.. ValidationResult.Errors.Select(x => x.ErrorMessage)]);
 
-        var TotalCount = await repo.CountAsync(specs);
+        var specs = new DoctorSpecification(allDoctorsParams, _httpContextAccessor);
 
-        var reslult = _pagedCreator
-             .CreatePagedResult([.. doctors], allDoctorsParams.PageIndex,
-             allDoctorsParams.PageSize, TotalCount);
+        var result = await _pagedCreator
+            .CreatePagedResult(_unitOfWork.Repository<Doctor>(), specs, allDoctorsParams.PageIndex, allDoctorsParams.PageSize);
 
-        return Success(reslult);
+        return Success(result);
     }
 
-    public async Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId)
-    {
-        var doctor = await _doctorRepo.GetByIdAsync(doctorId);
-        if (doctor == null)
-        {
-            return new ResponseHandler().NotFound<SoftDeleteDoctorResponse>($"No doctor found with ID {doctorId}");
-        }
 
-        doctor.IsActive = false;
-        _doctorRepo.Update(doctor);
 
-        var user = await _userManager.FindByIdAsync(doctor.Id.ToString());
-        if (user != null)
-        {
-            user.IsActive = false;
-            await _userManager.UpdateAsync(user);
-        }
+    //public async Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId)
+    //{
+    //    var doctor = await _doctorRepo.GetByIdAsync(doctorId);
+    //    if (doctor == null)
+    //    {
+    //        return new ResponseHandler().NotFound<SoftDeleteDoctorResponse>($"No doctor found with ID {doctorId}");
+    //    }
 
-        await _unitOfWork.SaveChangesAsync();
+    //    doctor.IsActive = false;
+    //    _doctorRepo.Update(doctor);
 
-        return new ResponseHandler().Success(new SoftDeleteDoctorResponse("Doctor and associated user successfully soft deleted."));
-    }
+    //    var user = await _userManager.FindByIdAsync(doctor.Id.ToString());
+    //    if (user != null)
+    //    {
+    //        user.IsActive = false;
+    //        await _userManager.UpdateAsync(user);
+    //    }
+
+    //    await _unitOfWork.SaveChangesAsync();
+
+    //    return new ResponseHandler().Success(new SoftDeleteDoctorResponse("Doctor and associated user successfully soft deleted."));
+    //}
 
     //public async Task<Response<CreateDoctorResponse>> CreateDoctor(CreateDoctorRequest newDoctorUser)
     //{

@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
+﻿namespace SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 
 public class GetAllDoctorsResponse : IDto
 {
