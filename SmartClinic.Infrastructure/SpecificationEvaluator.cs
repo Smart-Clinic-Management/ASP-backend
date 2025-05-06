@@ -52,9 +52,9 @@ public class SpecificationEvaluator<T>
         if (spec.Criteria is not null)
             query = query.Where(spec.Criteria);
 
-        var selectQuery = query as IQueryable<TResult>;
+        query = query.AsNoTracking();
 
-        selectQuery = query.Select(spec.Select);
+        var selectQuery = query.Select(spec.Select);
 
         #region Ordering
 

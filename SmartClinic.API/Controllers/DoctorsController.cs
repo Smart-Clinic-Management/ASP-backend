@@ -1,4 +1,5 @@
 ﻿using SmartClinic.Application.Bases;
+using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 
@@ -18,16 +19,16 @@ public class DoctorsController(IDoctorService doctorService) : AppControllerBase
     }
 
 
-    //[Authorize(Roles = "doctor")]
-    //[HttpPut]
-    //[ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status400BadRequest)]
-    //[ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> UpdateDoctor([FromForm] UpdateDoctorRequest request)
-    //{
-    //    var response = await doctorService.UpdateDoctorAsync(User.GetUserId(), request);
-    //    return NewResult(response);
-    //}
+    [Authorize(Roles = "doctor")]
+    [HttpPut]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateDoctor([FromForm] UpdateDoctorRequest request)
+    {
+        var response = await doctorService.UpdateDoctorAsync(User.GetUserId(), request);
+        return NewResult(response);
+    }
 
     [HttpGet]
     [ProducesResponseType<Response<Pagination<GetAllDoctorsResponse>>>(StatusCodes.Status200OK)]

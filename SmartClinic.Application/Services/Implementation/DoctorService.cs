@@ -164,9 +164,16 @@ public class DoctorService : ResponseHandler, IDoctorService
     //    return new ResponseHandler().Success(response, message: "Doctor Created Successfully");
     //}
 
-    public async Task<Response<GetDoctorByIdResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
+    public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
     {
-        return NotFound<GetDoctorByIdResponse?>();
+        var validator = new UpdateDoctorRequestValidator();
+
+        var validationResult = await validator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+            return BadRequest<UpdateDoctorResponse>(errors: [.. validationResult.Errors.Select(s => s.ErrorMessage)]);
+
+        return NotFound<UpdateDoctorResponse>();
     }
 
     //public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,

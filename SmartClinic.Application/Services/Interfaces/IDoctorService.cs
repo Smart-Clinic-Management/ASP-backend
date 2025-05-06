@@ -8,7 +8,7 @@ public interface IDoctorService
 {
     //Task<Response<CreateDoctorResponse>> CreateDoctor(CreateDoctorRequest newDoctorUser);
 
-    Task<Response<GetDoctorByIdResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request);
+    Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request);
 
     Task<Response<GetDoctorByIdResponse?>> GetDoctorByIdAsync(int doctorId);
 
