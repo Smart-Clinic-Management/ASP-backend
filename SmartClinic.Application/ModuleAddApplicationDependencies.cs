@@ -9,12 +9,12 @@ public static class ModuleAddApplicationDependencies
     {
 
         services.AddScoped<IDoctorService, DoctorService>();
-        services.AddScoped<ISpecializationService, SpecializationService>();
+        //services.AddScoped<ISpecializationService, SpecializationService>();
         services.AddScoped<ResponseHandler>();
-        services.AddScoped<IDoctorService, DoctorService>();
-        services.AddScoped<IPatientService, PatientService>();
-        services.AddScoped<IDoctorScheduleService, DoctorScheduleServices>();
-        services.AddScoped<IAppointmentService, AppointmentService>();
+        //services.AddScoped<IDoctorService, DoctorService>();
+        //services.AddScoped<IPatientService, PatientService>();
+        //services.AddScoped<IDoctorScheduleService, DoctorScheduleServices>();
+        //services.AddScoped<IAppointmentService, AppointmentService>();
 
 
 

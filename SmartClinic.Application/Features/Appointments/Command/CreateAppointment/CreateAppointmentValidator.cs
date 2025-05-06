@@ -17,27 +17,27 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
 
 
         RuleFor(x => x.DoctorId)
-         .MustAsync(DoctorExists).WithMessage("Invalid Doctor Id")
+         //.MustAsync(DoctorExists).WithMessage("Invalid Doctor Id")
          .NotEmpty();
 
         RuleFor(x => x.SpecializationId)
          .NotEmpty();
 
-        RuleFor(x => x)
-            .MustAsync(IsValidDoctorSpecialization).WithMessage("Invalid Doctor Specialization Id");
+        RuleFor(x => x);
+        //.MustAsync(IsValidDoctorSpecialization).WithMessage("Invalid Doctor Specialization Id");
 
         this._unitOfWork = unitOfWork;
     }
 
 
-    private async Task<bool> IsValidDoctorSpecialization(CreateAppointmentDto dto, CancellationToken token)
-        => await _unitOfWork.Repository<IDoctorRepository>().
-                     IsValidDoctorSpecialization(dto.SpecializationId, dto.DoctorId);
+    //private async Task<bool> IsValidDoctorSpecialization(CreateAppointmentDto dto, CancellationToken token)
+    //    => await _unitOfWork.Repository<IDoctorRepository>().
+    //                 IsValidDoctorSpecialization(dto.SpecializationId, dto.DoctorId);
 
 
 
-    private async Task<bool> DoctorExists(int DoctorId, CancellationToken token)
-         => await _unitOfWork.Repository<IDoctorRepository>().ExistsAsync(DoctorId);
+    //private async Task<bool> DoctorExists(int DoctorId, CancellationToken token)
+    //     => await _unitOfWork.Repository<IDoctorRepository>().ExistsAsync(DoctorId);
 
 
 

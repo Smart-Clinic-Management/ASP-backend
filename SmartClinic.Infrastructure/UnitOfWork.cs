@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
-using SmartClinic.Infrastructure.Data;
 
 namespace SmartClinic.Infrastructure;
 public class UnitOfWork(IServiceProvider serviceProvider, ApplicationDbContext context) : IUnitOfWork
@@ -13,15 +12,16 @@ public class UnitOfWork(IServiceProvider serviceProvider, ApplicationDbContext c
 
     public async Task<bool> SaveChangesAsync() => await context.SaveChangesAsync() > 0;
 
-    public TEntity Repository<TEntity>()
+    public IGenericRepo<TEntity> Repository<TEntity>()
+        where TEntity : BaseEntity
     {
         var key = typeof(TEntity).FullName!;
 
         var lazy = _repositories.GetOrAdd(key,
-           _ => new Lazy<object>(() => serviceProvider.GetRequiredService<TEntity>())
+           _ => new Lazy<object>(() => serviceProvider.GetRequiredService<IGenericRepo<TEntity>>())
            );
 
-        return (TEntity)lazy.Value;
+        return (IGenericRepo<TEntity>)lazy.Value;
     }
 
 }

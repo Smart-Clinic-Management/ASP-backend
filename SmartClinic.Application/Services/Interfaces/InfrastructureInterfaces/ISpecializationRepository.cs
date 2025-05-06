@@ -1,5 +1,5 @@
-﻿namespace SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+﻿//namespace SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
-public interface ISpecializationRepository// : IRepository<Specialization>
-{
-}
+//public interface ISpecializationRepository// : IRepository<Specialization>
+//{
+//}

@@ -1,6 +1,6 @@
 ﻿using SmartClinic.Application.Bases;
 using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctors;
+using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 
 namespace SmartClinic.API.Controllers;
 

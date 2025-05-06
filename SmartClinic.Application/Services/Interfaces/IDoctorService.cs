@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.Application.Services.Interfaces;
+﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+
+namespace SmartClinic.Application.Services.Interfaces;
 
 public interface IDoctorService
 {

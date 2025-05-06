@@ -1,6 +1,6 @@
-﻿namespace SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+﻿//namespace SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
-public interface IPatient //: IRepository<Patient>
-{
-    //Task<bool> ExistsAsync(int patientId);
-}
+//public interface IPatient //: IRepository<Patient>
+//{
+//    //Task<bool> ExistsAsync(int patientId);
+//}

@@ -1,4 +1,8 @@
-﻿namespace SmartClinic.Application.Features.Doctors.Mapper;
+﻿
+
+using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+
+namespace SmartClinic.Application.Features.Doctors.Mapper;
 
 public static class DoctorMappingExtensions
 {

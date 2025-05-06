@@ -1,9 +1,12 @@
-﻿namespace SmartClinic.Application.Services.Interfaces;
+﻿using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+
+namespace SmartClinic.Application.Services.Interfaces;
 public interface IPagedCreator<T>
     where T : BaseEntity
 {
-    Pagination<T> CreatePagedResult(IReadOnlyList<T> data, int pageIndex, int pageSize, int count);
+    Task<Pagination<T>> CreatePagedResult(IGenericRepo<T> repo, ISpecification<T> spec, int pageIndex, int pageSize);
 
-    Pagination<TDto> CreatePagedResult<TDto>(IReadOnlyList<TDto> data, int pageIndex, int pageSize, int count);
+    Task<Pagination<TDto>> CreatePagedResult<TDto>(IGenericRepo<T> repo,
+      ISpecification<T, TDto> spec, int pageIndex, int pageSize);
 
 }

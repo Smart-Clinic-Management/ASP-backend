@@ -9,17 +9,19 @@ public static class ModuleInfrastructureDependencies
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<IPatient, PatientRepo>();
+        //services.AddScoped<IPatient, PatientRepo>();
 
-        services.AddScoped<IDoctorRepository, DoctorRepository>();
+        //services.AddScoped<IDoctorRepository, DoctorRepository>();
 
-        services.AddScoped<IAppointment, AppointmentRepository>();
+        //services.AddScoped<IAppointment, AppointmentRepository>();
 
-        services.AddScoped<IDoctorSchedule, DoctorScheduleRepository>();
+        //services.AddScoped<IDoctorSchedule, DoctorScheduleRepository>();
 
-        services.AddScoped<IPatient, PatientRepo>();
+        //services.AddScoped<IPatient, PatientRepo>();
 
-        services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+        services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+
+        //services.AddScoped<ISpecializationRepository, SpecializationRepository>();
 
         return services;
     }
