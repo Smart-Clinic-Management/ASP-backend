@@ -1,6 +1,5 @@
-﻿
-
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithAvailableAppointment;
 
 namespace SmartClinic.Application.Features.Doctors.Mapper;
 
@@ -26,22 +25,21 @@ public static class DoctorMappingExtensions
         );
     }
 
-    public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
-    {
-        return new GetDoctorByIdResponse(
-            firstName: doctor.User.FirstName,
-            lastName: doctor.User.LastName,
-            userEmail: doctor.User.Email,
-            userPhoneNumber: doctor.User.PhoneNumber,
-            age: doctor.User.Age,
-            address: doctor.User.Address,
-            description: doctor.Description,
-            waitingTime: doctor.WaitingTime,
-            image: doctor.User.ProfileImage,
-            SlotDuration: doctor.DoctorSchedules.FirstOrDefault()?.SlotDuration,
-            Specialization: doctor.Specialization.Name
-        );
-    }
+    //public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
+    //{
+    //    return new GetDoctorByIdResponse(
+    //        FirstName: doctor.User.FirstName,
+    //        LastName: doctor.User.LastName,
+    //        UserEmail: doctor.User.Email,
+    //        PhoneNumber: doctor.User.PhoneNumber,
+    //        Age: doctor.User.Age,
+    //        Address: doctor.User.Address,
+    //        Description: doctor.Description,
+    //        WaitingTime: doctor.WaitingTime,
+    //        Image: doctor.User.ProfileImage,
+    //        Specialization: doctor.Specialization.Name
+    //    );
+    //}
 
 
     public static GetAllDoctorsResponse ToGetAllDoctorsResponse(this Doctor doctor)

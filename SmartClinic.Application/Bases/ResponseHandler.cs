@@ -27,7 +27,7 @@ public class ResponseHandler
             Message = "UnAuthorized"
         };
     }
-    public Response<T> BadRequest<T>(List<string> errors, string? Message = null)
+    public Response<T> BadRequest<T>(string? Message = null, params List<string> errors)
     {
         return new Response<T>()
         {

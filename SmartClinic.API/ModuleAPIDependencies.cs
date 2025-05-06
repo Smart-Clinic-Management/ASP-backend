@@ -95,7 +95,7 @@ public static class ModuleAPIDependencies
                                .Select(x => x.ErrorMessage)
                                .ToList();
 
-                           var response = new ResponseHandler().BadRequest<string>(errors);
+                           var response = new ResponseHandler().BadRequest<string>(errors: errors);
 
                            return new BadRequestObjectResult(response);
                        }

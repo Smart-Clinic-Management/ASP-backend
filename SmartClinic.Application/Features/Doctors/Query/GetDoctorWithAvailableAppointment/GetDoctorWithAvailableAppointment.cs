@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctorWithAvailableAppointment;
+﻿namespace SmartClinic.Application.Features.Doctors.Query.GetDoctorWithAvailableAppointment;
 public record GetDoctorWithAvailableAppointment(
          string FirstName,
          string? LastName,

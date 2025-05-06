@@ -1,7 +1,7 @@
 ﻿using SmartClinic.Application.Features.Doctors.Mapper;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 
-namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications;
+namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
 public class DoctorSpecification : BaseSpecification<Doctor, GetAllDoctorsResponse>
 {
 
@@ -35,6 +35,8 @@ public class DoctorSpecification : BaseSpecification<Doctor, GetAllDoctorsRespon
             WaitingTime = x.WaitingTime
         });
     }
+
+
 
 
 }

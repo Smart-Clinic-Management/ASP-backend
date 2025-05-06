@@ -1,45 +1,39 @@
 ﻿using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Doctors.Query.DTOs.GetDoctor;
+using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 
 namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DoctorsController : AppControllerBase
+public class DoctorsController(IDoctorService doctorService) : AppControllerBase
 {
-    private readonly IDoctorService _doctorService;
-
-    public DoctorsController(IDoctorService doctorService)
-    {
-        _doctorService = doctorService;
-    }
 
     [HttpGet("{id}")]
     [ProducesResponseType<Response<GetDoctorByIdResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<GetDoctorByIdResponse>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetById(int id)
-    //{
-    //    return NewResult(await _doctorService.GetDoctorByIdAsync(id));
-    //}
+    public async Task<IActionResult> GetById(int id)
+    {
+        return NewResult(await doctorService.GetDoctorByIdAsync(id));
+    }
 
 
     //[Authorize(Roles = "doctor")]
-    //[HttpPut("Update")]
+    //[HttpPut]
     //[ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status200OK)]
     //[ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status400BadRequest)]
     //[ProducesResponseType<Response<UpdateDoctorResponse>>(StatusCodes.Status404NotFound)]
     //public async Task<IActionResult> UpdateDoctor([FromForm] UpdateDoctorRequest request)
     //{
-    //    var response = await _doctorService.UpdateDoctorAsync(User.GetUserId(), request);
+    //    var response = await doctorService.UpdateDoctorAsync(User.GetUserId(), request);
     //    return NewResult(response);
     //}
 
     [HttpGet]
-    [ProducesResponseType<Response<List<GetAllDoctorsResponse>>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<Pagination<GetAllDoctorsResponse>>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllDoctors([FromQuery] GetAllDoctorsParams allDoctorsParams)
     {
-        return NewResult(await _doctorService.GetAllDoctorsAsync(allDoctorsParams));
+        return NewResult(await doctorService.GetAllDoctorsAsync(allDoctorsParams));
     }
 
 

@@ -12,7 +12,7 @@ public class UnitOfWork(IServiceProvider serviceProvider, ApplicationDbContext c
 
     public async Task<bool> SaveChangesAsync() => await context.SaveChangesAsync() > 0;
 
-    public IGenericRepo<TEntity> Repository<TEntity>()
+    public IGenericRepo<TEntity> Repo<TEntity>()
         where TEntity : BaseEntity
     {
         var key = typeof(TEntity).FullName!;

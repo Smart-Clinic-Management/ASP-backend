@@ -82,12 +82,12 @@ public class AuthService : IAuthService
 
         var userExist = await userMGR.FindByEmailAsync(user.Email);
         if (userExist == null)
-            return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
+            return response.BadRequest<LoginResponseDTO>("invalid login attempts")!;
 
         var sign = await signMGR.CheckPasswordSignInAsync(userExist, user.Password, false);
 
         if (!sign.Succeeded)
-            return response.BadRequest<LoginResponseDTO>(["invalid login attemps"])!;
+            return response.BadRequest<LoginResponseDTO>("invalid login attempts")!;
 
         var res = response.Success(new LoginResponseDTO() { Token = await GenerateJWT(userExist) }, message: "success");
 
@@ -132,7 +132,7 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-            return response.BadRequest<RegisterResponseDTO>(errors)!;
+            return response.BadRequest<RegisterResponseDTO>(errors: errors)!;
         }
         /////////////////
         var role = await userMGR.AddToRoleAsync(user, "patient");
@@ -140,7 +140,7 @@ public class AuthService : IAuthService
         if (!role.Succeeded)
         {
             var errors = role.Errors.Select(e => e.Description).ToList();
-            return response.BadRequest<RegisterResponseDTO>(errors)!;
+            return response.BadRequest<RegisterResponseDTO>(errors: errors)!;
         }
         if (fileResult.Success)
         {
@@ -164,7 +164,7 @@ public class AuthService : IAuthService
 
         if (user == null)
         {
-            return response.BadRequest<ImgResponse>(["invalid login attemps"])!;
+            return response.BadRequest<ImgResponse>("invalid login attempts")!;
         }
 
         return response.Success(new ImgResponse()

@@ -1,5 +1,7 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications;
+﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
+using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
+using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
@@ -28,19 +30,19 @@ public class DoctorService : ResponseHandler, IDoctorService
         this._pagedCreator = pagedCreator;
     }
 
-    //public async Task<Response<GetDoctorByIdResponse>> GetDoctorByIdAsync(int doctorId)
-    //{
-    //    var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
-    //    if (doctor == null)
-    //        return new ResponseHandler().NotFound<GetDoctorByIdResponse>($"No doctor found with ID {doctorId}");
+    public async Task<Response<GetDoctorByIdResponse?>> GetDoctorByIdAsync(int doctorId)
+    {
+        var specs = new DoctorByIdSpecification(doctorId, _httpContextAccessor);
 
-    //    var imageUrl = DoctorMappingExtensions.GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor);
+        var doctor = await _unitOfWork.Repo<Doctor>()
+            .GetEntityWithSpecAsync(specs);
 
-    //    var response = doctor.ToGetDoctorByIdResponse();
-    //    response = response with { image = imageUrl };
+        if (doctor is null)
+            return NotFound<GetDoctorByIdResponse?>($"No Doctor With id : {doctorId}");
 
-    //    return new ResponseHandler().Success(response);
-    //}
+        return Success(doctor)!;
+
+    }
 
     public async Task<Response<Pagination<GetAllDoctorsResponse>>> GetAllDoctorsAsync(GetAllDoctorsParams allDoctorsParams)
     {
@@ -49,12 +51,12 @@ public class DoctorService : ResponseHandler, IDoctorService
         var ValidationResult = await validator.ValidateAsync(allDoctorsParams);
 
         if (!ValidationResult.IsValid)
-            return BadRequest<Pagination<GetAllDoctorsResponse>>([.. ValidationResult.Errors.Select(x => x.ErrorMessage)]);
+            return BadRequest<Pagination<GetAllDoctorsResponse>>(errors: [.. ValidationResult.Errors.Select(x => x.ErrorMessage)]);
 
         var specs = new DoctorSpecification(allDoctorsParams, _httpContextAccessor);
 
         var result = await _pagedCreator
-            .CreatePagedResult(_unitOfWork.Repository<Doctor>(), specs, allDoctorsParams.PageIndex, allDoctorsParams.PageSize);
+            .CreatePagedResult(_unitOfWork.Repo<Doctor>(), specs, allDoctorsParams.PageIndex, allDoctorsParams.PageSize);
 
         return Success(result);
     }
