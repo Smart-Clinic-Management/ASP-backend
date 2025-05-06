@@ -3,7 +3,6 @@ global using Microsoft.AspNetCore.Identity;
 global using Microsoft.Extensions.DependencyInjection;
 global using SmartClinic.Application.Bases;
 global using SmartClinic.Application.Features.Auth;
-global using SmartClinic.Application.Features.Doctors.Command.DTOs.UpdateDoctor;
 global using SmartClinic.Application.Services.Implementation;
 global using SmartClinic.Application.Services.Implementation.FileHandlerService;
 global using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;

@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.Application.Features.Doctors.Query.GetDoctor;
+﻿using SmartClinic.Application.Features.DoctorsSchedules.DTOs;
+
+namespace SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 
 public record GetDoctorByIdResponse(
      string FirstName,
@@ -12,5 +14,6 @@ public record GetDoctorByIdResponse(
     int? WaitingTime,
     string? Image,
     int SpecializationId,
-    string Specialization
+    string Specialization,
+    IEnumerable<DoctorScheduleDto> Schedule
 );

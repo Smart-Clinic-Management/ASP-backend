@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartClinic.Infrastructure"
 		{D6760781-1627-47C9-AEAE-6CEC89CD1965} = {D6760781-1627-47C9-AEAE-6CEC89CD1965}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{73FD3D66-670E-4838-865A-BAE3ABB4E57D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{5FF82C95-19FF-7FD3-863C-249E3238DD2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FF82C95-19FF-7FD3-863C-249E3238DD2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FF82C95-19FF-7FD3-863C-249E3238DD2E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73FD3D66-670E-4838-865A-BAE3ABB4E57D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73FD3D66-670E-4838-865A-BAE3ABB4E57D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73FD3D66-670E-4838-865A-BAE3ABB4E57D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73FD3D66-670E-4838-865A-BAE3ABB4E57D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

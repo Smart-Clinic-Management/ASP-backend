@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
+﻿using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
+using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
@@ -163,50 +164,10 @@ public class DoctorService : ResponseHandler, IDoctorService
     //    return new ResponseHandler().Success(response, message: "Doctor Created Successfully");
     //}
 
-    //public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
-    //{
-    //    var doctor = await _doctorRepo.GetByIdWithIncludesAsync(doctorId);
-    //    if (doctor == null || !doctor.IsActive)
-    //    {
-    //        return new ResponseHandler().NotFound<UpdateDoctorResponse>($"No Doctor found with id {doctorId}");
-    //    }
-
-    //    var user = doctor.User;
-    //    user.FirstName = request.Fname ?? user.FirstName;
-    //    user.LastName = request.Lname ?? user.LastName;
-    //    user.Email = request.Email ?? user.Email;
-    //    user.Address = request.Address ?? user.Address;
-
-    //    if (request.Image != null)
-    //    {
-    //        var validationOptions = new FileValidation
-    //        {
-    //            MaxSize = 2 * 1024 * 1024,
-    //            AllowedExtenstions = [".jpg", ".jpeg", ".png"]
-    //        };
-
-    //        var fileResult = await _fileHandler.HanldeFile(request.Image, validationOptions);
-
-    //        if (!fileResult.Success)
-    //        {
-    //            var errors = new List<string> { fileResult.Error };
-    //            return new ResponseHandler().BadRequest<UpdateDoctorResponse>(errors);
-    //        }
-
-    //        user.ProfileImage = fileResult.RelativeFilePath;
-    //        await _fileHandler.SaveFile(request.Image, fileResult.FullFilePath);
-    //    }
-
-    //    await doctor.AddSpecializationsToDoctorAsync(_specialRepo, request.SpecializationId);
-
-    //    await _unitOfWork.SaveChangesAsync();
-
-    //    var imageUrl = DoctorMappingExtensions.GetImgUrl(user.ProfileImage, _httpContextAccessor);
-
-    //    var response = doctor.ToUpdateDoctorResponse(_httpContextAccessor) with { Image = imageUrl };
-
-    //    return new ResponseHandler().Success(response, message: "Doctor updated successfully");
-    //}
+    public async Task<Response<GetDoctorByIdResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
+    {
+        return NotFound<GetDoctorByIdResponse?>();
+    }
 
     //public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,
     //    DateOnly startDate)

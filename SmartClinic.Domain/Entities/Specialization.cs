@@ -16,6 +16,6 @@ public class Specialization : BaseEntity
 
     public bool IsActive { get; set; } = true;
 
-    public ICollection<Doctor> Doctors { get; set; } = new HashSet<Doctor>();
-    public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+    public IEnumerable<Doctor> Doctors { get; set; } = new HashSet<Doctor>();
+    public IEnumerable<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 }

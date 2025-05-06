@@ -56,20 +56,20 @@ public static class DoctorMappingExtensions
         };
     }
 
-    public static UpdateDoctorResponse ToUpdateDoctorResponse(this Doctor doctor, IHttpContextAccessor _httpContextAccessor)
-    {
-        return new UpdateDoctorResponse(
-            Fname: doctor.User.FirstName,
-            Lname: doctor.User.LastName,
-            Email: doctor.User.Email,
-            Image: doctor.User.ProfileImage != null ? GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor) : null,
-            SpecializationId: doctor.Specialization.Id,
-            BirthDate: doctor.User.BirthDate,
-            Address: doctor.User.Address,
-            WaitingTime: doctor.WaitingTime,
-            Description: doctor.Description
-        );
-    }
+    //public static UpdateDoctorResponse ToUpdateDoctorResponse(this Doctor doctor, IHttpContextAccessor _httpContextAccessor)
+    //{
+    //    return new UpdateDoctorResponse(
+    //        Fname: doctor.User.FirstName,
+    //        Lname: doctor.User.LastName,
+    //        Email: doctor.User.Email,
+    //        Image: doctor.User.ProfileImage != null ? GetImgUrl(doctor.User.ProfileImage, _httpContextAccessor) : null,
+    //        SpecializationId: doctor.Specialization.Id,
+    //        BirthDate: doctor.User.BirthDate,
+    //        Address: doctor.User.Address,
+    //        WaitingTime: doctor.WaitingTime,
+    //        Description: doctor.Description
+    //    );
+    //}
     public static string GetImgUrl(string? path, IHttpContextAccessor _httpContextAccessor)
     {
         if (path == null) return null!;

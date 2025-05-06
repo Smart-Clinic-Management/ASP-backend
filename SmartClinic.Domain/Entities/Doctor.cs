@@ -20,9 +20,9 @@ public class Doctor : BaseEntity
     [ForeignKey(nameof(SpecializationId))]
     public Specialization Specialization { get; set; } = null!;
 
-    public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();
+    public IEnumerable<DoctorSchedule> DoctorSchedules { get; set; } = new HashSet<DoctorSchedule>();
 
-    public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+    public IEnumerable<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 
 
 }

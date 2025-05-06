@@ -1,5 +1,6 @@
 ﻿using SmartClinic.Application.Features.Doctors.Mapper;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
+using SmartClinic.Application.Features.DoctorsSchedules.DTOs;
 
 namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 public class DoctorByIdSpecification : BaseSpecification<Doctor, GetDoctorByIdResponse>
@@ -20,7 +21,15 @@ public class DoctorByIdSpecification : BaseSpecification<Doctor, GetDoctorByIdRe
             x.WaitingTime,
             DoctorMappingExtensions.GetImgUrl(x.User.ProfileImage, httpContextAccessor),
             x.SpecializationId,
-            x.Specialization.Name
+            x.Specialization.Name,
+            x.DoctorSchedules.Select(s => new DoctorScheduleDto
+            (s.Id,
+            s.DayOfWeek,
+            s.DayOfWeek.ToString(),
+            s.StartTime,
+            s.EndTime,
+            s.SlotDuration
+            ))
             ));
     }
 }
