@@ -87,7 +87,8 @@ public class DoctorService : ResponseHandler, IDoctorService
         var createdUser = await _userManager.CreateAsync(newUser);
 
         if (!createdUser.Succeeded)
-            return BadRequest<string>("Something went wrong", [.. createdUser.Errors.Select(x => x.Description)]);
+            return BadRequest<string>("Something went wrong while Creating",
+                [.. createdUser.Errors.Select(x => x.Description)]);
 
         #endregion
 
@@ -95,7 +96,14 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         var addingRole = await _userManager.AddToRoleAsync(newUser, "doctor");
         if (!addingRole.Succeeded)
-            return BadRequest<string>("Something went wrong", [.. createdUser.Errors.Select(x => x.Description)]);
+            return BadRequest<string>("Something went wrong while adding to role", [.. createdUser.Errors.Select(x => x.Description)]);
+
+        #region Saving Image
+
+        await _fileHandler
+            .SaveFile(newDoctorUser.Image, newDoctorUser.Image.ToFullFilePath(newUser.ProfileImage!));
+
+        #endregion
 
         #endregion
         return Created("");
