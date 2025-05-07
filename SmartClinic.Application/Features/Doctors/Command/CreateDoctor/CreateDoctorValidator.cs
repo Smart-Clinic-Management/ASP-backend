@@ -67,7 +67,7 @@ public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
 
     private bool ValidPassword(string Pass)
     {
-        string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$";
+        string pattern = @"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}";
 
         return Regex.IsMatch(pattern, Pass);
     }
