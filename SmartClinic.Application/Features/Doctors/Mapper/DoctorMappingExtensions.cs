@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+﻿using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
+using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithAvailableAppointment;
 
 namespace SmartClinic.Application.Features.Doctors.Mapper;
@@ -70,6 +71,34 @@ public static class DoctorMappingExtensions
     //        Description: doctor.Description
     //    );
     //}
+
+    public static UpdateDoctorResponse ToUpdateDto(this Doctor doctor, IFileHandlerService fileHandler) => new()
+    {
+        Age = doctor.User.Age,
+        Image = fileHandler.GetFileURL(doctor.User.ProfileImage!),
+        LastName = doctor.User.LastName,
+        BirthDate = doctor.User.BirthDate,
+        Description = doctor.Description,
+        FirstName = doctor.User.FirstName,
+        WaitingTime = doctor.WaitingTime
+
+    };
+
+
+    public static Doctor UpdateEntity(this Doctor doctor, UpdateDoctorRequest request)
+    {
+        doctor.User.FirstName = request.Fname ?? doctor.User.FirstName;
+        doctor.User.LastName = request.Lname ?? doctor.User.LastName;
+        doctor.User.BirthDate = request.BirthDate ?? doctor.User.BirthDate;
+        doctor.User.ProfileImage = request.Image?.ToRelativeFilePath() ?? doctor.User.ProfileImage;
+        doctor.User.Address = request.Address ?? doctor.User.Address;
+        doctor.WaitingTime = request.WaitingTime ?? doctor.WaitingTime;
+        doctor.User.PhoneNumber = request.PhoneNumber ?? doctor.User.PhoneNumber;
+        doctor.Description = request.Description ?? doctor.Description;
+
+        return doctor;
+    }
+
     public static string GetImgUrl(string? path, IHttpContextAccessor _httpContextAccessor)
     {
         if (path == null) return null!;

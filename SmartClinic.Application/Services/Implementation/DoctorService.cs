@@ -1,8 +1,10 @@
 ﻿using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
+using SmartClinic.Application.Features.Doctors.Mapper;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
+using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.UpdateDoctorSpecifications;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
 namespace SmartClinic.Application.Services.Implementation;
@@ -166,6 +168,7 @@ public class DoctorService : ResponseHandler, IDoctorService
 
     public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
     {
+        #region Validation
         var validator = new UpdateDoctorRequestValidator();
 
         var validationResult = await validator.ValidateAsync(request);
@@ -173,7 +176,40 @@ public class DoctorService : ResponseHandler, IDoctorService
         if (!validationResult.IsValid)
             return BadRequest<UpdateDoctorResponse>(errors: [.. validationResult.Errors.Select(s => s.ErrorMessage)]);
 
-        return NotFound<UpdateDoctorResponse>();
+        #endregion
+
+
+        #region Updating
+
+        var specs = new UpdateDoctorSpecification(doctorId);
+
+        var doctor = await _unitOfWork.Repo<Doctor>()
+            .GetEntityWithSpecAsync(specs);
+
+        var currentImg = doctor!.User.ProfileImage;
+
+        doctor = doctor!.UpdateEntity(request);
+
+        _unitOfWork.Repo<Doctor>().Update(doctor);
+
+        #endregion
+
+        if (await _unitOfWork.SaveChangesAsync())
+        {
+            if (request.Image is not null)
+            {
+                await _fileHandler.SaveFile(request.Image!,
+                    request.Image.ToFullFilePath(doctor.User.ProfileImage!));
+
+                await _fileHandler.RemoveImg(currentImg!);
+            }
+
+            return Success(doctor.ToUpdateDto(_fileHandler), "Updated Successfully");
+        }
+
+        return BadRequest<UpdateDoctorResponse>("Doctor didn't update successfully");
+
+
     }
 
     //public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,

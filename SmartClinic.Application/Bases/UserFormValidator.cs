@@ -14,14 +14,22 @@ public static class UserFormValidator
     }
 
 
-    public static bool IsValidImageExtension(IFormFile? file)
+    public static bool IsValidImageExtension(IFormFile image)
     {
-        if (file is null) return true;
-
-        var fileName = Path.GetFileName(file.FileName);
+        var fileName = Path.GetFileName(image.FileName);
         string pattern = @"^.*\.(jpg|jpeg|png)$";
 
         return Regex.IsMatch(fileName, pattern, RegexOptions.IgnoreCase);
+    }
+
+    public static bool IsValidImageSize(IFormFile image)
+    {
+        if (image.Length == 0)
+            return false;
+
+        long maxSizeInBytes = 2 * 1024 * 1024; // 2 MB
+        return image.Length <= maxSizeInBytes;
+
     }
 
     public static bool IsValidDoctorAge(DateOnly? birthDate)

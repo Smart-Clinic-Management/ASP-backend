@@ -28,11 +28,24 @@ public class UpdateDoctorRequestValidator : AbstractValidator<UpdateDoctorReques
 
         RuleFor(x => x.Image)
             .Must(ValidImageExtension)
-            .WithMessage("Only accept jpg|jpeg|png images");
+            .WithMessage("Only accept jpg|jpeg|png images")
+            .Must(ValidateImageSize);
+
+    }
+
+    private bool ValidateImageSize(IFormFile? file)
+    {
+        if (file is null) return true;
+
+        return UserFormValidator.IsValidImageSize(file);
     }
 
     private bool ValidImageExtension(IFormFile? file)
-        => UserFormValidator.IsValidImageExtension(file);
+    {
+        if (file is null) return true;
+
+        return UserFormValidator.IsValidImageExtension(file);
+    }
 
     private bool ValidPhoneNumber(string? PhoneNumber)
         => UserFormValidator.IsValidPhoneNumber(PhoneNumber);
