@@ -12,5 +12,5 @@ public record CreateDoctorRequest
     DateOnly BirthDate,
     string Address,
     int WaitingTime,
-    string Description
+    string? Description
     );

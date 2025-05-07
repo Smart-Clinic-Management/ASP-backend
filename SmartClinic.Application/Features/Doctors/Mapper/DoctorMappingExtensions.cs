@@ -30,6 +30,7 @@ public static class DoctorMappingExtensions
     public static AppUser ToUser(this CreateDoctorRequest newDoctorUser) => new()
     {
         Address = newDoctorUser.Address,
+        UserName = newDoctorUser.Email,
         FirstName = newDoctorUser.FirstName,
         LastName = newDoctorUser.LastName,
         Email = newDoctorUser.Email,
