@@ -14,6 +14,10 @@ public class UpdateDoctorRequestValidator : AbstractValidator<UpdateDoctorReques
         RuleFor(x => x.BirthDate)
             .Must(ValidateMinimumAge);
 
+        RuleFor(x => x.WaitingTime)
+           .GreaterThanOrEqualTo(0)
+           .LessThanOrEqualTo(30);
+
         RuleFor(x => x.PhoneNumber)
             .Must(ValidPhoneNumber)
             .WithMessage("Phone number must start with +20 and be exactly 13 characters long, including 10 digits after +20.");
