@@ -134,8 +134,6 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         doctor.UpdateEntity(request);
 
-        _unitOfWork.Repo<Doctor>().Update(doctor);
-
         #endregion
 
         if (await _unitOfWork.SaveChangesAsync())
@@ -146,7 +144,7 @@ public class DoctorService : ResponseHandler, IDoctorService
             return Success(doctor.ToUpdateDto(_fileHandler), "Updated Successfully");
         }
 
-        return BadRequest<UpdateDoctorResponse>("Doctor didn't update successfully");
+        return BadRequest<UpdateDoctorResponse>("No changes made");
 
 
     }
