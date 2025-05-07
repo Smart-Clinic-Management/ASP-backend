@@ -186,7 +186,7 @@ public class DoctorService : ResponseHandler, IDoctorService
         var doctor = await _unitOfWork.Repo<Doctor>()
             .GetEntityWithSpecAsync(specs);
 
-        var currentImg = doctor!.User.ProfileImage;
+        var oldImg = doctor!.User.ProfileImage;
 
         doctor = doctor!.UpdateEntity(request);
 
@@ -197,12 +197,7 @@ public class DoctorService : ResponseHandler, IDoctorService
         if (await _unitOfWork.SaveChangesAsync())
         {
             if (request.Image is not null)
-            {
-                await _fileHandler.SaveFile(request.Image!,
-                    request.Image.ToFullFilePath(doctor.User.ProfileImage!));
-
-                await _fileHandler.RemoveImg(currentImg!);
-            }
+                await _fileHandler.UpdateImg(request.Image, doctor.User.ProfileImage!, oldImg);
 
             return Success(doctor.ToUpdateDto(_fileHandler), "Updated Successfully");
         }

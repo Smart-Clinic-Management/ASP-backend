@@ -67,4 +67,11 @@ public class FileHandler : IFileHandlerService
         System.IO.File.Delete(filePath);
         return true;
     }
+
+    public async Task UpdateImg(IFormFile file, string newImgRelativePath, string oldImgRelativePath)
+    {
+        await SaveFile(file, file.ToFullFilePath(newImgRelativePath));
+        await RemoveImg(oldImgRelativePath);
+    }
+
 }
