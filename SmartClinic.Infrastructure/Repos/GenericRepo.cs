@@ -10,7 +10,7 @@ public class GenericRepo<T>(ApplicationDbContext _context) : IGenericRepo<T>
 
     public async Task AddAsync(T entity) => await _db.AddAsync(entity);
 
-    public async Task<int> CountAsync(ISpecification<T> spec) => await ApplySecifications(spec).CountAsync();
+    public async Task<int> CountAsync(ISpecification<T> spec) => await _db.CountAsync(spec.Criteria!);
 
     public void Delete(T entity) => _db.Remove(entity);
 

@@ -21,6 +21,7 @@ public class PagedCreator<T> : IPagedCreator<T>
       ISpecification<T, TDto> spec, int pageIndex, int pageSize)
     {
         var items = await repo.ListAsync(spec);
+
         var count = await repo.CountAsync(spec);
 
         List<TDto> dtoItems = [.. items];
