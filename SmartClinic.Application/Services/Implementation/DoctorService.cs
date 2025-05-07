@@ -84,7 +84,7 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         var newUser = newDoctorUser.ToUser();
 
-        var createdUser = await _userManager.CreateAsync(newUser);
+        var createdUser = await _userManager.CreateAsync(newUser, newDoctorUser.Password);
 
         if (!createdUser.Succeeded)
             return BadRequest<string>("Something went wrong while Creating",
