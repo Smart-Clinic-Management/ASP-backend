@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
+using SmartClinic.Application.Interfaces;
 using SmartClinic.Application.Models;
 using SmartClinic.Application.Services.Implementation.Profile;
+using SmartClinic.Infrastructure.Services;
 
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
@@ -15,6 +17,9 @@ public static class ModuleAddApplicationDependencies
         //services.AddScoped<IPatientService, PatientService>();
         //services.AddScoped<IDoctorScheduleService, DoctorScheduleServices>();
         //services.AddScoped<IAppointmentService, AppointmentService>();
+
+        services.AddHttpClient<IChatBotService, ChatBotService>();
+
 
 
 
