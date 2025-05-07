@@ -37,6 +37,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entry.Entity.IsActive = false;
             entry.Entity.User.IsActive = false;
             entry.Entity.User.Email = null;
+            entry.Entity.DoctorSchedules = [];
+            var upcommingAppointment = entry.Entity.Appointments
+                .Where(x => x.AppointmentDate >= DateOnly.FromDateTime(DateTime.Now));
+
+            foreach (var appointment in upcommingAppointment)
+                appointment.Status = AppointmentStatus.Canceled;
+
         }
         #endregion
 
