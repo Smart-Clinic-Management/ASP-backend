@@ -15,6 +15,7 @@ public interface IDoctorService
 
     Task<Response<Pagination<GetAllDoctorsResponse>>> GetAllDoctorsAsync(GetAllDoctorsParams allDoctorsParams);
 
+    Task<Response<string>> DeleteById(int id);
 
     //Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id, DateOnly startDate);
 }

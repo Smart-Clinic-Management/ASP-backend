@@ -3,6 +3,7 @@ using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 using SmartClinic.Application.Features.Doctors.Mapper;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.DeleteDoctorSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
 using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.UpdateDoctorSpecifications;
@@ -131,7 +132,7 @@ public class DoctorService : ResponseHandler, IDoctorService
 
         var oldImg = doctor!.User.ProfileImage;
 
-        doctor = doctor!.UpdateEntity(request);
+        doctor.UpdateEntity(request);
 
         _unitOfWork.Repo<Doctor>().Update(doctor);
 
@@ -148,6 +149,31 @@ public class DoctorService : ResponseHandler, IDoctorService
         return BadRequest<UpdateDoctorResponse>("Doctor didn't update successfully");
 
 
+    }
+
+    public async Task<Response<string>> DeleteById(int id)
+    {
+        var specs = new DeleteDoctorSpecification(id);
+
+        var doctor = await _unitOfWork.Repo<Doctor>().GetEntityWithSpecAsync(specs);
+
+        if (doctor is null)
+            return NotFound<string>();
+
+        doctor.Delete();
+
+        #region Removing doctor schedules
+
+        foreach (var schedule in doctor.DoctorSchedules)
+            _unitOfWork.Repo<DoctorSchedule>().Delete(schedule);
+
+        #endregion
+
+
+        if (!await _unitOfWork.SaveChangesAsync())
+            return BadRequest<string>("Something went wrong while deleting");
+
+        return Deleted<string>();
     }
 
     //public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,

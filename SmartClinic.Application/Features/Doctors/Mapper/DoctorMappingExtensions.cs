@@ -8,6 +8,19 @@ namespace SmartClinic.Application.Features.Doctors.Mapper;
 public static class DoctorMappingExtensions
 {
 
+    public static Doctor Delete(this Doctor doctor)
+    {
+        doctor.IsActive = false;
+        doctor.User.IsActive = false;
+        doctor.User.Email = null;
+
+
+        foreach (var appointment in doctor.Appointments)
+            appointment.Status = AppointmentStatus.Canceled;
+
+        return doctor;
+    }
+
     public static GetDoctorWithAvailableAppointment ToGetDoctorWithAvailableSchedules(this Doctor doctor, List<AvailableSchedule> AvailableSchedules)
     {
         return new GetDoctorWithAvailableAppointment

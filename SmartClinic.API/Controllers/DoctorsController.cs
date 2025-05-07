@@ -39,14 +39,17 @@ public class DoctorsController(IDoctorService doctorService) : AppControllerBase
     }
 
 
-    //[Authorize(Roles = "admin")]
-    //[HttpDelete("{id}")]
-    //[ProducesResponseType<Response<SoftDeleteDoctorResponse>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<SoftDeleteDoctorResponse>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> SoftDeleteDoctor(int id)
-    //{
-    //    return NewResult(await _doctorService.SoftDeleteDoctorAsync(id));
-    //}
+
+
+    [Authorize(Roles = "admin")]
+    [HttpDelete("{id}")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SoftDeleteDoctor(int id)
+    {
+        return NewResult(await doctorService.DeleteById(id));
+    }
 
 
     [Authorize(Roles = "admin")]
