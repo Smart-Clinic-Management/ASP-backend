@@ -40,4 +40,11 @@ public static class UserFormValidator
 
         return birthDate.Value.Year <= 1999;
     }
+
+    public static bool IsValidPassword(string Pass)
+    {
+        string pattern = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$";
+
+        return Regex.IsMatch(Pass, pattern);
+    }
 }

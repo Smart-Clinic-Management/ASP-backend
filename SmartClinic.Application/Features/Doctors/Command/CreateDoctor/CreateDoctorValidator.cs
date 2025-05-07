@@ -1,6 +1,4 @@
-﻿
-using System.Text.RegularExpressions;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 
@@ -66,12 +64,7 @@ public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
         this._userManager = userManager;
     }
 
-    private bool ValidPassword(string Pass)
-    {
-        string pattern = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$";
-
-        return Regex.IsMatch(Pass, pattern);
-    }
+    private bool ValidPassword(string Pass) => UserFormValidator.IsValidPassword(Pass);
 
     private async Task<bool> IsUniqueEmail(string Email, CancellationToken token) =>
         !await _userManager.Users.AnyAsync(u => u.Email == Email);
