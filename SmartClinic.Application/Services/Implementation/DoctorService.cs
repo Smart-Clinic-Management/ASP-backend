@@ -1,39 +1,18 @@
-﻿using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
-using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
-using SmartClinic.Application.Features.Doctors.Mapper;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.DeleteDoctorSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.UpdateDoctorSpecifications;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
-namespace SmartClinic.Application.Services.Implementation;
-
-public class DoctorService : ResponseHandler, IDoctorService
+public class DoctorService(
+    IUnitOfWork unitOfWork,
+    UserManager<AppUser> userManager,
+    IFileHandlerService fileHandler,
+    IHttpContextAccessor httpContextAccessor,
+    IPagedCreator<Doctor> pagedCreator
+        ) : ResponseHandler, IDoctorService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly UserManager<AppUser> _userManager;
-    private readonly IFileHandlerService _fileHandler;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IPagedCreator<Doctor> _pagedCreator;
-
-
-    public DoctorService(
-        IUnitOfWork unitOfWork,
-        UserManager<AppUser> userManager,
-        IFileHandlerService fileHandler,
-        IHttpContextAccessor httpContextAccessor,
-        IPagedCreator<Doctor> pagedCreator
-        )
-    {
-        _unitOfWork = unitOfWork;
-        _userManager = userManager;
-        _fileHandler = fileHandler;
-        _httpContextAccessor = httpContextAccessor;
-        this._pagedCreator = pagedCreator;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly UserManager<AppUser> _userManager = userManager;
+    private readonly IFileHandlerService _fileHandler = fileHandler;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IPagedCreator<Doctor> _pagedCreator = pagedCreator;
 
     public async Task<Response<GetDoctorByIdResponse?>> GetDoctorByIdAsync(int doctorId)
     {
