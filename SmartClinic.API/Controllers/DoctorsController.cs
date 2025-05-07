@@ -1,4 +1,5 @@
 ﻿using SmartClinic.Application.Bases;
+using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
 using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
@@ -48,15 +49,15 @@ public class DoctorsController(IDoctorService doctorService) : AppControllerBase
     //}
 
 
-    //[Authorize(Roles = "admin")]
-    //[HttpPost("Create")]
-    //[Consumes("multipart/form-data")]
-    //[ProducesResponseType<Response<CreateDoctorResponse>>(StatusCodes.Status201Created)]
-    //[ProducesResponseType<Response<CreateDoctorResponse>>(StatusCodes.Status400BadRequest)]
-    //public async Task<IActionResult> CreateDoctor([FromForm] CreateDoctorRequest request)
-    //{
-    //    return NewResult(await _doctorService.CreateDoctor(request));
-    //}
+    [Authorize(Roles = "admin")]
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateDoctor([FromForm] CreateDoctorRequest request)
+    {
+        return NewResult(await doctorService.CreateDoctor(request));
+    }
 
     //[HttpGet("schedule")]
     //[EndpointDescription("Gets the doctor with available schedule")]

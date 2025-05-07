@@ -6,7 +6,7 @@ public static class UserFormValidator
 {
     public static bool IsValidPhoneNumber(string? phoneNumber)
     {
-        if (phoneNumber is null) return true;
+        if (phoneNumber is null) return false;
 
         string pattern = @"^\+20[0-9]{10}$";
 
@@ -16,6 +16,8 @@ public static class UserFormValidator
 
     public static bool IsValidImageExtension(IFormFile image)
     {
+        if (image is null) return false;
+
         var fileName = Path.GetFileName(image.FileName);
         string pattern = @"^.*\.(jpg|jpeg|png)$";
 
@@ -24,7 +26,7 @@ public static class UserFormValidator
 
     public static bool IsValidImageSize(IFormFile image)
     {
-        if (image.Length == 0)
+        if (image is null || image.Length == 0)
             return false;
 
         long maxSizeInBytes = 2 * 1024 * 1024; // 2 MB
@@ -34,7 +36,7 @@ public static class UserFormValidator
 
     public static bool IsValidDoctorAge(DateOnly? birthDate)
     {
-        if (birthDate is null) return true;
+        if (!birthDate.HasValue) return false;
 
         return birthDate.Value.Year <= 1999;
     }

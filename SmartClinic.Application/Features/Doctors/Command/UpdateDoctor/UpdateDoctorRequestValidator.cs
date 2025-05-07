@@ -12,7 +12,7 @@ public class UpdateDoctorRequestValidator : AbstractValidator<UpdateDoctorReques
             .Length(3, 30);
 
         RuleFor(x => x.BirthDate)
-            .Must(ValidateMinimumAge);
+            .Must(ValidateMinimumAge).WithMessage("Minimum age is 25"); ;
 
         RuleFor(x => x.WaitingTime)
            .GreaterThanOrEqualTo(0)
@@ -33,7 +33,7 @@ public class UpdateDoctorRequestValidator : AbstractValidator<UpdateDoctorReques
         RuleFor(x => x.Image)
             .Must(ValidImageExtension)
             .WithMessage("Only accept jpg|jpeg|png images")
-            .Must(ValidateImageSize);
+            .Must(ValidateImageSize).WithMessage("Image max size 2mb");
 
     }
 
@@ -52,8 +52,15 @@ public class UpdateDoctorRequestValidator : AbstractValidator<UpdateDoctorReques
     }
 
     private bool ValidPhoneNumber(string? PhoneNumber)
-        => UserFormValidator.IsValidPhoneNumber(PhoneNumber);
+    {
+        if (PhoneNumber is null) return true;
+        return UserFormValidator.IsValidPhoneNumber(PhoneNumber);
+    }
 
     private bool ValidateMinimumAge(DateOnly? birthDate)
-        => UserFormValidator.IsValidDoctorAge(birthDate);
+    {
+        if (birthDate is null) return true;
+
+        return UserFormValidator.IsValidDoctorAge(birthDate);
+    }
 }

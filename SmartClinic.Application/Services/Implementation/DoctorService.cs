@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
+﻿using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
+using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 using SmartClinic.Application.Features.Doctors.Mapper;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
@@ -51,10 +52,10 @@ public class DoctorService : ResponseHandler, IDoctorService
     {
         var validator = new GetAllDoctorsValidator();
 
-        var ValidationResult = await validator.ValidateAsync(allDoctorsParams);
+        var validationResult = await validator.ValidateAsync(allDoctorsParams);
 
-        if (!ValidationResult.IsValid)
-            return BadRequest<Pagination<GetAllDoctorsResponse>>(errors: [.. ValidationResult.Errors.Select(x => x.ErrorMessage)]);
+        if (!validationResult.IsValid)
+            return BadRequest<Pagination<GetAllDoctorsResponse>>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
 
         var specs = new DoctorSpecification(allDoctorsParams, _httpContextAccessor);
 
@@ -66,105 +67,21 @@ public class DoctorService : ResponseHandler, IDoctorService
 
 
 
-    //public async Task<Response<SoftDeleteDoctorResponse>> SoftDeleteDoctorAsync(int doctorId)
-    //{
-    //    var doctor = await _doctorRepo.GetByIdAsync(doctorId);
-    //    if (doctor == null)
-    //    {
-    //        return new ResponseHandler().NotFound<SoftDeleteDoctorResponse>($"No doctor found with ID {doctorId}");
-    //    }
 
-    //    doctor.IsActive = false;
-    //    _doctorRepo.Update(doctor);
 
-    //    var user = await _userManager.FindByIdAsync(doctor.Id.ToString());
-    //    if (user != null)
-    //    {
-    //        user.IsActive = false;
-    //        await _userManager.UpdateAsync(user);
-    //    }
+    public async Task<Response<string>> CreateDoctor(CreateDoctorRequest newDoctorUser)
+    {
+        #region Validation
+        var validotor = new CreateDoctorValidator(_unitOfWork, _userManager);
 
-    //    await _unitOfWork.SaveChangesAsync();
+        var validationResult = await validotor.ValidateAsync(newDoctorUser);
 
-    //    return new ResponseHandler().Success(new SoftDeleteDoctorResponse("Doctor and associated user successfully soft deleted."));
-    //}
+        if (!validationResult.IsValid)
+            return BadRequest<string>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
+        #endregion
 
-    //public async Task<Response<CreateDoctorResponse>> CreateDoctor(CreateDoctorRequest newDoctorUser)
-    //{
-    //    if (newDoctorUser.Image == null)
-    //    {
-    //        return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors: ["No image uploaded"]);
-    //    }
-
-    //    var validationOptions = new FileValidation
-    //    {
-    //        MaxSize = 2 * 1024 * 1024,
-    //        AllowedExtenstions = [".jpg", ".jpeg", ".png"]
-    //    };
-
-    //    var fileResult = await _fileHandler.HanldeFile(newDoctorUser.Image, validationOptions);
-
-    //    if (!fileResult.Success)
-    //    {
-    //        var errors = new List<string>();
-    //        if (!string.IsNullOrEmpty(fileResult.Error)) errors.Add(fileResult.Error);
-    //        return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors: errors);
-    //    }
-
-    //    var user = new AppUser
-    //    {
-    //        UserName = newDoctorUser.Email,
-    //        Email = newDoctorUser.Email,
-    //        FirstName = newDoctorUser.Fname,
-    //        LastName = newDoctorUser.Lname,
-    //        Address = newDoctorUser.Address,
-    //        BirthDate = newDoctorUser.BirthDate,
-    //        ProfileImage = fileResult.RelativeFilePath,
-    //    };
-
-    //    var userCreationResult = await _userManager.CreateAsync(user, "DefaultPassword123");
-
-    //    if (!userCreationResult.Succeeded)
-    //    {
-    //        var errors = userCreationResult.Errors.Select(e => e.Description).ToList();
-    //        return new ResponseHandler().BadRequest<CreateDoctorResponse>(errors);
-    //    }
-
-    //    await _userManager.AddToRoleAsync(user, "Doctor");
-
-    //    var doctor = new Doctor
-    //    {
-    //        Id = user.Id,
-    //        Description = newDoctorUser.Description,
-    //        WaitingTime = newDoctorUser.WaitingTime,
-    //        IsActive = true
-    //    };
-
-    //    await doctor.AddSpecializationsToDoctorAsync(_specialRepo, newDoctorUser.SpecializationId);
-
-    //    await _doctorRepo.AddAsync(doctor);
-
-    //    if (fileResult.Success)
-    //    {
-    //        await _fileHandler.SaveFile(newDoctorUser.Image, fileResult.FullFilePath);
-    //    }
-
-    //    await _unitOfWork.SaveChangesAsync();
-
-    //    var response = new CreateDoctorResponse(
-    //        Fname: user.FirstName,
-    //        Lname: user.LastName,
-    //        Email: user.Email,
-    //        Image: fileResult.Success ? DoctorMappingExtensions.GetImgUrl(fileResult.RelativeFilePath, _httpContextAccessor) : null,
-    //        SpecializationId: doctor.Specialization.Id,
-    //        BirthDate: user.BirthDate,
-    //        Address: user.Address,
-    //        WaitingTime: doctor.WaitingTime,
-    //        Description: doctor.Description
-    //    );
-
-    //    return new ResponseHandler().Success(response, message: "Doctor Created Successfully");
-    //}
+        return new ResponseHandler().Success("response", message: "Doctor Created Successfully");
+    }
 
     public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)
     {
