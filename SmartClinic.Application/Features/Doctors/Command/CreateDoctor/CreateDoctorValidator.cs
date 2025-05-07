@@ -51,7 +51,8 @@ public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
 
         RuleFor(x => x.Password)
             .NotEmpty()
-            .Must(ValidPassword);
+            .Must(ValidPassword)
+            .WithMessage("Minimum six characters, at least one upper case English letter, one lower case English letter, one number and one special character");
 
 
         RuleFor(x => x.Image)
@@ -67,7 +68,7 @@ public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
 
     private bool ValidPassword(string Pass)
     {
-        string pattern = @"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}";
+        string pattern = @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$";
 
         return Regex.IsMatch(pattern, Pass);
     }
