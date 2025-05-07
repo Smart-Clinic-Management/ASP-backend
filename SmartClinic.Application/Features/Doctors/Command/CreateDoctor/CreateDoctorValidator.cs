@@ -1,4 +1,5 @@
 ﻿
+using System.Text.RegularExpressions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
@@ -48,6 +49,10 @@ public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
         RuleFor(x => x.Description)
             .Length(3, 200);
 
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .Must(ValidPassword);
+
 
         RuleFor(x => x.Image)
             .NotEmpty()
@@ -60,32 +65,24 @@ public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
         this._userManager = userManager;
     }
 
+    private bool ValidPassword(string Pass)
+    {
+        string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$";
+
+        return Regex.IsMatch(pattern, Pass);
+    }
+
     private async Task<bool> IsUniqueEmail(string Email, CancellationToken token) =>
         !await _userManager.Users.AnyAsync(u => u.Email == Email);
 
-    private async Task<bool> IsValidSpecificaionId(int? SpecificaionId, CancellationToken token)
-    {
-        if (SpecificaionId is null) return false;
+    private async Task<bool> IsValidSpecificaionId(int SpecificaionId, CancellationToken token)
+        => await _unitOfWork.Repo<Specialization>().Exists(SpecificaionId);
 
-        return await _unitOfWork.Repo<Specialization>().Exists(SpecificaionId.Value);
-    }
+    private bool ValidateImageSize(IFormFile? file) => UserFormValidator.IsValidImageSize(file!);
 
-    private bool ValidateImageSize(IFormFile? file)
-    {
+    private bool ValidImageExtension(IFormFile? file) => UserFormValidator.IsValidImageExtension(file!);
 
-        return UserFormValidator.IsValidImageSize(file!);
-    }
+    private bool ValidPhoneNumber(string PhoneNumber) => UserFormValidator.IsValidPhoneNumber(PhoneNumber);
 
-    private bool ValidImageExtension(IFormFile? file)
-    {
-
-        return UserFormValidator.IsValidImageExtension(file!);
-    }
-
-    private bool ValidPhoneNumber(string? PhoneNumber)
-    {
-        return UserFormValidator.IsValidPhoneNumber(PhoneNumber);
-    }
-
-    private bool ValidateMinimumAge(DateOnly? birthDate) => UserFormValidator.IsValidDoctorAge(birthDate);
+    private bool ValidateMinimumAge(DateOnly birthDate) => UserFormValidator.IsValidDoctorAge(birthDate);
 }

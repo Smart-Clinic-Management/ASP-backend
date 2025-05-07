@@ -80,7 +80,25 @@ public class DoctorService : ResponseHandler, IDoctorService
             return BadRequest<string>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
         #endregion
 
-        return new ResponseHandler().Success("response", message: "Doctor Created Successfully");
+        #region Create User
+
+        var newUser = newDoctorUser.ToUser();
+
+        var createdUser = await _userManager.CreateAsync(newUser);
+
+        if (!createdUser.Succeeded)
+            return BadRequest<string>("Something went wrong", [.. createdUser.Errors.Select(x => x.Description)]);
+
+        #endregion
+
+        #region Adding Role
+
+        var addingRole = await _userManager.AddToRoleAsync(newUser, "doctor");
+        if (!addingRole.Succeeded)
+            return BadRequest<string>("Something went wrong", [.. createdUser.Errors.Select(x => x.Description)]);
+
+        #endregion
+        return Created("");
     }
 
     public async Task<Response<UpdateDoctorResponse>> UpdateDoctorAsync(int doctorId, UpdateDoctorRequest request)

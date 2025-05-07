@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
+﻿using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
+using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithAvailableAppointment;
 
@@ -25,6 +26,23 @@ public static class DoctorMappingExtensions
              AvailableSchedules
         );
     }
+
+    public static AppUser ToUser(this CreateDoctorRequest newDoctorUser) => new()
+    {
+        Address = newDoctorUser.Address,
+        FirstName = newDoctorUser.FirstName,
+        LastName = newDoctorUser.LastName,
+        Email = newDoctorUser.Email,
+        BirthDate = newDoctorUser.BirthDate,
+        PhoneNumber = newDoctorUser.PhoneNumber,
+        ProfileImage = newDoctorUser.Image.ToRelativeFilePath(),
+        Doctor = new Doctor()
+        {
+            Description = newDoctorUser.Description,
+            WaitingTime = newDoctorUser.WaitingTime,
+            SpecializationId = newDoctorUser.SpecializationId,
+        }
+    };
 
     //public static GetDoctorByIdResponse ToGetDoctorByIdResponse(this Doctor doctor)
     //{

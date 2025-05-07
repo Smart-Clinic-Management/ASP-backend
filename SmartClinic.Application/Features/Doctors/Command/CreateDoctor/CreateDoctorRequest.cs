@@ -2,14 +2,15 @@
 
 public record CreateDoctorRequest
     (
-    string? FirstName,
-    string? LastName,
-    string? Email,
-    string? PhoneNumber,
-    IFormFile? Image,
-    int? SpecializationId,
-    DateOnly? BirthDate,
-    string? Address,
-    int? WaitingTime,
-    string? Description
+    string FirstName,
+    string LastName,
+    string Email,
+    string Password,
+    string PhoneNumber,
+    IFormFile Image,
+    int SpecializationId,
+    DateOnly BirthDate,
+    string Address,
+    int WaitingTime,
+    string Description
     );
