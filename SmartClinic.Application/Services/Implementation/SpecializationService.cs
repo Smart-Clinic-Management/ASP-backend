@@ -1,4 +1,7 @@
-﻿namespace SmartClinic.Application.Services.Implementation;
+﻿using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
+using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
+
+namespace SmartClinic.Application.Services.Implementation;
 
 public class SpecializationService(
 IFileHandlerService fileHandler,
@@ -43,6 +46,44 @@ UserManager<AppUser> userManager)
 
         }
         return Success(Specialization);
+    }
+
+
+
+    public async Task<Response<string>> CreateSpecialization(CreateSpecializationRequest newSpecializationUser)
+    {
+        #region Validation
+        var validator = new CreateSpecializationValidator(_unitOfWork);
+
+        var validationResult = await validator.ValidateAsync(newSpecializationUser);
+
+        if (!validationResult.IsValid)
+            return BadRequest<string>(errors: validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+        #endregion
+
+        #region Create Specialization
+
+        var specialization = new Specialization
+        {
+            Name = newSpecializationUser.Name,
+            Description = newSpecializationUser.Description,
+            Image = string.Empty
+        };
+
+        await _unitOfWork.Repo<Specialization>().AddAsync(specialization);
+        #endregion
+
+        #region Saving Image
+
+        if (newSpecializationUser.Image != null)
+        {
+            await _fileHandler
+                .SaveFile(newSpecializationUser.Image, newSpecializationUser.Image.ToFullFilePath(specialization.Image));
+        }
+
+        #endregion
+
+        return Created("Specialization created successfully");
     }
     //        public async Task<Response<CreateSpecializationResponse>> CreateSpecializationAsync(CreateSpecializationRequest request)
     //        {

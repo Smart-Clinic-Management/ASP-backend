@@ -1,4 +1,7 @@
-﻿namespace SmartClinic.Application.Services.Implementation;
+﻿using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
+using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
+
+namespace SmartClinic.Application.Services.Implementation;
 
 public class DoctorService(
     IUnitOfWork unitOfWork,
@@ -149,6 +152,10 @@ public class DoctorService(
 
         return Deleted<string>();
     }
+
+
+   
+
 
     //public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,
     //    DateOnly startDate)
