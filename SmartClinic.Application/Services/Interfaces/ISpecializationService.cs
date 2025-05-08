@@ -1,9 +1,4 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
-using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
-using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
-
-namespace SmartClinic.Application.Services.Interfaces;
+﻿namespace SmartClinic.Application.Services.Interfaces;
 
 public interface ISpecializationService
 {

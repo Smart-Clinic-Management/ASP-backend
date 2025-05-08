@@ -8,6 +8,8 @@ global using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 global using SmartClinic.Application.Features.Doctors.Mapper;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+global using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
+global using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
 global using SmartClinic.Application.Services.Implementation;
 global using SmartClinic.Application.Services.Implementation.FileHandlerService;
 global using SmartClinic.Application.Services.Implementation.FileHandlerService.Command;
@@ -15,6 +17,8 @@ global using SmartClinic.Application.Services.Implementation.Specifications.Doct
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.UpdateDoctorSpecifications;
+global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationByIdSpecifications;
+global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationsSpecifications;
 global using SmartClinic.Application.Services.Interfaces;
 global using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 global using SmartClinic.Domain.Entities;

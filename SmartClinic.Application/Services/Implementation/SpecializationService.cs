@@ -1,38 +1,18 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
-using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
-using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationByIdSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationsSpecifications;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
-namespace SmartClinic.Application.Services.Implementation;
-
-public class SpecializationService : ResponseHandler, ISpecializationService
+public class SpecializationService(
+IFileHandlerService fileHandler,
+IHttpContextAccessor httpContextAccessor,
+IUnitOfWork unitOfWork,
+ IPagedCreator<Specialization> pagedCreator,
+UserManager<AppUser> userManager)
+    : ResponseHandler, ISpecializationService
 {
-    //private readonly ISpecializationRepository _specialRepo;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IFileHandlerService _fileHandler;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly UserManager<AppUser> _userManager;
-    private readonly IPagedCreator<Specialization> _pagedCreator;
-    public SpecializationService(
-    //ISpecializationRepository specialRepo,
-    IFileHandlerService fileHandler,
-    IHttpContextAccessor httpContextAccessor,
-    IUnitOfWork unitOfWork,
-     IPagedCreator<Specialization> pagedCreator,
-    UserManager<AppUser> userManager)
-    {
-        //_specialRepo = specialRepo;
-        _unitOfWork = unitOfWork;
-        _userManager = userManager;
-        _fileHandler = fileHandler;
-        _httpContextAccessor = httpContextAccessor;
-        this._pagedCreator = pagedCreator;
-
-
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IFileHandlerService _fileHandler = fileHandler;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly UserManager<AppUser> _userManager = userManager;
+    private readonly IPagedCreator<Specialization> _pagedCreator = pagedCreator;
 
     public async Task<Response<Pagination<GetAllSpecializationsResponse>>> GetAllSpecializationsAsync(GetAllSpecializationsParams allSpecializationsParams)
     {
@@ -46,8 +26,8 @@ public class SpecializationService : ResponseHandler, ISpecializationService
         }
         var specs = new SpecializationsSpecification(allSpecializationsParams, _httpContextAccessor);
 
-              var result = await _pagedCreator
-            .CreatePagedResult(_unitOfWork.Repo<Specialization>(), specs, allSpecializationsParams.PageIndex, allSpecializationsParams.PageSize);
+        var result = await _pagedCreator
+      .CreatePagedResult(_unitOfWork.Repo<Specialization>(), specs, allSpecializationsParams.PageIndex, allSpecializationsParams.PageSize);
 
         return Success(result);
 
@@ -60,7 +40,7 @@ public class SpecializationService : ResponseHandler, ISpecializationService
         if (Specialization is null)
         {
             return NotFound<GetSpecializationByIdResponse?>($"No Specialization with id : {SpecializationId}");
-           
+
         }
         return Success(Specialization);
     }

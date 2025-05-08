@@ -1,17 +1,8 @@
-﻿using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
-using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
-using SmartClinic.Application.Features.Specializations.Command.DTOs.UpdateSpecialization;
-using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
-using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
-using SmartClinic.Application.Services.Implementation;
-using SmartClinic.Application.Services.Interfaces;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SpecializationController(ISpecializationService _specializationService) : AppControllerBase
+public class SpecializationsController(ISpecializationService _specializationService) : AppControllerBase
 {
 
     //[Authorize(Roles = "admin")]

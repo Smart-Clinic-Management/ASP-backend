@@ -1,10 +1,4 @@
-﻿using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
-using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
