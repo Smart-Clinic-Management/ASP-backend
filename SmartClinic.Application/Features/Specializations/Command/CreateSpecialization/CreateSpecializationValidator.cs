@@ -33,7 +33,7 @@ public class CreateSpecializationValidator : AbstractValidator<CreateSpecializat
     private async Task<bool> IsUniqueSpecializationName(string name, CancellationToken token)
     {
         var spec = new SpecializationByNameSpecification(name);
-        return !await _unitOfWork.Repo<Specialization>().Exists(spec);
+        return !await _unitOfWork.Repo<Specialization>().ExistsWithSpecAsync(spec);
     }
 
 
