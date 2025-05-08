@@ -70,7 +70,7 @@ public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
         !await _userManager.Users.AnyAsync(u => u.Email == Email);
 
     private async Task<bool> IsValidSpecificaionId(int SpecificaionId, CancellationToken token)
-        => await _unitOfWork.Repo<Specialization>().Exists(SpecificaionId);
+        => await _unitOfWork.Repo<Specialization>().ExistsAsync(SpecificaionId);
 
     private bool ValidateImageSize(IFormFile? file) => UserFormValidator.IsValidImageSize(file!);
 

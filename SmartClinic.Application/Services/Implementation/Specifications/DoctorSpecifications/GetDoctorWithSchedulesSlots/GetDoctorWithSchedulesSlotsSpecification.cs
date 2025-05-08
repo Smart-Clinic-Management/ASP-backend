@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Services.Implementation.Specifications.GetDoctorWithSchedulesSlots;
+﻿namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorWithSchedulesSlots;
 public class GetDoctorWithSchedulesSlotsSpecification : BaseSpecification<Doctor>
 {
     public GetDoctorWithSchedulesSlotsSpecification(GetDoctorWithSchedulesSlotsParams schedulesSlotsParams)

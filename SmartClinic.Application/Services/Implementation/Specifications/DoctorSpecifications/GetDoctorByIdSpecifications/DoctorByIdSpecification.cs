@@ -1,13 +1,10 @@
-﻿using SmartClinic.Application.Features.Doctors.Mapper;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
-using SmartClinic.Application.Features.DoctorsSchedules.DTOs;
+﻿using SmartClinic.Application.Features.DoctorsSchedules.DTOs;
 
 namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 public class DoctorByIdSpecification : BaseSpecification<Doctor, GetDoctorByIdResponse>
 {
-    public DoctorByIdSpecification(int id, IHttpContextAccessor httpContextAccessor) : base(
-      x => x.IsActive && x.Id == id
-      )
+    public DoctorByIdSpecification(int id, IHttpContextAccessor httpContextAccessor)
+        : base(x => x.IsActive && x.Id == id)
     {
         AddSelect(x => new GetDoctorByIdResponse(
             x.User.FirstName,
@@ -31,5 +28,11 @@ public class DoctorByIdSpecification : BaseSpecification<Doctor, GetDoctorByIdRe
             s.SlotDuration
             ))
             ));
+    }
+
+    public DoctorByIdSpecification(int id)
+        : base(x => x.IsActive && x.Id == id)
+    {
+
     }
 }

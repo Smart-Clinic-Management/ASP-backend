@@ -3,6 +3,7 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.Extensions.DependencyInjection;
 global using SmartClinic.Application.Bases;
+global using SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
 global using SmartClinic.Application.Features.Auth;
 global using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
 global using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
@@ -18,6 +19,7 @@ global using SmartClinic.Application.Services.Implementation.FileHandlerService.
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.DeleteDoctorSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
+global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorWithSchedulesSlots;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.UpdateDoctorSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationByIdSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationsSpecifications;

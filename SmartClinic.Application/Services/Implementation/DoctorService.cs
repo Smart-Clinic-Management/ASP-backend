@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Services.Implementation.Specifications.GetDoctorWithSchedulesSlots;
-
-namespace SmartClinic.Application.Services.Implementation;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
 public class DoctorService(
     IUnitOfWork unitOfWork,
