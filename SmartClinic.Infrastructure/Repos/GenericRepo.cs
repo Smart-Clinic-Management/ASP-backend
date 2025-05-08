@@ -43,4 +43,7 @@ public class GenericRepo<T>(ApplicationDbContext _context) : IGenericRepo<T>
 
     private IQueryable<TResult> ApplySecifications<TResult>(ISpecification<T, TResult> spec)
        => SpecificationEvaluator<T>.GetQuery(_db.AsQueryable(), spec);
+
+
+  
 }

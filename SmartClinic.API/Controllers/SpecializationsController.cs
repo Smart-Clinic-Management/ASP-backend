@@ -1,21 +1,23 @@
-﻿namespace SmartClinic.API.Controllers;
+﻿using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
+
+namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class SpecializationsController(ISpecializationService _specializationService) : AppControllerBase
 {
 
-    //[Authorize(Roles = "admin")]
-    //[HttpPost]
-    //[Consumes("multipart/form-data")]
-    //[Route("Create")]
-    //[ProducesResponseType<Response<CreateSpecializationResponse>>(StatusCodes.Status201Created)]
-    //[ProducesResponseType<Response<CreateSpecializationResponse>>(StatusCodes.Status400BadRequest)]
-    //public async Task<IActionResult> CreateSpecialization([FromForm] CreateSpecializationRequest request)
-    //{
-    //    var response = await _specializationService.CreateSpecializationAsync(request);
-    //    return NewResult(response);
-    //}
+    [Authorize(Roles = "admin")]
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateSpecialization([FromForm] CreateSpecializationRequest request)
+    {
+        var response = await _specializationService.CreateSpecialization(request);
+        return NewResult(response);
+    }
+
 
 
 
