@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
+using SmartClinic.Domain.Entities;
+
+namespace SmartClinic.Application.Features.Specializations.Query.GetSpecialization
+{
+    public record GetSpecializationByIdResponse(
+        int Id,
+        string Name,
+        string Description,
+        string Image,
+        IEnumerable<DoctorDto> Doctors
+    );
+
+    public record DoctorDto(
+    int Id,
+    string FirstName,
+    string LastName,
+    string Image
+);
+
+}
