@@ -1,7 +1,4 @@
-﻿using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
-using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+﻿
 
 namespace SmartClinic.Application.Services.Interfaces;
 
@@ -17,5 +14,5 @@ public interface IDoctorService
 
     Task<Response<string>> DeleteById(int id);
 
-    //Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id, DateOnly startDate);
+    Task<Response<GetDoctorWithSchedulesSlotsResponse>> GetDoctorWithSchedulesSlots(GetDoctorWithSchedulesSlotsParams schedulesSlotsParams);
 }

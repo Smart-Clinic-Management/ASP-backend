@@ -1,9 +1,4 @@
-﻿using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
-using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithAvailableAppointment;
-
-namespace SmartClinic.Application.Features.Doctors.Mapper;
+﻿namespace SmartClinic.Application.Features.Doctors.Mapper;
 
 public static class DoctorMappingExtensions
 {
@@ -21,9 +16,9 @@ public static class DoctorMappingExtensions
         return doctor;
     }
 
-    public static GetDoctorWithAvailableAppointment ToGetDoctorWithAvailableSchedules(this Doctor doctor, List<AvailableSchedule> AvailableSchedules)
+    public static GetDoctorWithSchedulesSlotsResponse ToGetDoctorWithAvailableSchedules(this Doctor doctor, List<AvailableSchedule> AvailableSchedules)
     {
-        return new GetDoctorWithAvailableAppointment
+        return new GetDoctorWithSchedulesSlotsResponse
         (
              doctor.User.FirstName,
              doctor.User.LastName,

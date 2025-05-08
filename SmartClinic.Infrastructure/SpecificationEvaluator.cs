@@ -13,6 +13,9 @@ public class SpecificationEvaluator<T>
         if (spec.Criteria is not null)
             query = query.Where(spec.Criteria);
 
+        if (spec.IsNoTracking)
+            query = query.AsNoTracking();
+
         #region Ordering
 
         #region Asc

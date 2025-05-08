@@ -1,4 +1,5 @@
-﻿global using Microsoft.AspNetCore.Http;
+﻿global using FluentValidation;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.Extensions.DependencyInjection;
 global using SmartClinic.Application.Bases;
@@ -8,6 +9,7 @@ global using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 global using SmartClinic.Application.Features.Doctors.Mapper;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+global using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithSchedulesSlots;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
 global using SmartClinic.Application.Services.Implementation;

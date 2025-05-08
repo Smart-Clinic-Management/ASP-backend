@@ -1,9 +1,9 @@
-﻿namespace SmartClinic.Application.Features.Doctors.Query.GetDoctorWithAvailableAppointment;
-public record GetDoctorWithAvailableAppointment(
+﻿namespace SmartClinic.Application.Features.Doctors.Query.GetDoctorWithSchedulesSlots;
+public record GetDoctorWithSchedulesSlotsResponse(
          string FirstName,
          string? LastName,
-         string UserEmail,
-         string UserPhoneNumber,
+         string Email,
+         string PhoneNumber,
         int Age,
         string Address,
         string? Description,
