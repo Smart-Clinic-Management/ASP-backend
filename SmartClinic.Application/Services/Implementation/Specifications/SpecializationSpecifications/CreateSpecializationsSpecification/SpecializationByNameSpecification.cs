@@ -27,6 +27,8 @@ namespace SmartClinic.Application.Services.Implementation.Specifications.Special
         public int Skip { get; }
         public bool IsPagingEnabled { get; }
 
+        public bool IsNoTracking => throw new NotImplementedException();
+
         public IQueryable<Specialization> ApplyCriteria(IQueryable<Specialization> query)
         {
             if (Criteria != null)
