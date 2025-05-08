@@ -14,9 +14,9 @@ public class GenericRepo<T>(ApplicationDbContext _context) : IGenericRepo<T>
 
     public void Delete(T entity) => _db.Remove(entity);
 
-    public Task<bool> Exists(int id) => _db.AnyAsync(x => x.Id == id);
+    public Task<bool> ExistsAsync(int id) => _db.AnyAsync(x => x.Id == id);
 
-    public Task<bool> Exists(ISpecification<T> spec) => _db.AnyAsync(spec.Criteria!);
+    public Task<bool> ExistsWithSpecAsync(ISpecification<T> spec) => _db.AnyAsync(spec.Criteria!);
 
     public async Task<T?> GetByIdAsync(int id) => await _db.FindAsync(id);
 

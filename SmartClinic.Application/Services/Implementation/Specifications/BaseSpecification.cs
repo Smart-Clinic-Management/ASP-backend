@@ -21,6 +21,10 @@ public abstract class BaseSpecification<T>(Expression<Func<T, bool>>? criteria =
 
     public List<string> IncludeStrings { get; } = [];
 
+    public bool IsNoTracking { get; private set; }
+
+    protected void AsNoTracking() => IsNoTracking = true;
+
     protected void AddOrderBy(string? orderBy) => OrderBy = orderBy;
 
     protected void AddOrderByDescending(string? orderByDesc)

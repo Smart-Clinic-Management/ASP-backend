@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.API.Controllers;
+﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithSchedulesSlots;
+
+namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -56,13 +58,13 @@ public class DoctorsController(IDoctorService doctorService) : AppControllerBase
         return NewResult(await doctorService.CreateDoctor(request));
     }
 
-    //[HttpGet("schedule")]
-    //[EndpointDescription("Gets the doctor with available schedule")]
-    //[ProducesResponseType<Response<GetDoctorWithAvailableAppointment>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<GetDoctorWithAvailableAppointment>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetDoctorAvailableSchedules([FromQuery] int id, [FromQuery] DateOnly startDate)
-    //{
-    //    return NewResult(await _doctorService.GetDoctorWithAvailableSchedule(id, startDate));
-    //}
+    [HttpGet("schedule/slots")]
+    [EndpointDescription("Gets the doctor with schedules slots")]
+    [ProducesResponseType<Response<GetDoctorWithSchedulesSlotsResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<GetDoctorWithSchedulesSlotsResponse>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDoctorWithSchedulesSlots([FromQuery] GetDoctorWithSchedulesSlotsParams schedulesSlotsParams)
+    {
+        return NewResult(await doctorService.GetDoctorWithSchedulesSlots(schedulesSlotsParams));
+    }
 
 }

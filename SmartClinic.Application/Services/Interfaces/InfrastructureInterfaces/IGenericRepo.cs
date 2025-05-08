@@ -18,9 +18,9 @@ public interface IGenericRepo<T> where T : BaseEntity
 
     void Delete(T entity);
 
-    Task<bool> Exists(int id);
+    Task<bool> ExistsAsync(int id);
 
-    Task<bool> Exists(ISpecification<T> spec);
+    Task<bool> ExistsWithSpecAsync(ISpecification<T> spec);
 
     Task<int> CountAsync(ISpecification<T> spec);
 

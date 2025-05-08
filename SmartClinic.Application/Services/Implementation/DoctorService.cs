@@ -154,91 +154,99 @@ public class DoctorService(
     }
 
 
-   
+    public async Task<Response<GetDoctorWithSchedulesSlotsResponse>> GetDoctorWithSchedulesSlots(GetDoctorWithSchedulesSlotsParams schedulesSlotsParams)
+    {
+        var validator = new GetDoctorWithSchedulesSlotsValidator();
+
+        var validationResult = await validator.ValidateAsync(schedulesSlotsParams);
+
+        if (!validationResult.IsValid)
+            return BadRequest<GetDoctorWithSchedulesSlotsResponse>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
 
 
-    //public async Task<Response<GetDoctorWithAvailableAppointment>> GetDoctorWithAvailableSchedule(int id,
-    //    DateOnly startDate)
-    //{
-    //    var doctor = await _unitOfWork.Repository<IDoctorRepository>()
-    //        .GetWithAppointmentsAsync(id, startDate);
+        var specs = new GetDoctorWithSchedulesSlotsSpecification(schedulesSlotsParams);
 
-    //    if (doctor is null) return NotFound<GetDoctorWithAvailableAppointment>($"No Doctor with id : {id}");
-
-    //    // get requested dates
-
-    //    HashSet<DayOfWeek> requestedDates = GetRequestedDates(startDate);
-
-    //    List<DayOfWeek> DoctorSchedulesDays = [.. doctor!.DoctorSchedules.Select(x => x.DayOfWeek)];
-
-    //    List<AvailableSchedule> AvailableSchedules = AddingSchudlesDays(requestedDates, DoctorSchedulesDays);
-
-    //    // create the slots
-
-    //    AvailableSchedules = AddingDaySlots(doctor, AvailableSchedules);
-
-    //    doctor.User.ProfileImage = _fileHandler.GetFileURL(doctor.User.ProfileImage!);
-
-    //    var result = doctor.ToGetDoctorWithAvailableSchedules(AvailableSchedules);
-    //    return Success(result, "Found");
-    //}
-
-    //private static HashSet<DayOfWeek> GetRequestedDates(DateOnly startDate)
-    //{
-    //    HashSet<DayOfWeek> requestedDates = [];
-
-    //    for (int i = 0; i < 3; i++)
-    //        requestedDates.Add(startDate.AddDays(i).DayOfWeek);
-    //    return requestedDates;
-    //}
-
-    //private static List<AvailableSchedule> AddingSchudlesDays(HashSet<DayOfWeek> requestedDates, List<DayOfWeek> DoctorSchedulesDays)
-    //{
-    //    List<AvailableSchedule> AvailableDays = [];
-
-    //    foreach (var day in requestedDates)
-    //    {
-    //        if (DoctorSchedulesDays.Contains(day))
-    //            AvailableDays.Add(new() { Day = day.ToString()!, IsAvailable = true });
-    //        else
-    //            AvailableDays.Add(new() { Day = day.ToString()! });
-    //    }
-
-    //    return AvailableDays;
-    //}
+        var doctor = await _unitOfWork.Repo<Doctor>().GetEntityWithSpecAsync(specs);
 
 
 
-    //private static List<AvailableSchedule> AddingDaySlots(Doctor doctor, List<AvailableSchedule> AvailableDays)
-    //{
-    //    List<AvailableSchedule> newAvailableDays = AvailableDays;
+        if (doctor is null)
+            return NotFound<GetDoctorWithSchedulesSlotsResponse>($"No Doctor with id : {schedulesSlotsParams.DoctorId}");
 
-    //    List<TimeOnly> reservedSlots = [.. doctor.Appointments.Select(x => x.Duration.StartTime)];
+        // get requested dates
 
-    //    foreach (var day in newAvailableDays.Where(x => x.IsAvailable))
-    //    {
+        HashSet<DayOfWeek> requestedDates = GetRequestedDates(schedulesSlotsParams.StartDate);
 
-    //        var scheduleDay = doctor.DoctorSchedules
-    //            .FirstOrDefault(x => x.DayOfWeek.ToString().Equals(day.Day))!;
+        List<DayOfWeek> DoctorSchedulesDays = [.. doctor!.DoctorSchedules.Select(x => x.DayOfWeek)];
 
-    //        var dayAppointments = doctor.Appointments
-    //            .Where(x => x.AppointmentDate.DayOfWeek.ToString().Equals(day.Day))
-    //            .Select(x => x.Duration.StartTime).ToList();
+        List<AvailableSchedule> AvailableSchedules = AddingSchudlesDays(requestedDates, DoctorSchedulesDays);
 
-    //        while (scheduleDay.StartTime < scheduleDay.EndTime)
-    //        {
-    //            if (!dayAppointments.Contains(scheduleDay.StartTime))
-    //                day.Slots.Add(new(scheduleDay.StartTime, true));
-    //            else
-    //                day.Slots.Add(new(scheduleDay.StartTime, false));
+        //// create the slots
 
-    //            scheduleDay.StartTime = scheduleDay.StartTime.AddMinutes(scheduleDay.SlotDuration);
-    //        }
+        AvailableSchedules = AddingDaySlots(doctor, AvailableSchedules);
 
-    //    }
+        doctor.User.ProfileImage = _fileHandler.GetFileURL(doctor.User.ProfileImage!);
 
-    //    return newAvailableDays;
-    //}
+        var result = doctor.ToGetDoctorWithAvailableSchedules(AvailableSchedules);
+        return Success(result);
+    }
+
+    private static HashSet<DayOfWeek> GetRequestedDates(DateOnly startDate)
+    {
+        HashSet<DayOfWeek> requestedDates = [];
+
+        for (int i = 0; i < 3; i++)
+            requestedDates.Add(startDate.AddDays(i).DayOfWeek);
+        return requestedDates;
+    }
+
+    private static List<AvailableSchedule> AddingSchudlesDays(HashSet<DayOfWeek> requestedDates, List<DayOfWeek> DoctorSchedulesDays)
+    {
+        List<AvailableSchedule> AvailableDays = [];
+
+        foreach (var day in requestedDates)
+        {
+            if (DoctorSchedulesDays.Contains(day))
+                AvailableDays.Add(new() { Day = day.ToString()!, IsAvailable = true });
+            else
+                AvailableDays.Add(new() { Day = day.ToString()! });
+        }
+
+        return AvailableDays;
+    }
+
+
+
+    private static List<AvailableSchedule> AddingDaySlots(Doctor doctor, List<AvailableSchedule> AvailableDays)
+    {
+        List<AvailableSchedule> newAvailableDays = AvailableDays;
+
+        List<TimeOnly> reservedSlots = [.. doctor.Appointments.Select(x => x.Duration.StartTime)];
+
+        foreach (var day in newAvailableDays.Where(x => x.IsAvailable))
+        {
+
+            var scheduleDay = doctor.DoctorSchedules
+                .FirstOrDefault(x => x.DayOfWeek.ToString().Equals(day.Day))!;
+
+            var dayAppointments = doctor.Appointments
+                .Where(x => x.AppointmentDate.DayOfWeek.ToString().Equals(day.Day))
+                .Select(x => x.Duration.StartTime).ToList();
+
+            while (scheduleDay.StartTime < scheduleDay.EndTime)
+            {
+                if (!dayAppointments.Contains(scheduleDay.StartTime))
+                    day.Slots.Add(new(scheduleDay.StartTime, true));
+                else
+                    day.Slots.Add(new(scheduleDay.StartTime, false));
+
+                scheduleDay.StartTime = scheduleDay.StartTime.AddMinutes(scheduleDay.SlotDuration);
+            }
+
+        }
+
+        return newAvailableDays;
+    }
 
 
 }
