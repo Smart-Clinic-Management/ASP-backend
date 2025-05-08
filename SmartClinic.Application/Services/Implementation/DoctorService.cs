@@ -67,9 +67,6 @@ public class DoctorService : ResponseHandler, IDoctorService
     }
 
 
-
-
-
     public async Task<Response<string>> CreateDoctor(CreateDoctorRequest newDoctorUser)
     {
         #region Validation

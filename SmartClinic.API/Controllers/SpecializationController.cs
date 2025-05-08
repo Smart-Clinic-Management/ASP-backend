@@ -1,7 +1,11 @@
 ﻿using SmartClinic.Application.Bases;
+using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.UpdateSpecialization;
 using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
+using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
+using SmartClinic.Application.Services.Implementation;
+using SmartClinic.Application.Services.Interfaces;
 
 namespace SmartClinic.API.Controllers;
 
@@ -34,13 +38,15 @@ public class SpecializationController(ISpecializationService _specializationServ
 
 
 
-    //[HttpGet("GetAll")]
-    //[ProducesResponseType<Response<List<CreateSpecializationResponse>>>(StatusCodes.Status200OK)]
-    //public async Task<IActionResult> GetAllSpecializations()
-    //{
-    //    var response = await _specializationService.GetAllSpecializationsAsync();
-    //    return NewResult(response);
-    //}
+
+
+
+    [HttpGet]
+    [ProducesResponseType<Response<Pagination<GetAllSpecializationsResponse>>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllDoctors([FromQuery] GetAllSpecializationsParams allSpecializationsParams)
+    {
+        return NewResult(await _specializationService.GetAllSpecializationsAsync(allSpecializationsParams));
+    }
 
 
     //[Authorize(Roles = "admin")]
@@ -63,6 +69,6 @@ public class SpecializationController(ISpecializationService _specializationServ
     //{
     //    var response = await _specializationService.DeleteSpecializationAsync(id);
     //    return NewResult(response);
-   // }
+    // }
 
 }

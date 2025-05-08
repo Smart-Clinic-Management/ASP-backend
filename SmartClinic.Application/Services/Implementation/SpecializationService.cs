@@ -15,13 +15,13 @@ public class SpecializationService : ResponseHandler, ISpecializationService
     private readonly IFileHandlerService _fileHandler;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly UserManager<AppUser> _userManager;
-    private readonly IPagedCreator<Doctor> _pagedCreator;
+    private readonly IPagedCreator<Specialization> _pagedCreator;
     public SpecializationService(
     //ISpecializationRepository specialRepo,
     IFileHandlerService fileHandler,
     IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
-     IPagedCreator<Doctor> pagedCreator,
+     IPagedCreator<Specialization> pagedCreator,
     UserManager<AppUser> userManager)
     {
         //_specialRepo = specialRepo;
