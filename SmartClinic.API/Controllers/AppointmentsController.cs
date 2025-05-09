@@ -56,7 +56,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     [HttpPut]
     [Authorize(Roles = "doctor")]
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> UpdateAppointment(UpdateDoctorAppointmentRequest updateDoctorAppointment)
+    public async Task<IActionResult> UpdateAppointment([FromBody] UpdateDoctorAppointmentRequest updateDoctorAppointment)
     {
         var result = await _appointmentService
             .UpdateDoctorAppointmentAsync(User.GetUserId(), updateDoctorAppointment);

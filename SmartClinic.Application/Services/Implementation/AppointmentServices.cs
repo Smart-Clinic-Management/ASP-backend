@@ -138,19 +138,6 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         return Success(result);
     }
 
-    private static void UpdateAppointmentsStatus(Pagination<Appointment> appointments)
-    {
-        var currentDate = DateOnly.FromDateTime(DateTime.Now);
-        var currentTime = TimeOnly.FromDateTime(DateTime.Now);
-        foreach (var appointment in appointments.Data.Where(x => x.AppointmentDate <= currentDate))
-        {
-            if (appointment.Duration.EndTime <= currentTime && appointment.AppointmentDate == currentDate)
-                appointment.Status = AppointmentStatus.Canceled;
-            else if (appointment.AppointmentDate < currentDate)
-                appointment.Status = AppointmentStatus.Canceled;
-        }
-    }
-
     public async Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateDoctorAppointmentRequest updateDoctorAppointment)
     {
         #region Validation
@@ -171,16 +158,14 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         if (appointment is null)
             BadRequest<string>($"Invalid appointment id");
 
-        var currentDate = DateOnly.FromDateTime(DateTime.Now);
-        var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+
+        #region Check if the appointment can have the new status
 
         switch (updateDoctorAppointment.Status)
         {
             case AppointmentStatus.Pending:
-                if (appointment!.AppointmentDate > currentDate
-                    || (appointment.Duration.EndTime > currentTime && appointment.AppointmentDate == currentDate)
-                    )
-                    appointment.Status = updateDoctorAppointment.Status;
+                if (CanBePendingAppointment(appointment!))
+                    appointment!.Status = updateDoctorAppointment.Status;
                 else
                     return BadRequest<string>("you can't change passed appointment to pending status");
                 break;
@@ -188,17 +173,48 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
                 appointment!.Status = updateDoctorAppointment.Status;
                 break;
             case AppointmentStatus.Completed:
-                if (appointment!.AppointmentDate < currentDate
-                    || (appointment.Duration.EndTime < currentTime && appointment.AppointmentDate == currentDate)
-                    )
-                    appointment.Status = updateDoctorAppointment.Status;
+                if (CanBeCompletedAppointment(appointment!))
+                    appointment!.Status = updateDoctorAppointment.Status;
                 else
                     return BadRequest<string>("you can't change unpasted appointment to completed status");
                 break;
         }
 
+        #endregion
+
         await _unitOfWork.SaveChangesAsync();
 
-        return Success("");
+        return Success("", "Updated Successfully");
+    }
+
+    private static void UpdateAppointmentsStatus(Pagination<Appointment> appointments)
+    {
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+        var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+        foreach (var appointment in appointments.Data.Where(x => x.AppointmentDate <= currentDate))
+        {
+            if (appointment.Duration.EndTime <= currentTime && appointment.AppointmentDate == currentDate)
+                appointment.Status = AppointmentStatus.Canceled;
+            else if (appointment.AppointmentDate < currentDate)
+                appointment.Status = AppointmentStatus.Canceled;
+        }
+    }
+
+    private static bool CanBePendingAppointment(Appointment appointment)
+    {
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+        var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+
+        return appointment!.AppointmentDate > currentDate
+                            || (appointment.Duration.EndTime > currentTime && appointment.AppointmentDate == currentDate);
+    }
+
+    private static bool CanBeCompletedAppointment(Appointment appointment)
+    {
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+        var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+
+        return appointment!.AppointmentDate < currentDate
+                    || (appointment.Duration.EndTime < currentTime && appointment.AppointmentDate == currentDate);
     }
 }
