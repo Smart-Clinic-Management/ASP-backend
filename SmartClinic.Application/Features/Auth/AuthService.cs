@@ -1,15 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Models.DTOs.Auth;
-using SmartClinic.Application.Features.Auth.Command;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
-using SmartClinic.Domain.DTOs.Auth;
-
-namespace SmartClinic.Application.Features.Auth;
+﻿namespace SmartClinic.Application.Features.Auth;
 
 public class AuthService : IAuthService
 {

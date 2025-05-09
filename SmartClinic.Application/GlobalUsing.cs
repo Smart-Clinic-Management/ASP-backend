@@ -1,10 +1,18 @@
-﻿global using FluentValidation;
+﻿global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Text;
+global using FluentValidation;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.IdentityModel.Tokens;
+global using Models.DTOs.Auth;
 global using SmartClinic.Application.Bases;
 global using SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
 global using SmartClinic.Application.Features.Auth;
+global using SmartClinic.Application.Features.Auth.Command;
 global using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
 global using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 global using SmartClinic.Application.Features.Doctors.Mapper;
@@ -25,5 +33,6 @@ global using SmartClinic.Application.Services.Implementation.Specifications.Spec
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationsSpecifications;
 global using SmartClinic.Application.Services.Interfaces;
 global using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+global using SmartClinic.Domain.DTOs.Auth;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Domain.Entities.AppointmentAggregation;
