@@ -23,7 +23,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     [HttpGet("GetDoctorAppointments")]
     [ProducesResponseType<Response<Pagination<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<Pagination<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDoctorAppointments(GetDoctorAppointmentsParams appointmentsParams)
+    public async Task<IActionResult> GetDoctorAppointments([FromQuery] GetDoctorAppointmentsParams appointmentsParams)
     {
         var result = await _appointmentService
             .ListDoctorAppointmentsAsync(User.GetUserId(), appointmentsParams);

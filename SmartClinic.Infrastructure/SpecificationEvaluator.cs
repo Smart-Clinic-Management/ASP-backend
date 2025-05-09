@@ -25,7 +25,7 @@ public class SpecificationEvaluator<T>
             query = query.OrderBy(spec.OrderByDescending + " descending");
         else
         {
-            if (spec.OrderBy is not null)
+            if (spec.OrderByDescending is null)
                 query = query.OrderBy(x => x.Id);
             else
                 query = query.OrderByDescending(x => x.Id);
