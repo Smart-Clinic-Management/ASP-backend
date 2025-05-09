@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

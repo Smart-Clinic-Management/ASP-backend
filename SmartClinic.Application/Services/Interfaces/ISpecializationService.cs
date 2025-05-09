@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
-
-namespace SmartClinic.Application.Services.Interfaces;
+﻿namespace SmartClinic.Application.Services.Interfaces;
 
 public interface ISpecializationService
 {

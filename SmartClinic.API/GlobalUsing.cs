@@ -21,6 +21,7 @@ global using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
 global using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
+global using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
 global using SmartClinic.Application.Services.Interfaces;

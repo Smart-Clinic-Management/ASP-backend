@@ -1,9 +1,4 @@
-﻿using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
-using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
-using SmartClinic.Application.Features.Specializations.Mapper;
-using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.DeleteSpecializationSpecifications;
-
-namespace SmartClinic.Application.Services.Implementation;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
 public class SpecializationService(
 IFileHandlerService fileHandler,
