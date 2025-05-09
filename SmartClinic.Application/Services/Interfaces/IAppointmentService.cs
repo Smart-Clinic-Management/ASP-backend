@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.Application.Services.Interfaces;
+﻿using SmartClinic.Application.Features.Appointments.Command.UpdateAppointmnet;
+
+namespace SmartClinic.Application.Services.Interfaces;
 
 public interface IAppointmentService
 {
@@ -10,5 +12,7 @@ public interface IAppointmentService
 
     Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, int patientId);
 
-    Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateDoctorAppointmentRequest updateDoctorAppointment);
+    Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateAppointmentRequest updateDoctorAppointment);
+
+    Task<Response<string>> CancelPatientAppointmentAsync(int PatientId, int appointmentId);
 }

@@ -1,11 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Mapper;
-using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.AllAppointmentsSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.CreateAppointmentSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetDoctorAppointmentsSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetPatientAppointmentsSpecifications;
-using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.UpdateDoctorAppointmentSpecifications;
-
-namespace SmartClinic.Application.Services.Implementation;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
 public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointment> pagedCreator)
         : ResponseHandler,
@@ -138,20 +131,20 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         return Success(result);
     }
 
-    public async Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateDoctorAppointmentRequest updateDoctorAppointment)
+    public async Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateAppointmentRequest updateAppointment)
     {
         #region Validation
 
-        var validator = new UpdateDoctorAppointmentRequestValidator();
+        var validator = new UpdateAppointmentRequestValidator();
 
-        var validationResult = await validator.ValidateAsync(updateDoctorAppointment);
+        var validationResult = await validator.ValidateAsync(updateAppointment);
 
         if (!validationResult.IsValid)
             return BadRequest<string>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
 
         #endregion
 
-        var specs = new UpdateDoctorAppointmentSpecification(doctorId, updateDoctorAppointment);
+        var specs = new UpdateDoctorAppointmentSpecification(doctorId, updateAppointment);
 
         var appointment = await _unitOfWork.Repo<Appointment>().GetEntityWithSpecAsync(specs);
 
@@ -161,26 +154,48 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 
         #region Check if the appointment can have the new status
 
-        switch (updateDoctorAppointment.Status)
+        switch (updateAppointment.Status)
         {
             case AppointmentStatus.Pending:
                 if (CanBePendingAppointment(appointment!))
-                    appointment!.Status = updateDoctorAppointment.Status;
+                    appointment!.Status = updateAppointment.Status;
                 else
                     return BadRequest<string>("you can't change passed appointment to pending status");
                 break;
             case AppointmentStatus.Canceled:
-                appointment!.Status = updateDoctorAppointment.Status;
+                appointment!.Status = updateAppointment.Status;
                 break;
             case AppointmentStatus.Completed:
                 if (CanBeCompletedAppointment(appointment!))
-                    appointment!.Status = updateDoctorAppointment.Status;
+                    appointment!.Status = updateAppointment.Status;
                 else
                     return BadRequest<string>("you can't change unpasted appointment to completed status");
                 break;
         }
 
         #endregion
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Success("", "Updated Successfully");
+    }
+
+    public async Task<Response<string>> CancelPatientAppointmentAsync(int PatientId, int appointmentId)
+    {
+
+        var specs = new CancelAppointmentSpecification(PatientId, appointmentId);
+
+        var appointment = await _unitOfWork.Repo<Appointment>().GetEntityWithSpecAsync(specs);
+
+        if (appointment is null)
+            BadRequest<string>($"Invalid appointment id");
+
+
+
+        if (appointment!.Status != AppointmentStatus.Pending)
+            return BadRequest<string>("you can't cancel completed or canceled appointment");
+
+        appointment!.Status = AppointmentStatus.Canceled;
 
         await _unitOfWork.SaveChangesAsync();
 
@@ -217,4 +232,6 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         return appointment!.AppointmentDate < currentDate
                     || (appointment.Duration.EndTime < currentTime && appointment.AppointmentDate == currentDate);
     }
+
+
 }

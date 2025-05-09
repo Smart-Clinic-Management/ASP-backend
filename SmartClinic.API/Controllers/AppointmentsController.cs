@@ -1,4 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Command.UpdateDoctorAppointment;
+﻿using SmartClinic.Application.Features.Appointments.Command.UpdateAppointmnet;
 
 namespace SmartClinic.API.Controllers;
 
@@ -56,7 +56,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     [HttpPut]
     [Authorize(Roles = "doctor")]
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> UpdateAppointment([FromBody] UpdateDoctorAppointmentRequest updateDoctorAppointment)
+    public async Task<IActionResult> UpdateAppointment([FromBody] UpdateAppointmentRequest updateDoctorAppointment)
     {
         var result = await _appointmentService
             .UpdateDoctorAppointmentAsync(User.GetUserId(), updateDoctorAppointment);
@@ -64,13 +64,13 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
         return NewResult(result);
     }
 
-    //[HttpDelete("{id}")]
-    //[Authorize(Roles = "patient")]
-    //[ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
-    //public IActionResult DeleteAppointment(int id)
-    //{
-    //    return NewResult(new ResponseHandler().Deleted<string>());
-    //}
+    [HttpDelete("{appointmentId}")]
+    [Authorize(Roles = "patient")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+    public IActionResult DeleteAppointment(int appointmentId)
+    {
+        return NewResult(new ResponseHandler().Deleted<string>());
+    }
 
 
 }
