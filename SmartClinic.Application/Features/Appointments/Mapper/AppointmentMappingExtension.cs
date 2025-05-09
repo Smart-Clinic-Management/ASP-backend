@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
+﻿using SmartClinic.Application.Features.Appointments.Query.AllAppointments;
+using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
 using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
 
 namespace SmartClinic.Application.Features.Appointments.Mapper;
@@ -40,6 +41,17 @@ public static class AppointmentMappingExtension
             );
     }
 
+    public static Pagination<AllAppointmentsResponseDto> ToAllAppointmentsPaginatedDto(this Pagination<Appointment> appointments)
+    {
+        return new Pagination<AllAppointmentsResponseDto>
+        (
+            appointments.PageIndex,
+            appointments.PageSize,
+            appointments.Total,
+            appointments.Data.Select(x => x.ToAllAppointmentsDto())
+            );
+    }
+
     public static Pagination<DoctorWithAppointmentsResponseDto> ToDoctorAppointmentsPaginatedDto(this Pagination<Appointment> appointments)
     {
         return new Pagination<DoctorWithAppointmentsResponseDto>
@@ -61,6 +73,22 @@ public static class AppointmentMappingExtension
             StartTime: appointment.Duration.StartTime,
             EndTime: appointment.Duration.EndTime,
             Status: appointment.Status.ToString()
+        );
+    }
+
+    public static AllAppointmentsResponseDto ToAllAppointmentsDto(this Appointment appointment)
+    {
+        return new AllAppointmentsResponseDto(
+            AppointmentId: appointment.Id,
+            PatientId: appointment.PatientId,
+            DoctorId: appointment.DoctorId,
+            PatientFullName: appointment.Patient.User.GetFullName(),
+            DoctorFullName: appointment.Doctor.User.GetFullName(),
+            AppointmentDate: appointment.AppointmentDate,
+            StartTime: appointment.Duration.StartTime,
+            EndTime: appointment.Duration.EndTime,
+            Status: appointment.Status.ToString(),
+            SpecializationName: appointment.Specialization.Name
         );
     }
     public static PatientAppointmentsWithDoctorDetailsDto ToPatientAppointmentsDto(this Appointment appointment)

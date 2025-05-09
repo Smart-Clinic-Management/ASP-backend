@@ -1,7 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
-using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -9,15 +6,15 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
 {
     private readonly IAppointmentService _appointmentService = appointmentService;
 
-    //[Authorize(Roles = "admin")]
-    //[HttpGet("GetAll")]
-    //[ProducesResponseType<Response<List<AppointmentResponseDto>>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<List<AppointmentResponseDto>>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetAllAppointments(int pageSize = 20, int pageIndex = 1)
-    //{
-    //    var result = await _appointmentService.ListAllAppointmentsAsync(pageSize, pageIndex);
-    //    return NewResult(result);
-    //}
+    [Authorize(Roles = "admin")]
+    [HttpGet("admin/GetAll")]
+    [ProducesResponseType<Response<Pagination<AllAppointmentsResponseDto>>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<Pagination<AllAppointmentsResponseDto>>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllAppointments([FromQuery] AllAppointmentsParams appointmentsParams)
+    {
+        var result = await _appointmentService.ListAllAppointmentsAsync(appointmentsParams);
+        return NewResult(result);
+    }
 
     [Authorize(Roles = "doctor")]
     [HttpGet("GetDoctorAppointments")]

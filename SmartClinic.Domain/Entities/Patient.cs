@@ -12,6 +12,6 @@ public class Patient : BaseEntity
 
     public AppUser User { get; set; } = null!;
 
-    public IEnumerable<Appointment> Appointments { get; set; } = [];
+    public IEnumerable<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 
 }

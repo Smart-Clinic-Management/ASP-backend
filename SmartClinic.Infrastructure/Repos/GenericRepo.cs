@@ -21,9 +21,7 @@ public class GenericRepo<T>(ApplicationDbContext _context) : IGenericRepo<T>
     public async Task<T?> GetByIdAsync(int id) => await _db.FindAsync(id);
 
     public async Task<T?> GetEntityWithSpecAsync(ISpecification<T> spec)
-    {
-        return await ApplySecifications(spec).FirstOrDefaultAsync();
-    }
+        => await ApplySecifications(spec).FirstOrDefaultAsync();
 
     public async Task<TResult?> GetEntityWithSpecAsync<TResult>(ISpecification<T, TResult> spec)
         => await ApplySecifications(spec).FirstOrDefaultAsync();
