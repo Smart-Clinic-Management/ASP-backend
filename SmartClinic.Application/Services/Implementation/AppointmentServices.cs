@@ -13,7 +13,7 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentDto appointmentDto, int patientId)
+    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, int patientId)
     {
         #region Validation
 

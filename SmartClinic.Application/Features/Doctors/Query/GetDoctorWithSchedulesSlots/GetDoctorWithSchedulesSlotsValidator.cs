@@ -4,9 +4,16 @@ public class GetDoctorWithSchedulesSlotsValidator : AbstractValidator<GetDoctorW
     public GetDoctorWithSchedulesSlotsValidator()
     {
         RuleFor(x => x.StartDate)
-            .NotEmpty();
+            .NotEmpty()
+            .Matches(GlobalValidator.ValidDateRegex())
+            .WithMessage("StartDate must be in format YYYY-MM-DD.")
+            .Must(BeAValidDateOnly)
+            .WithMessage("StartDate must be a valid calendar date.");
 
         RuleFor(x => x.DoctorId)
+            .GreaterThanOrEqualTo(1)
             .NotEmpty();
     }
+
+    private bool BeAValidDateOnly(string date) => GlobalValidator.BeAValidDateOnly(date);
 }

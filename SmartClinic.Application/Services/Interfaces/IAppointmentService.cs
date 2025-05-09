@@ -8,7 +8,7 @@ public interface IAppointmentService
 
     Task<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>> ListPatientAppointmentsAsync(int patientId, GetPatientAppointmentsParams appointmentParams);
 
-    Task<Response<string>> CreateAppointmentAsync(CreateAppointmentDto appointmentDto, int patientId);
+    Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, int patientId);
 
     Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateDoctorAppointmentRequest updateDoctorAppointment);
 }

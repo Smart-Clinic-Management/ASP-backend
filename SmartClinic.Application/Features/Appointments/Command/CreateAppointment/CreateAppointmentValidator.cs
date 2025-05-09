@@ -1,13 +1,16 @@
 ﻿namespace SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
-public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto>
+public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentRequest>
 {
     private readonly IUnitOfWork _unitOfWork;
 
     public CreateAppointmentValidator(IUnitOfWork unitOfWork)
     {
         RuleFor(x => x.AppointmentDate)
-            .NotEmpty()
-            .Must(ValidDate).WithMessage("Not valid date , date must be at least today");
+            .Matches(GlobalValidator.ValidDateRegex())
+            .WithMessage("AppointmentDate must be in format YYYY-MM-DD.")
+            .Must(ValidDate)
+            .WithMessage("AppointmentDate must be a valid calendar date , date must be at least today.")
+            .NotEmpty();
 
         RuleFor(x => x.StartTime)
          .NotEmpty();
@@ -27,7 +30,7 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
     }
 
 
-    private async Task<bool> IsValidDoctorSpecialization(CreateAppointmentDto dto, CancellationToken token)
+    private async Task<bool> IsValidDoctorSpecialization(CreateAppointmentRequest dto, CancellationToken token)
     {
         var specs = new SpecializationByIdSpecification(dto.SpecializationId);
         return await _unitOfWork.Repo<Specialization>().ExistsWithSpecAsync(specs);
@@ -42,11 +45,15 @@ public class CreateAppointmentValidator : AbstractValidator<CreateAppointmentDto
         return await _unitOfWork.Repo<Doctor>().ExistsWithSpecAsync(specs);
     }
 
-    private bool ValidDate(DateOnly appointmentDate)
+    private bool ValidDate(string appointmentDate)
     {
-        var currentDate = DateOnly.FromDateTime(DateTime.Now);
-        return appointmentDate >= currentDate;
-    }
+        if (GlobalValidator.BeAValidDateOnly(appointmentDate))
+        {
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
 
+            return appointmentDate.ToDate() >= currentDate;
+        }
+        return false;
+    }
 
 }

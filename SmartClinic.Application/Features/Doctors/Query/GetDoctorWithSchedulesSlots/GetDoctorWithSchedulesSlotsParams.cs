@@ -2,5 +2,5 @@
 public class GetDoctorWithSchedulesSlotsParams
 {
     public int DoctorId { get; set; }
-    public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+    public string StartDate { get; set; } = null!;
 }

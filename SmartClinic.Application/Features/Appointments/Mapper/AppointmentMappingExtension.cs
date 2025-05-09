@@ -1,8 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Query.AllAppointments;
-using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
-using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
-
-namespace SmartClinic.Application.Features.Appointments.Mapper;
+﻿namespace SmartClinic.Application.Features.Appointments.Mapper;
 
 public static class AppointmentMappingExtension
 {
@@ -104,12 +100,12 @@ public static class AppointmentMappingExtension
         );
     }
 
-    public static Appointment ToEntity(this CreateAppointmentDto appointmentDto, int patientId, int timeSlot)
+    public static Appointment ToEntity(this CreateAppointmentRequest appointmentDto, int patientId, int timeSlot)
         => new()
         {
             Duration = new(appointmentDto.StartTime,
             appointmentDto.StartTime.AddMinutes(timeSlot)),
-            AppointmentDate = appointmentDto.AppointmentDate,
+            AppointmentDate = appointmentDto.AppointmentDate.ToDate(),
             DoctorId = appointmentDto.DoctorId,
             PatientId = patientId,
             SpecializationId = appointmentDto.SpecializationId,

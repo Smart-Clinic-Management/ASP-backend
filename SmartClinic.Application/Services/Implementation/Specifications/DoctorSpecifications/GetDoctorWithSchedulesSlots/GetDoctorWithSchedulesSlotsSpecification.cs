@@ -6,7 +6,8 @@ public class GetDoctorWithSchedulesSlotsSpecification : BaseSpecification<Doctor
             x => x.Id == schedulesSlotsParams.DoctorId && x.IsActive
             )
     {
-        var endDate = schedulesSlotsParams.StartDate.AddDays(3);
+        var startdate = schedulesSlotsParams.StartDate.ToDate();
+        var endDate = startdate.AddDays(3);
 
         AsNoTracking();
 
@@ -14,7 +15,7 @@ public class GetDoctorWithSchedulesSlotsSpecification : BaseSpecification<Doctor
         AddInclude(x => x.DoctorSchedules);
         AddInclude(x => x.Specialization);
         AddInclude(x => x.Appointments
-                .Where(a => a.AppointmentDate >= schedulesSlotsParams.StartDate &&
+                .Where(a => a.AppointmentDate >= startdate &&
                                 a.AppointmentDate < endDate));
 
     }

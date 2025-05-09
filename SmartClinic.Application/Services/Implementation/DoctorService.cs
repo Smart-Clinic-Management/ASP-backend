@@ -1,7 +1,4 @@
-﻿using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
-using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
-
-namespace SmartClinic.Application.Services.Implementation;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
 public class DoctorService(
     IUnitOfWork unitOfWork,
@@ -175,7 +172,7 @@ public class DoctorService(
 
         // get requested dates
 
-        HashSet<DayOfWeek> requestedDates = GetRequestedDates(schedulesSlotsParams.StartDate);
+        HashSet<DayOfWeek> requestedDates = GetRequestedDates(schedulesSlotsParams.StartDate.ToDate());
 
         List<DayOfWeek> DoctorSchedulesDays = [.. doctor!.DoctorSchedules.Select(x => x.DayOfWeek)];
 

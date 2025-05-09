@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Bases;
-
-namespace SmartClinic.API;
+﻿namespace SmartClinic.API;
 public static class ModuleAPIDependencies
 {
     public static IServiceCollection AddAPIDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -90,8 +88,8 @@ public static class ModuleAPIDependencies
                  options.InvalidModelStateResponseFactory = context =>
                        {
                            var errors = context.ModelState
-                               .Where(x => x.Value.Errors.Count > 0)
-                               .SelectMany(x => x.Value.Errors)
+                               .Where(x => x.Value!.Errors.Count > 0)
+                               .SelectMany(x => x.Value!.Errors)
                                .Select(x => x.ErrorMessage)
                                .ToList();
 
