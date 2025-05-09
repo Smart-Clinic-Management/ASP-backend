@@ -18,6 +18,6 @@ public class GetPatientAppointmentValidator : AbstractValidator<GetPatientAppoin
     {
         if (orderBy is null) return true;
 
-        return PagingValidator.IsValidProperty(orderBy, typeof(GetAllDoctorsResponse));
+        return PagingValidator.IsValidProperty(orderBy, typeof(PatientAppointmentsWithDoctorDetailsDto));
     }
 }

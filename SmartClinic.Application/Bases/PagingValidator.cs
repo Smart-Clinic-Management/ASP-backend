@@ -8,7 +8,7 @@ public static class PagingValidator
     {
         if (PropName is null) return false;
 
-        return typeof(GetAllDoctorsResponse).GetProperty(PropName, BindingFlags.IgnoreCase
+        return type.GetProperty(PropName, BindingFlags.IgnoreCase
                | BindingFlags.Public | BindingFlags.Instance) is not null;
     }
 }

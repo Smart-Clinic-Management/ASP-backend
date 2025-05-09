@@ -18,19 +18,18 @@ public class SpecificationEvaluator<T>
 
         #region Ordering
 
-        #region Asc
         if (ValidProperty(spec.OrderBy))
             query = query.OrderBy(spec.OrderBy!);
-        else
-            query = query.OrderBy(x => x.Id);
-        #endregion
 
-        #region Desc
-        if (ValidProperty(spec.OrderByDescending))
-            query = query.OrderBy(spec.OrderByDescending!);
+        else if (ValidProperty(spec.OrderByDescending))
+            query = query.OrderBy(spec.OrderByDescending + " descending");
         else
-            query = query.OrderByDescending(x => x.Id);
-        #endregion
+        {
+            if (spec.OrderBy is not null)
+                query = query.OrderBy(x => x.Id);
+            else
+                query = query.OrderByDescending(x => x.Id);
+        }
 
         #endregion
 
@@ -61,19 +60,11 @@ public class SpecificationEvaluator<T>
 
         #region Ordering
 
-        #region Asc
         if (ValidProperty<TResult>(spec.OrderBy))
             selectQuery = selectQuery.OrderBy(spec.OrderBy!);
-        //else
-        //    selectQuery = selectQuery.OrderBy();
-        #endregion
 
-        #region Desc
-        if (ValidProperty(spec.OrderByDescending))
-            selectQuery = selectQuery.OrderBy(spec.OrderByDescending!);
-        //else
-        //    selectQuery = selectQuery.OrderByDescending();
-        #endregion
+        else if (ValidProperty(spec.OrderByDescending))
+            selectQuery = selectQuery.OrderBy(spec.OrderByDescending + " descending");
 
         #endregion
 

@@ -28,7 +28,7 @@ public abstract class BaseSpecification<T>(Expression<Func<T, bool>>? criteria =
     protected void AddOrderBy(string? orderBy) => OrderBy = orderBy;
 
     protected void AddOrderByDescending(string? orderByDesc)
-        => OrderByDescending = orderByDesc + " descending";
+        => OrderByDescending = orderByDesc;
 
     protected void AddDistinct() => IsDistinct = true;
 
