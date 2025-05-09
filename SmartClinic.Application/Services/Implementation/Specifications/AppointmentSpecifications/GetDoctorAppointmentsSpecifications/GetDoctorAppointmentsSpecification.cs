@@ -11,6 +11,7 @@ public class GetDoctorAppointmentsSpecification : BaseSpecification<Appointment>
 
         AddPagination(appointmentsParams.PageIndex, appointmentsParams.PageSize);
 
+
         if (appointmentsParams.IsDescending)
             AddOrderByDescending(appointmentsParams.OrderBy);
         else
