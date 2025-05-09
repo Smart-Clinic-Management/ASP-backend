@@ -13,6 +13,7 @@ global using SmartClinic.API.Bases;
 global using SmartClinic.API.RequestHelper;
 global using SmartClinic.Application;
 global using SmartClinic.Application.Bases;
+global using SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
 global using SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
 global using SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctor;

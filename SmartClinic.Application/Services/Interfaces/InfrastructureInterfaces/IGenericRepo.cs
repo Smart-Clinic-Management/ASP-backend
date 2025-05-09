@@ -6,11 +6,11 @@ public interface IGenericRepo<T> where T : BaseEntity
 
     Task<T?> GetEntityWithSpecAsync(ISpecification<T> spec);
 
-    Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec); 
+    Task<IEnumerable<T>> ListAsync(ISpecification<T> spec);
 
     Task<TResult?> GetEntityWithSpecAsync<TResult>(ISpecification<T, TResult> spec);
 
-    Task<IReadOnlyList<TResult>> ListAsync<TResult>(ISpecification<T, TResult> spec);
+    Task<IEnumerable<TResult>> ListAsync<TResult>(ISpecification<T, TResult> spec);
 
     Task AddAsync(T entity);
 
@@ -24,5 +24,5 @@ public interface IGenericRepo<T> where T : BaseEntity
 
     Task<int> CountAsync(ISpecification<T> spec);
 
-  
+
 }

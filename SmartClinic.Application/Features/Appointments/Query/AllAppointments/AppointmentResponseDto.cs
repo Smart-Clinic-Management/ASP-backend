@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Features.Appointments.Query.DTOs.AllAppointments
+﻿namespace SmartClinic.Application.Features.Appointments.Query.AllAppointments
 {
     public record AppointmentResponseDto
     (

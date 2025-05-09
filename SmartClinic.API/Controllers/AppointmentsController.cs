@@ -1,4 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
+﻿using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
 
 namespace SmartClinic.API.Controllers;
 
@@ -30,22 +30,22 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     //}
 
 
-    //[Authorize(Roles = "patient")]
-    //[HttpGet("GetPatientAppointments")]
-    //[ProducesResponseType<Response<List<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<List<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetPatientAppointments(int pageSize = 20, int pageIndex = 1)
-    //{
-    //    var result = await _appointmentService
-    //        .ListPatientAppointmentsAsync(User.GetUserId(), pageSize, pageIndex);
-    //    return NewResult(result);
-    //}
+    [Authorize(Roles = "patient")]
+    [HttpGet("GetPatientAppointments")]
+    [ProducesResponseType<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetPatientAppointments([FromQuery] GetPatientAppointmentParams appointmentParams)
+    {
+        var result = await _appointmentService
+            .ListPatientAppointmentsAsync(User.GetUserId(), appointmentParams);
+        return NewResult(result);
+    }
 
     [Authorize(Roles = "patient")]
     [HttpPost]
     [ProducesResponseType<Response<string>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAppointment(CreateAppointmentDto appointmentDto)
+    public async Task<IActionResult> CreateAppointment([FromQuery] CreateAppointmentDto appointmentDto)
     {
         var patientId = User.GetUserId();
         var result = await _appointmentService.CreateAppointmentAsync(appointmentDto, patientId);

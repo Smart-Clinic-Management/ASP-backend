@@ -1,5 +1,5 @@
-﻿using SmartClinic.Application.Features.Appointments.Command.CreateAppointment;
-using SmartClinic.Application.Features.Appointments.Query.DTOs.DoctorAppointments;
+﻿using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
+using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
 
 namespace SmartClinic.Application.Features.Appointments.Mapper;
 
@@ -29,7 +29,16 @@ public static class AppointmentMappingExtension
     //    );
     //}
 
-
+    public static Pagination<PatientAppointmentsWithDoctorDetailsDto> ToPaginatedDto(this Pagination<Appointment> appointments)
+    {
+        return new Pagination<PatientAppointmentsWithDoctorDetailsDto>
+        (
+            appointments.PageIndex,
+            appointments.PageSize,
+            appointments.Total,
+            appointments.Data.Select(x => x.ToPatientAppointmentDto())
+            );
+    }
     public static DoctorWithAppointmentsResponseDto ToDoctorDto(this Appointment appointment)
     {
         return new DoctorWithAppointmentsResponseDto(
@@ -42,18 +51,18 @@ public static class AppointmentMappingExtension
             Status: appointment.Status.ToString()
         );
     }
-    //public static PatientAppointmentsWithDoctorDetailsDto ToPatientDto(this Appointment appointment)
-    //{
-    //    return new PatientAppointmentsWithDoctorDetailsDto(
-    //        AppointmentId: appointment.Id,
-    //        DoctorId: appointment.DoctorId,
-    //        DoctorFullName: appointment.Doctor.User.GetFullName(),
-    //        AppointmentDate: appointment.AppointmentDate,
-    //        StartTime: appointment.Duration.StartTime,
-    //        EndTime: appointment.Duration.EndTime,
-    //        Status: appointment.Status.ToString()
-    //    );
-    //}
+    public static PatientAppointmentsWithDoctorDetailsDto ToPatientAppointmentDto(this Appointment appointment)
+    {
+        return new PatientAppointmentsWithDoctorDetailsDto(
+            AppointmentId: appointment.Id,
+            DoctorId: appointment.DoctorId,
+            DoctorFullName: appointment.Doctor.User.GetFullName(),
+            AppointmentDate: appointment.AppointmentDate,
+            StartTime: appointment.Duration.StartTime,
+            EndTime: appointment.Duration.EndTime,
+            Status: appointment.Status.ToString()
+        );
+    }
 
     public static Appointment ToEntity(this CreateAppointmentDto appointmentDto, int patientId, int timeSlot)
         => new()

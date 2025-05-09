@@ -1,9 +1,11 @@
 ﻿using SmartClinic.Application.Features.Appointments.Mapper;
+using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
 using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.CreateAppointmentSpecifications;
+using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetPatientAppointmentsSpecifications;
 
 namespace SmartClinic.Application.Services.Implementation;
 
-public class AppointmentService(IUnitOfWork unitOfWork)
+public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointment> pagedCreator)
         : ResponseHandler,
     IAppointmentService
 {
@@ -66,14 +68,44 @@ public class AppointmentService(IUnitOfWork unitOfWork)
     //    return new ResponseHandler().Success(appointmentDtos);
     //}
 
-    //public async Task<Response<List<PatientAppointmentsWithDoctorDetailsDto>>> ListPatientAppointmentsAsync(int patientId, int pageSize = 20, int pageIndex = 1)
-    //{
-    //    var appointments = await _unitOfWork.Repository<IAppointment>().ListPatientAppointmentsAsync(patientId, pageSize, pageIndex);
+    public async Task<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>> ListPatientAppointmentsAsync(int patientId, GetPatientAppointmentParams appointmentParams)
+    {
+        #region Validation
+        var validator = new GetPatientAppointmentValidator();
 
-    //    if (!appointments.Any())
-    //        return new ResponseHandler().Success(new List<PatientAppointmentsWithDoctorDetailsDto>(), "");
+        var validationResult = await validator.ValidateAsync(appointmentParams);
 
-    //    var appointmentDtos = appointments.Select(a => a.ToPatientDto()).ToList();
-    //    return new ResponseHandler().Success(appointmentDtos);
-    //}
+        if (!validationResult.IsValid)
+            return BadRequest<Pagination<PatientAppointmentsWithDoctorDetailsDto>>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
+
+        #endregion
+
+        var specs = new GetPatientAppointmentsSpecification(patientId, appointmentParams);
+
+        var appointments = await pagedCreator.CreatePagedResult(_unitOfWork.Repo<Appointment>(), specs, appointmentParams.PageIndex, appointmentParams.PageSize);
+
+        if (appointments.Total == 0)
+            return NotFound<Pagination<PatientAppointmentsWithDoctorDetailsDto>>("There is no appointment found");
+
+        UpdateAppointmentsStatus(appointments);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        var result = appointments.ToPaginatedDto();
+
+        return Success(result);
+    }
+
+    private static void UpdateAppointmentsStatus(Pagination<Appointment> appointments)
+    {
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+        var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+        foreach (var appointment in appointments.Data.Where(x => x.AppointmentDate <= currentDate))
+        {
+            if (appointment.Duration.EndTime <= currentTime && appointment.AppointmentDate == currentDate)
+                appointment.Status = AppointmentStatus.Canceled;
+            else if (appointment.AppointmentDate < currentDate)
+                appointment.Status = AppointmentStatus.Canceled;
+        }
+    }
 }

@@ -28,13 +28,11 @@ public class GenericRepo<T>(ApplicationDbContext _context) : IGenericRepo<T>
     public async Task<TResult?> GetEntityWithSpecAsync<TResult>(ISpecification<T, TResult> spec)
         => await ApplySecifications(spec).FirstOrDefaultAsync();
 
-    public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
+    public async Task<IEnumerable<T>> ListAsync(ISpecification<T> spec)
         => await ApplySecifications(spec).ToListAsync();
 
-    public async Task<IReadOnlyList<TResult>> ListAsync<TResult>(ISpecification<T, TResult> spec)
+    public async Task<IEnumerable<TResult>> ListAsync<TResult>(ISpecification<T, TResult> spec)
         => await ApplySecifications(spec).ToListAsync();
-
-    public async Task<IReadOnlyList<T>> ListAllAsync() => await _db.ToListAsync();
 
     public void Update(T entity) => _db.Update(entity);
 
@@ -45,5 +43,5 @@ public class GenericRepo<T>(ApplicationDbContext _context) : IGenericRepo<T>
        => SpecificationEvaluator<T>.GetQuery(_db.AsQueryable(), spec);
 
 
-  
+
 }

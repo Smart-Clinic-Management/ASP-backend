@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartClinic.Application.Features.Appointments.Query.DTOs.PatientAppointments
+namespace SmartClinic.Application.Features.Appointments.Query.PatientAppointments
 {
     public record PatientAppointmentsWithDoctorDetailsDto
      (
