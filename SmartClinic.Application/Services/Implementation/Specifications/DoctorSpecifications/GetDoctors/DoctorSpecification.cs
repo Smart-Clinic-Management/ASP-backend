@@ -1,7 +1,4 @@
-﻿using SmartClinic.Application.Features.Doctors.Mapper;
-using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
-
-namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
+﻿namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
 public class DoctorSpecification : BaseSpecification<Doctor, GetAllDoctorsResponse>
 {
 
@@ -10,10 +7,10 @@ public class DoctorSpecification : BaseSpecification<Doctor, GetAllDoctorsRespon
         : base(
         x => x.IsActive
             && (string.IsNullOrWhiteSpace(doctorsParams.DoctorName)
-            || doctorsParams.DoctorName.Contains(x.User.FirstName))
+            || (x.User.FirstName + x.User.LastName).Contains(doctorsParams.DoctorName))
 
           && (string.IsNullOrWhiteSpace(doctorsParams.Specialization)
-          || doctorsParams.Specialization.Contains(x.Specialization.Name))
+          || x.Specialization.Name.Contains(doctorsParams.Specialization))
              )
     {
         AddPagination(doctorsParams.PageIndex, doctorsParams.PageSize);
