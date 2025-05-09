@@ -1,8 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Query.AllAppointments;
-using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
-using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
-
-namespace SmartClinic.Application.Services.Interfaces;
+﻿namespace SmartClinic.Application.Services.Interfaces;
 
 public interface IAppointmentService
 {
@@ -13,4 +9,6 @@ public interface IAppointmentService
     Task<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>> ListPatientAppointmentsAsync(int patientId, GetPatientAppointmentsParams appointmentParams);
 
     Task<Response<string>> CreateAppointmentAsync(CreateAppointmentDto appointmentDto, int patientId);
+
+    Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateDoctorAppointmentRequest updateDoctorAppointment);
 }

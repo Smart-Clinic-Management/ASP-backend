@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.API.Controllers;
+﻿using SmartClinic.Application.Features.Appointments.Command.UpdateDoctorAppointment;
+
+namespace SmartClinic.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -43,7 +45,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     [HttpPost]
     [ProducesResponseType<Response<string>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateAppointment([FromQuery] CreateAppointmentDto appointmentDto)
+    public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentDto appointmentDto)
     {
         var patientId = User.GetUserId();
         var result = await _appointmentService.CreateAppointmentAsync(appointmentDto, patientId);
@@ -51,13 +53,16 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     }
 
 
-    //[HttpPut("{id}")]
-    //[Authorize(Roles = "doctor")]
-    //[ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
-    //public IActionResult UpdateAppointment(int id)
-    //{
-    //    return NewResult(new ResponseHandler().Success(""));
-    //}
+    [HttpPut]
+    [Authorize(Roles = "doctor")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateAppointment(UpdateDoctorAppointmentRequest updateDoctorAppointment)
+    {
+        var result = await _appointmentService
+            .UpdateDoctorAppointmentAsync(User.GetUserId(), updateDoctorAppointment);
+
+        return NewResult(result);
+    }
 
     //[HttpDelete("{id}")]
     //[Authorize(Roles = "patient")]

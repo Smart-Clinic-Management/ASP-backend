@@ -1,11 +1,9 @@
 ﻿using SmartClinic.Application.Features.Appointments.Mapper;
-using SmartClinic.Application.Features.Appointments.Query.AllAppointments;
-using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
-using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
 using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.AllAppointmentsSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.CreateAppointmentSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetDoctorAppointmentsSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetPatientAppointmentsSpecifications;
+using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.UpdateDoctorAppointmentSpecifications;
 
 namespace SmartClinic.Application.Services.Implementation;
 
@@ -151,5 +149,56 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
             else if (appointment.AppointmentDate < currentDate)
                 appointment.Status = AppointmentStatus.Canceled;
         }
+    }
+
+    public async Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateDoctorAppointmentRequest updateDoctorAppointment)
+    {
+        #region Validation
+
+        var validator = new UpdateDoctorAppointmentRequestValidator();
+
+        var validationResult = await validator.ValidateAsync(updateDoctorAppointment);
+
+        if (!validationResult.IsValid)
+            return BadRequest<string>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
+
+        #endregion
+
+        var specs = new UpdateDoctorAppointmentSpecification(doctorId, updateDoctorAppointment);
+
+        var appointment = await _unitOfWork.Repo<Appointment>().GetEntityWithSpecAsync(specs);
+
+        if (appointment is null)
+            BadRequest<string>($"Invalid appointment id");
+
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+        var currentTime = TimeOnly.FromDateTime(DateTime.Now);
+
+        switch (updateDoctorAppointment.Status)
+        {
+            case AppointmentStatus.Pending:
+                if (appointment!.AppointmentDate > currentDate
+                    || (appointment.Duration.EndTime > currentTime && appointment.AppointmentDate == currentDate)
+                    )
+                    appointment.Status = updateDoctorAppointment.Status;
+                else
+                    return BadRequest<string>("you can't change passed appointment to pending status");
+                break;
+            case AppointmentStatus.Canceled:
+                appointment!.Status = updateDoctorAppointment.Status;
+                break;
+            case AppointmentStatus.Completed:
+                if (appointment!.AppointmentDate < currentDate
+                    || (appointment.Duration.EndTime < currentTime && appointment.AppointmentDate == currentDate)
+                    )
+                    appointment.Status = updateDoctorAppointment.Status;
+                else
+                    return BadRequest<string>("you can't change unpasted appointment to completed status");
+                break;
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Success("");
     }
 }
