@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using SmartClinic.Application.Models;
 using SmartClinic.Application.Services.Implementation.Profile;
+using System.Net.Http.Headers;
 
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
@@ -15,6 +16,14 @@ public static class ModuleAddApplicationDependencies
         //services.AddScoped<IPatientService, PatientService>();
         //services.AddScoped<IDoctorScheduleService, DoctorScheduleServices>();
         services.AddScoped<IAppointmentService, AppointmentService>();
+
+
+
+    
+        services.Configure<GeminiApiSettings>(configuration.GetSection("GeminiApi"));
+        services.AddScoped<IGeminiService, GeminiService>();
+        services.AddHttpClient();
+
 
 
 
