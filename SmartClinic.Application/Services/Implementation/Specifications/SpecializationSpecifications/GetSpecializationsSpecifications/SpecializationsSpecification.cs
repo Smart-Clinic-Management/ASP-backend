@@ -1,9 +1,4 @@
-﻿using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
-using System;
-using Microsoft.AspNetCore.Http;
-using SmartClinic.Application.Features.Doctors.Mapper;
-
-namespace SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationsSpecifications;
+﻿namespace SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationsSpecifications;
 
 public class SpecializationsSpecification : BaseSpecification<Specialization, GetAllSpecializationsResponse>
 {

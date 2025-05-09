@@ -1,6 +1,7 @@
 ﻿using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
 using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
 using SmartClinic.Application.Features.Specializations.Mapper;
+using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.DeleteSpecializationSpecifications;
 
 namespace SmartClinic.Application.Services.Implementation;
 
@@ -83,10 +84,22 @@ UserManager<AppUser> userManager)
         return Created("Specialization created successfully");
     }
 
+    public async Task<Response<string>> DeleteSpecializationAsync(int specializationId)
+    {
+        var specs = new DeleteSpecializationSpecification(specializationId);
 
+        var specialization = await _unitOfWork.Repo<Specialization>().GetEntityWithSpecAsync(specs);
 
+        if (specialization is null)
+            return NotFound<string>($"No specialization with id {specializationId}");
 
+        if (specialization.Doctors.Any())
+            return BadRequest<string>("Can't Delete Specialization that have doctors assigned");
 
+        specialization.IsActive = false;
 
+        await _unitOfWork.SaveChangesAsync();
 
+        return Success("", "Deleted Successfully");
+    }
 }

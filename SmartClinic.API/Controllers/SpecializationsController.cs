@@ -21,12 +21,12 @@ public class SpecializationsController(ISpecializationService _specializationSer
 
 
 
-    [HttpGet("{id}")]
+    [HttpGet("{Id}")]
     [ProducesResponseType<Response<GetSpecializationByIdResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<GetSpecializationByIdResponse>>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int Id)
     {
-        return NewResult(await _specializationService.GetSpecializationByIdAsync(id));
+        return NewResult(await _specializationService.GetSpecializationByIdAsync(Id));
     }
 
 
@@ -54,14 +54,14 @@ public class SpecializationsController(ISpecializationService _specializationSer
     //}
 
 
-    //[Authorize(Roles = "admin")]
-    //[HttpDelete("Delete/{id}")]
-    //[ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<string>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> DeleteSpecialization(int id)
-    //{
-    //    var response = await _specializationService.DeleteSpecializationAsync(id);
-    //    return NewResult(response);
-    // }
+    [Authorize(Roles = "admin")]
+    [HttpDelete("{id}")]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteSpecialization(int id)
+    {
+        var response = await _specializationService.DeleteSpecializationAsync(id);
+        return NewResult(response);
+    }
 
 }
