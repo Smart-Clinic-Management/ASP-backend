@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
+﻿using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
+using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
 
 namespace SmartClinic.API.Controllers;
 
@@ -18,23 +19,23 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     //    return NewResult(result);
     //}
 
-    //[Authorize(Roles = "doctor")]
-    //[HttpGet("GetDoctorAppointments")]
-    //[ProducesResponseType<Response<List<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<List<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetDoctorAppointments(int pageSize = 20, int pageIndex = 1)
-    //{
-    //    var result = await _appointmentService
-    //        .ListDoctorAppointmentsAsync(User.GetUserId(), pageSize, pageIndex);
-    //    return NewResult(result);
-    //}
+    [Authorize(Roles = "doctor")]
+    [HttpGet("GetDoctorAppointments")]
+    [ProducesResponseType<Response<Pagination<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<Pagination<DoctorWithAppointmentsResponseDto>>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDoctorAppointments(GetDoctorAppointmentsParams appointmentsParams)
+    {
+        var result = await _appointmentService
+            .ListDoctorAppointmentsAsync(User.GetUserId(), appointmentsParams);
+        return NewResult(result);
+    }
 
 
     [Authorize(Roles = "patient")]
     [HttpGet("GetPatientAppointments")]
     [ProducesResponseType<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPatientAppointments([FromQuery] GetPatientAppointmentParams appointmentParams)
+    public async Task<IActionResult> GetPatientAppointments([FromQuery] GetPatientAppointmentsParams appointmentParams)
     {
         var result = await _appointmentService
             .ListPatientAppointmentsAsync(User.GetUserId(), appointmentParams);

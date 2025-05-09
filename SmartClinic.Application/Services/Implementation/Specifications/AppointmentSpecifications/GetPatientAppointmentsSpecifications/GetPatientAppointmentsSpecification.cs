@@ -3,7 +3,7 @@
 namespace SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetPatientAppointmentsSpecifications;
 public class GetPatientAppointmentsSpecification : BaseSpecification<Appointment>
 {
-    public GetPatientAppointmentsSpecification(int patientId, GetPatientAppointmentParams appointmentParams)
+    public GetPatientAppointmentsSpecification(int patientId, GetPatientAppointmentsParams appointmentParams)
         : base(x => x.PatientId == patientId)
     {
         AddInclude(x => x.Doctor);

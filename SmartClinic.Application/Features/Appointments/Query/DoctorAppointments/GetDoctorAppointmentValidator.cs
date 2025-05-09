@@ -1,10 +1,12 @@
-﻿namespace SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
-public class GetPatientAppointmentValidator : AbstractValidator<GetPatientAppointmentsParams>
+﻿using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
+
+namespace SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
+public class GetDoctorAppointmentValidator : AbstractValidator<GetDoctorAppointmentsParams>
 {
-    public GetPatientAppointmentValidator()
+    public GetDoctorAppointmentValidator()
     {
         RuleFor(x => x.PageIndex)
-           .GreaterThanOrEqualTo(1);
+         .GreaterThanOrEqualTo(1);
 
         RuleFor(x => x.PageSize)
            .GreaterThanOrEqualTo(1)

@@ -29,17 +29,29 @@ public static class AppointmentMappingExtension
     //    );
     //}
 
-    public static Pagination<PatientAppointmentsWithDoctorDetailsDto> ToPaginatedDto(this Pagination<Appointment> appointments)
+    public static Pagination<PatientAppointmentsWithDoctorDetailsDto> ToPatientAppointmentsPaginatedDto(this Pagination<Appointment> appointments)
     {
         return new Pagination<PatientAppointmentsWithDoctorDetailsDto>
         (
             appointments.PageIndex,
             appointments.PageSize,
             appointments.Total,
-            appointments.Data.Select(x => x.ToPatientAppointmentDto())
+            appointments.Data.Select(x => x.ToPatientAppointmentsDto())
             );
     }
-    public static DoctorWithAppointmentsResponseDto ToDoctorDto(this Appointment appointment)
+
+    public static Pagination<DoctorWithAppointmentsResponseDto> ToDoctorAppointmentsPaginatedDto(this Pagination<Appointment> appointments)
+    {
+        return new Pagination<DoctorWithAppointmentsResponseDto>
+        (
+            appointments.PageIndex,
+            appointments.PageSize,
+            appointments.Total,
+            appointments.Data.Select(x => x.ToDoctorAppointmentsDto())
+            );
+    }
+
+    public static DoctorWithAppointmentsResponseDto ToDoctorAppointmentsDto(this Appointment appointment)
     {
         return new DoctorWithAppointmentsResponseDto(
             Id: appointment.Id,
@@ -51,7 +63,7 @@ public static class AppointmentMappingExtension
             Status: appointment.Status.ToString()
         );
     }
-    public static PatientAppointmentsWithDoctorDetailsDto ToPatientAppointmentDto(this Appointment appointment)
+    public static PatientAppointmentsWithDoctorDetailsDto ToPatientAppointmentsDto(this Appointment appointment)
     {
         return new PatientAppointmentsWithDoctorDetailsDto(
             AppointmentId: appointment.Id,

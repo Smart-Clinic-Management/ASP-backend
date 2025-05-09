@@ -1,6 +1,8 @@
 ﻿using SmartClinic.Application.Features.Appointments.Mapper;
+using SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
 using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
 using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.CreateAppointmentSpecifications;
+using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetDoctorAppointmentsSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetPatientAppointmentsSpecifications;
 
 namespace SmartClinic.Application.Services.Implementation;
@@ -57,32 +59,51 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
     //    return new ResponseHandler().Success(appointmentDtos);
     //}
 
-    //public async Task<Response<List<DoctorWithAppointmentsResponseDto>>> ListDoctorAppointmentsAsync(int doctorId, int pageSize = 20, int pageIndex = 1)
-    //{
-    //    var appointments = await _unitOfWork.Repository<IAppointment>().ListDoctorAppointmentsAsync(doctorId, pageSize, pageIndex);
+    public async Task<Response<Pagination<DoctorWithAppointmentsResponseDto>>> ListDoctorAppointmentsAsync(int doctorId, GetDoctorAppointmentsParams appointmentsParams)
+    {
+        #region Validation
+        var validator = new GetDoctorAppointmentValidator();
 
-    //    if (!appointments.Any())
-    //        return new ResponseHandler().Success(new List<DoctorWithAppointmentsResponseDto>(), "");
+        var validationResult = await validator.ValidateAsync(appointmentsParams);
 
-    //    var appointmentDtos = appointments.Select(a => a.ToDoctorDto()).ToList();
-    //    return new ResponseHandler().Success(appointmentDtos);
-    //}
+        if (!validationResult.IsValid)
+            return BadRequest<Pagination<DoctorWithAppointmentsResponseDto>>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
 
-    public async Task<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>> ListPatientAppointmentsAsync(int patientId, GetPatientAppointmentParams appointmentParams)
+        #endregion
+
+        var specs = new GetDoctorAppointmentsSpecification(doctorId, appointmentsParams);
+
+        var appointments = await pagedCreator.CreatePagedResult(_unitOfWork.Repo<Appointment>(),
+            specs, appointmentsParams.PageIndex, appointmentsParams.PageSize);
+
+        if (appointments.Total == 0)
+            return NotFound<Pagination<DoctorWithAppointmentsResponseDto>>("There is no appointment found");
+
+        UpdateAppointmentsStatus(appointments);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        var result = appointments.ToDoctorAppointmentsPaginatedDto();
+
+        return Success(result);
+    }
+
+    public async Task<Response<Pagination<PatientAppointmentsWithDoctorDetailsDto>>> ListPatientAppointmentsAsync(int patientId, GetPatientAppointmentsParams appointmentsParams)
     {
         #region Validation
         var validator = new GetPatientAppointmentValidator();
 
-        var validationResult = await validator.ValidateAsync(appointmentParams);
+        var validationResult = await validator.ValidateAsync(appointmentsParams);
 
         if (!validationResult.IsValid)
             return BadRequest<Pagination<PatientAppointmentsWithDoctorDetailsDto>>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
 
         #endregion
 
-        var specs = new GetPatientAppointmentsSpecification(patientId, appointmentParams);
+        var specs = new GetPatientAppointmentsSpecification(patientId, appointmentsParams);
 
-        var appointments = await pagedCreator.CreatePagedResult(_unitOfWork.Repo<Appointment>(), specs, appointmentParams.PageIndex, appointmentParams.PageSize);
+        var appointments = await pagedCreator.CreatePagedResult(_unitOfWork.Repo<Appointment>(),
+            specs, appointmentsParams.PageIndex, appointmentsParams.PageSize);
 
         if (appointments.Total == 0)
             return NotFound<Pagination<PatientAppointmentsWithDoctorDetailsDto>>("There is no appointment found");
@@ -91,7 +112,7 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 
         await _unitOfWork.SaveChangesAsync();
 
-        var result = appointments.ToPaginatedDto();
+        var result = appointments.ToPatientAppointmentsPaginatedDto();
 
         return Success(result);
     }
