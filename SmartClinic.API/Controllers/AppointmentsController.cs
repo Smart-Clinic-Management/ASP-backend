@@ -65,7 +65,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
         return NewResult(result);
     }
 
-    [HttpDelete("/patient/cancel/{appointmentId}")]
+    [HttpDelete("patient/cancel/{appointmentId}")]
     [Authorize(Roles = "patient")]
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
