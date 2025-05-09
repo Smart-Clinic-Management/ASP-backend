@@ -53,9 +53,10 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     }
 
 
-    [HttpPut]
+    [HttpPut("doctor")]
     [Authorize(Roles = "doctor")]
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAppointment([FromBody] UpdateAppointmentRequest updateDoctorAppointment)
     {
         var result = await _appointmentService
@@ -64,12 +65,17 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
         return NewResult(result);
     }
 
-    [HttpDelete("{appointmentId}")]
+    [HttpDelete("/patient/cancel/{appointmentId}")]
     [Authorize(Roles = "patient")]
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
-    public IActionResult DeleteAppointment(int appointmentId)
+    [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
+
+    public async Task<IActionResult> DeleteAppointment(int appointmentId)
     {
-        return NewResult(new ResponseHandler().Deleted<string>());
+        var result = await _appointmentService
+            .CancelPatientAppointmentAsync(User.GetUserId(), appointmentId);
+
+        return NewResult(result);
     }
 
 
