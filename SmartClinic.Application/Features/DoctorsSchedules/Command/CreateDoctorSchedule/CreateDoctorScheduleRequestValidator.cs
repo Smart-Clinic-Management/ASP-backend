@@ -34,6 +34,6 @@ public class CreateDoctorScheduleRequestValidator : AbstractValidator<CreateDoct
 
     private bool ValidDuration(CreateDoctorScheduleRequest request)
     {
-        return request.EndTime.AddHours(2) > request.StartTime;
+        return request.EndTime >= request.StartTime.AddHours(2);
     }
 }
