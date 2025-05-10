@@ -1,8 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
-
-namespace SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
+﻿namespace SmartClinic.Application.Features.Doctors.Command.CreateDoctor;
 public class CreateDoctorValidator : AbstractValidator<CreateDoctorRequest>
 {
     private readonly IUnitOfWork _unitOfWork;

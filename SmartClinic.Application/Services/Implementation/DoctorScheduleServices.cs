@@ -1,24 +1,9 @@
-﻿using SmartClinic.Application.Features.DoctorsSchedules.Command.DeleteDoctorSchedule;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSchedulesSpecifications.DeleteDoctorSchedulesSpecifications;
-
-namespace SmartClinic.Application.Services.Implementation;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
 public class DoctorScheduleServices(IUnitOfWork unitOfWork)
     : ResponseHandler, IDoctorScheduleService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
-    //public async Task<Response<IEnumerable<GetDoctorSchedule>>> GetSchedulesForDoctorAsync(int doctorId)
-    //{
-    //    var schedules = await _doctorScheduleRepo.GetByDoctorIdAsync(doctorId);
-
-    //    if (schedules == null || !schedules.Any())
-    //        return NotFound<IEnumerable<GetDoctorSchedule>>();
-
-    //    var scheduleDtos = schedules.Select(schedule => schedule.ToGetDoctorScheduleDto()).ToList();
-
-    //    return Success<IEnumerable<GetDoctorSchedule>>(scheduleDtos);
-    //}
 
     public async Task<Response<string>> DeleteScheduleAsync(DeleteDoctorScheduleRequest deleteDoctorSchedule)
     {
@@ -37,35 +22,39 @@ public class DoctorScheduleServices(IUnitOfWork unitOfWork)
             return Success<string>(null, "Deleted Successfully and all upcoming schedule appointment are canceled");
 
         return BadRequest<string>("Something went wrong while deleting schedule");
+
     }
 
-    //public async Task<Response<GetDoctorSchedule>> CreateAsync(CreateDoctorScheduleRequest request)
-    //{
-    //    var schedule = request.ToEntity();
+    public async Task<Response<GetDoctorSchedule>> CreateAsync(CreateDoctorScheduleRequest request)
+    {
+        #region Validation
 
-    //    await _doctorScheduleRepo.AddAsync(schedule);
-    //    await _unitOfWork.SaveChangesAsync();
+        var validator = new CreateDoctorScheduleRequestValidator(_unitOfWork);
 
-    //    return Created(schedule.ToGetDoctorScheduleDto());
+        var validationResult = await validator.ValidateAsync(request);
 
-    //}
+        if (!validationResult.IsValid)
+            return BadRequest<GetDoctorSchedule>(errors: [.. validationResult.Errors.Select(x => x.ErrorMessage)]);
 
+        var specs = new CreateDoctorSchedulesSpecification(request);
 
+        var scheduleExists = await _unitOfWork.Repo<DoctorSchedule>().ExistsWithSpecAsync(specs);
 
-    //public async Task<Response<GetDoctorSchedule>> UpdateAsync(UpdateDoctorScheduleRequest request)
-    //{
-    //    var schedule = await _doctorScheduleRepo.GetByIdAsync(request.Id);
+        if (scheduleExists)
+            return BadRequest<GetDoctorSchedule>("This schedule is already exists please choose another day");
 
-    //    if (schedule is null)
-    //        return BadRequest<GetDoctorSchedule>([$"Schedule with ID {request.Id} not found."]);
+        #endregion
 
-    //    schedule.UpdateFromRequest(request);
+        var newSchedule = request.ToEntity();
 
-    //    await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.Repo<DoctorSchedule>().AddAsync(newSchedule);
 
-    //    return Success(schedule.ToGetDoctorScheduleDto());
+        if (await _unitOfWork.SaveChangesAsync())
+            return Created(newSchedule.ToGetDoctorScheduleDto());
 
-    //}
+        return BadRequest<GetDoctorSchedule>("Something went wrong while creating the schedule");
+
+    }
 
 
     private static void CancelUpcommingAppointments(IEnumerable<Appointment> appointments)

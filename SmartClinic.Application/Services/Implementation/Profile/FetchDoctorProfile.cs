@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Profile.Command;
-
-namespace SmartClinic.Application.Services.Implementation.Profile;
+﻿namespace SmartClinic.Application.Services.Implementation.Profile;
 
 public class FetchDoctorProfile : IFetchProfile
 {

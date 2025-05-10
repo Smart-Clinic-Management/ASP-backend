@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithSchedulesSlots;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

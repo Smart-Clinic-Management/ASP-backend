@@ -1,11 +1,8 @@
-﻿using SmartClinic.Application.Features.Profile.Command;
+﻿namespace SmartClinic.Application.Services.Interfaces;
 
-namespace SmartClinic.Application.Services.Interfaces
+public interface IFetchProfile
 {
-    public interface IFetchProfile
-    {
-        string Role { get; set; }
-        Task<BaseProfile> FetchAsync(AppUser user);
+    string Role { get; set; }
+    Task<BaseProfile> FetchAsync(AppUser user);
 
-    }
 }

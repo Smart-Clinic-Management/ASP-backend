@@ -1,7 +1,6 @@
-﻿namespace SmartClinic.Application.Features.Profile.Command
+﻿namespace SmartClinic.Application.Features.Profile.Command;
+
+public class PatientProfile : BaseProfile
 {
-    public class PatientProfile : BaseProfile
-    {
-        public string MedicalHistory { get; set; } = null!;
-    }
+    public string MedicalHistory { get; set; } = null!;
 }

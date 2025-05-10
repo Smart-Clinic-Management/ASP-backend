@@ -1,40 +1,36 @@
-﻿using System.Text.Json;
-using API.Errors;
+﻿namespace SmartClinic.API.Middleware;
 
-namespace API.Middleware
+public class ExceptionMiddleware(IHostEnvironment env, RequestDelegate next)
 {
-    public class ExceptionMiddleware(IHostEnvironment env, RequestDelegate next)
+    private static readonly JsonSerializerOptions _jsonOptions = new()
     {
-        private static readonly JsonSerializerOptions _jsonOptions = new()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 
-        public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            try
-            {
-                await next(context);
-            }
-            catch (Exception ex)
-            {
-                await HandleExceptionAsync(context, ex, env);
-
-            }
+            await next(context);
         }
-
-        private static Task HandleExceptionAsync(HttpContext context, Exception ex, IHostEnvironment env)
+        catch (Exception ex)
         {
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            context.Response.ContentType = "application/json";
+            await HandleExceptionAsync(context, ex, env);
 
-            var response = env.IsDevelopment()
-                ? new ApiErrorResponse(context.Response.StatusCode, ex.Message, ex.StackTrace)
-                : new ApiErrorResponse(context.Response.StatusCode, ex.Message, "Internal server error");
-
-            var json = JsonSerializer.Serialize(response, _jsonOptions);
-
-            return context.Response.WriteAsync(json);
         }
+    }
+
+    private static Task HandleExceptionAsync(HttpContext context, Exception ex, IHostEnvironment env)
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+
+        var response = env.IsDevelopment()
+            ? new ApiErrorResponse(context.Response.StatusCode, ex.Message, ex.StackTrace)
+            : new ApiErrorResponse(context.Response.StatusCode, ex.Message, "Internal server error");
+
+        var json = JsonSerializer.Serialize(response, _jsonOptions);
+
+        return context.Response.WriteAsync(json);
     }
 }

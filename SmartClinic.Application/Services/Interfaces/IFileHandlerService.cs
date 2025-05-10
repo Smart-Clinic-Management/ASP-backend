@@ -2,7 +2,7 @@
 
 public interface IFileHandlerService
 {
-    Task<FileValidationResult> HanldeFile(IFormFile file, FileValidation options);
+    Task<FileValidationResult> HandleFile(IFormFile file, FileValidation options);
 
     Task SaveFile(IFormFile file, string path);
 

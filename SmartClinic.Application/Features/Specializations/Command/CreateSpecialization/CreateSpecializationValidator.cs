@@ -1,11 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
-using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.CreateSpecializationsSpecification;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
-
-namespace SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
+﻿namespace SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
 public class CreateSpecializationValidator : AbstractValidator<CreateSpecializationRequest>
 {
     private readonly IUnitOfWork _unitOfWork;

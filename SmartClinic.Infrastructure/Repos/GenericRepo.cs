@@ -1,7 +1,4 @@
-﻿using SmartClinic.Application.Services.Interfaces;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
-
-namespace SmartClinic.Infrastructure.Repos;
+﻿namespace SmartClinic.Infrastructure.Repos;
 
 public class GenericRepo<T>(ApplicationDbContext _context) : IGenericRepo<T>
        where T : BaseEntity

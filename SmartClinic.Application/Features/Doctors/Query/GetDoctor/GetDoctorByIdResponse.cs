@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.DoctorsSchedules.DTOs;
-
-namespace SmartClinic.Application.Features.Doctors.Query.GetDoctor;
+﻿namespace SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 
 public record GetDoctorByIdResponse(
      string FirstName,

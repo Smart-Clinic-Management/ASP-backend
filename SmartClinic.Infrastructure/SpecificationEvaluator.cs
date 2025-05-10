@@ -1,8 +1,4 @@
-﻿using System.Linq.Dynamic.Core;
-using System.Reflection;
-using SmartClinic.Application.Services.Interfaces;
-
-namespace SmartClinic.Infrastructure;
+﻿namespace SmartClinic.Infrastructure;
 
 public class SpecificationEvaluator<T>
      where T : BaseEntity

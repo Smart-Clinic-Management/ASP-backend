@@ -7,25 +7,6 @@ public static class AppointmentMappingExtension
         return $"{user.FirstName} {user.LastName ?? string.Empty}".Trim();
     }
 
-    //public static AppointmentResponseDto ToDto(this Appointment appointment)
-    //{
-    //    var doctorFullName = appointment.Doctor.User.GetFullName();
-    //    var patientFullName = appointment.Patient.User.GetFullName();
-
-    //    return new AppointmentResponseDto(
-    //        Id: appointment.Id,
-    //        DoctorId: appointment.DoctorId,
-    //        DoctorFullName: doctorFullName,
-    //        PatientId: appointment.PatientId,
-    //        PatientFullName: patientFullName,
-    //        SpecializationName: appointment.Specialization.Name,
-    //        AppointmentDate: appointment.AppointmentDate,
-    //        StartTime: appointment.Duration.StartTime,
-    //        EndTime: appointment.Duration.EndTime,
-    //        Status: appointment.Status.ToString()
-    //    );
-    //}
-
     public static Pagination<PatientAppointmentsWithDoctorDetailsDto> ToPatientAppointmentsPaginatedDto(this Pagination<Appointment> appointments)
     {
         return new Pagination<PatientAppointmentsWithDoctorDetailsDto>

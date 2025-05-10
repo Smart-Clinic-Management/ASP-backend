@@ -9,7 +9,7 @@ public class FileHandler : IFileHandlerService
         this.httpContext = httpContext;
     }
 
-    public async Task<FileValidationResult> HanldeFile(IFormFile file, FileValidation options)
+    public async Task<FileValidationResult> HandleFile(IFormFile file, FileValidation options)
     {
         var result = new FileValidationResult() { Success = false };
 
@@ -17,7 +17,7 @@ public class FileHandler : IFileHandlerService
 
         if (!options.AllowedExtenstions.Contains(extenstion))
         {
-            result.Error = $"extenstion type must be in[ {string.Join(',', options.AllowedExtenstions)} ]";
+            result.Error = $"extension type must be in[ {string.Join(',', options.AllowedExtenstions)} ]";
         }
 
         if (file.Length > options.MaxSize)

@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Query.PatientAppointments;
-
-namespace SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
+﻿namespace SmartClinic.Application.Features.Appointments.Query.DoctorAppointments;
 public class GetDoctorAppointmentValidator : AbstractValidator<GetDoctorAppointmentsParams>
 {
     public GetDoctorAppointmentValidator()

@@ -1,25 +1,17 @@
 ﻿namespace SmartClinic.Application.Features.Auth;
 
-public class AuthService : IAuthService
+public class AuthService(
+    IConfiguration configuration,
+    UserManager<AppUser> userMGR,
+    SignInManager<AppUser> signMGR,
+    ResponseHandler response,
+    IFileHandlerService fileHandler) : IAuthService
 {
-    private readonly IConfiguration configuration;
-    private readonly UserManager<AppUser> userMGR;
-    private readonly SignInManager<AppUser> signMGR;
-    private readonly ResponseHandler response;
-    private readonly IUnitOfWork uof;
-    private readonly IFileHandlerService fileHandler;
-    private readonly IHttpContextAccessor httpContext;
-
-    public AuthService(IConfiguration configuration, UserManager<AppUser> userMGR, SignInManager<AppUser> signMGR, ResponseHandler response, IUnitOfWork uof, IFileHandlerService fileHandler, IHttpContextAccessor request)
-    {
-        this.configuration = configuration;
-        this.userMGR = userMGR;
-        this.signMGR = signMGR;
-        this.response = response;
-        this.uof = uof;
-        this.fileHandler = fileHandler;
-        this.httpContext = request;
-    }
+    private readonly IConfiguration configuration = configuration;
+    private readonly UserManager<AppUser> userMGR = userMGR;
+    private readonly SignInManager<AppUser> signMGR = signMGR;
+    private readonly ResponseHandler response = response;
+    private readonly IFileHandlerService fileHandler = fileHandler;
 
     public async Task<string> GenerateJWT(AppUser user)
     {
@@ -95,7 +87,7 @@ public class AuthService : IAuthService
                 MaxSize = 2 * 1024 * 1024,
                 AllowedExtenstions = [".jpg", ".jpeg", ".png"]
             };
-            fileResult = await fileHandler.HanldeFile(newPatientUser.Image, validationsOptions);
+            fileResult = await fileHandler.HandleFile(newPatientUser.Image, validationsOptions);
             if (!fileResult.Success)
             {
                 return response.BadRequest<RegisterResponseDTO>(errors: [fileResult.Error]);
