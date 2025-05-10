@@ -7,11 +7,11 @@ public static class ModuleAddApplicationDependencies
         services.AddScoped<IDoctorService, DoctorService>();
         services.AddScoped<ISpecializationService, SpecializationService>();
         services.AddScoped<ResponseHandler>();
-        //services.AddScoped<IPatientService, PatientService>();
+        services.AddScoped<IPatientService, PatientService>();
         services.AddScoped<IDoctorScheduleService, DoctorScheduleServices>();
         services.AddScoped<IAppointmentService, AppointmentService>();
 
-
+        services.AddScoped<IPatientService, PatientService>();
 
 
         services.Configure<GeminiApiSettings>(configuration.GetSection("GeminiApi"));

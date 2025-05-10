@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Features.Patients.Mapper;
+namespace SmartClinic.Application.Features.Patients.Mapper;
 
 public static class PatientMappingExtensions
 {

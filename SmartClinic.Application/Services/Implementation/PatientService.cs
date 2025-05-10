@@ -1,57 +1,40 @@
-﻿//using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
+﻿using SmartClinic.Application.Services.Implementation.Specifications.PatientSpecifications.GetPatients;
 
-//namespace SmartClinic.Application.Services.Implementation;
+public class PatientService : ResponseHandler, IPatientService
+{
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly UserManager<AppUser> _userManager;
+    private readonly IFileHandlerService _fileHandler;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IPagedCreator<Patient> _pagedCreator; 
 
-//public class PatientService : IPatientService
-//{
-//    private readonly IPatient _patientRepo;
-//    private readonly IUnitOfWork _unitOfWork;
-//    private readonly UserManager<AppUser> _userManager;
-//    private readonly IFileHandlerService _fileHandler;
-//    private readonly IHttpContextAccessor _httpContextAccessor;
-//    private readonly ISpecializationService _specializationService;
+    public PatientService(
+        IUnitOfWork unitOfWork,
+        UserManager<AppUser> userManager,
+        IFileHandlerService fileHandler,
+        IHttpContextAccessor httpContextAccessor,
+        IPagedCreator<Patient> pagedCreator)  
+    {
+        _unitOfWork = unitOfWork;
+        _userManager = userManager;
+        _fileHandler = fileHandler;
+        _httpContextAccessor = httpContextAccessor;
+        _pagedCreator = pagedCreator;  
+    }
 
-//    public PatientService(
-//       IPatient patientRepo,
-//        IUnitOfWork unitOfWork,
-//        UserManager<AppUser> userManager,
-//        IFileHandlerService fileHandler,
-//        IHttpContextAccessor httpContextAccessor,
-//        ISpecializationService specializationService)
-//    {
-//        _patientRepo = patientRepo;
-//        _unitOfWork = unitOfWork;
-//        _userManager = userManager;
-//        _fileHandler = fileHandler;
-//        _httpContextAccessor = httpContextAccessor;
-//        _specializationService = specializationService;
-//    }
+    public async Task<Response<Pagination<GetAllPatientsResponse>>> GetAllPatientsAsync(GetAllPatientsParams allPatientsParams)
+    {
+        var validator = new GetAllPatientsValidator();
+        var validationResult = await validator.ValidateAsync(allPatientsParams);
 
+        if (!validationResult.IsValid)
+            return BadRequest<Pagination<GetAllPatientsResponse>>(errors: validationResult.Errors.Select(x => x.ErrorMessage).ToList());
 
-//    //   public async Task<Response<List<GetAllPatientsResponse>>> GetAllPatientsAsync(int pageSize = 20, int pageIndex = 1)
-//    //{
-//    //    var patients = await _patientRepo.ListAsync(pageSize, pageIndex);
-//    //    var response = patients.Select(patient =>
-//    //    {
-//    //        return patient.ToGetAllPatientsResponse();
-//    //    }).ToList();
+        var specs = new PatientSpecification(allPatientsParams, _httpContextAccessor);
 
-//    //    return new ResponseHandler().Success(response);
-//    //}
+        var result = await _pagedCreator
+            .CreatePagedResult(_unitOfWork.Repo<Patient>(), specs, allPatientsParams.PageIndex, allPatientsParams.PageSize);
 
-
-
-//    //public async Task<Response<GetPatientByIdResponse>> GetPatientByIdAsync(int patientId)
-//    //{
-//    //    var patient = await _patientRepo.GetByIdWithIncludesAsync(patientId);
-//    //    if (patient == null)
-//    //    {
-//    //        return new ResponseHandler().NotFound<GetPatientByIdResponse>($"No patient found with ID {patientId}");
-//    //    }
-
-//    //    var response = patient.ToGetPatientByIdResponse();
-
-//    //    return new ResponseHandler().Success(response);
-//    //}
-
-//}
+        return Success(result);
+    }
+}
