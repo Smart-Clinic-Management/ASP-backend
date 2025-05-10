@@ -14,7 +14,7 @@ public class DoctorScheduleController(IDoctorScheduleService doctorScheduleServi
     [ProducesResponseType<Response<string>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<string>>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> DeleteScheduleById([FromBody] DeleteDoctorScheduleRequest deleteDoctorSchedule)
+    public async Task<IActionResult> DeleteScheduleById([FromQuery] DeleteDoctorScheduleRequest deleteDoctorSchedule)
     {
         var response = await _doctorScheduleService.DeleteScheduleAsync(deleteDoctorSchedule);
 
@@ -27,7 +27,7 @@ public class DoctorScheduleController(IDoctorScheduleService doctorScheduleServi
     [ProducesResponseType<Response<GetDoctorSchedule>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<GetDoctorSchedule>>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<Response<GetDoctorSchedule>>(StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateDoctorSchedule([FromBody] CreateDoctorScheduleRequest request)
+    public async Task<IActionResult> CreateDoctorSchedule([FromQuery] CreateDoctorScheduleRequest request)
     {
         var result = await _doctorScheduleService.CreateAsync(request);
 

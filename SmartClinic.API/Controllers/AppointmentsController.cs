@@ -45,8 +45,8 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     [ProducesResponseType<Response<string>>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAppointment([FromBody] CreateAppointmentRequest appointmentDto)
     {
-        var patientId = User.GetUserId();
-        var result = await _appointmentService.CreateAppointmentAsync(appointmentDto, patientId);
+        var result = await _appointmentService.CreateAppointmentAsync(appointmentDto,
+            User.GetUserData());
         return NewResult(result);
     }
 

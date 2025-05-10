@@ -1,3 +1,5 @@
+using SmartClinic.Application.Services.Implementation.EmailService;
+
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
 {
@@ -20,6 +22,8 @@ public static class ModuleAddApplicationDependencies
 
 
         services.Configure<EmailSettings>(configuration.GetRequiredSection("EmailSettings"));
+        services.AddTransient<IEmailSender, EmailSender>();
+
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddHttpContextAccessor();
