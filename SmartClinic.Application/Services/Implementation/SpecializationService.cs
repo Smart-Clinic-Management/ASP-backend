@@ -97,70 +97,41 @@ UserManager<AppUser> userManager)
     }
 
 
-    public async Task<Response<UpdateSpecializationResponse>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest updatedSpecialization)
+    public async Task<Response<GetSpecializationByIdResponse?>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest request)
     {
         #region Validation
-        var validator = new UpdateSpecializationValidator(_unitOfWork);
-        var validationResult = await validator.ValidateAsync(updatedSpecialization);
+        var validator = new UpdateSpecializationValidator(_unitOfWork, specializationId); 
+        var validationResult = await validator.ValidateAsync(request);
 
         if (!validationResult.IsValid)
-            return BadRequest<UpdateSpecializationResponse>(errors: validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+            return BadRequest<GetSpecializationByIdResponse>(errors: validationResult.Errors.Select(x => x.ErrorMessage).ToList());
         #endregion
 
         #region Get Specialization
-        var specs = new UpdateSpecializationSpecification(specializationId);
-        var specialization = await _unitOfWork.Repo<Specialization>().GetEntityWithSpecAsync(specs);
+        var specialization = await _unitOfWork.Repo<Specialization>().GetByIdAsync(specializationId);
 
         if (specialization is null)
-            return NotFound<UpdateSpecializationResponse>($"No specialization with id {specializationId}");
+            return NotFound<GetSpecializationByIdResponse>($"No specialization found with id {specializationId}");
         #endregion
 
         #region Update Specialization
-        if (!string.IsNullOrWhiteSpace(updatedSpecialization.Name))
-            specialization.Name = updatedSpecialization.Name;
+      
+        var isUpdated = specialization.UpdateEntity(request);
 
-        if (!string.IsNullOrWhiteSpace(updatedSpecialization.Description))
-            specialization.Description = updatedSpecialization.Description;
-        #endregion
-
-        #region Update Image
-        if (updatedSpecialization.Image != null)
-        {
-            if (!string.IsNullOrEmpty(specialization.Image))
-            {
-                await _fileHandler.RemoveImg(specialization.Image);
-            }
-
-            var result = await _fileHandler.HandleFile(updatedSpecialization.Image, new FileValidation
-            {
-                AllowedExtenstions = new[] { ".jpg", ".jpeg", ".png" },
-                MaxSize = 5 * 1024 * 1024
-            });
-
-            if (!result.Success)
-            {
-                return BadRequest<UpdateSpecializationResponse>(errors: [result.Error]);
-            }
-
-            specialization.Image = result.RelativeFilePath;
-            await _fileHandler.SaveFile(updatedSpecialization.Image, result.FullFilePath);
-        }
-        #endregion
+        if (!isUpdated)
+            return BadRequest<GetSpecializationByIdResponse>("No changes were made to the specialization.");
 
         if (await _unitOfWork.SaveChangesAsync())
         {
-            var response = new UpdateSpecializationResponse
-            {
-                Id = specialization.Id,
-                Name = specialization.Name,
-                Description = specialization.Description,
-                Image = DoctorMappingExtensions.GetImgUrl(specialization.Image, _httpContextAccessor)
-            };
+         
+            if (request.Image is not null)
+                await _fileHandler.UpdateImg(request.Image, specialization.Image!, specialization.Image!);
 
-            return Success(response, "Specialization updated successfully");
+            return Success(specialization.ToGetByIdDto(_fileHandler), "Specialization updated successfully");
         }
+        #endregion
 
-        return BadRequest<UpdateSpecializationResponse>("No changes made");
+        return BadRequest<GetSpecializationByIdResponse>("Failed to update the specialization.");
     }
 
 

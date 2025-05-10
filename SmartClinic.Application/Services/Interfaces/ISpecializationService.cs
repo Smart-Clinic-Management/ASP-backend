@@ -2,7 +2,7 @@
 
 public interface ISpecializationService
 {
-    Task<Response<UpdateSpecializationResponse>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest request);
+  
     Task<Response<string>> DeleteSpecializationAsync(int specializationId);
 
     Task<Response<GetSpecializationByIdResponse?>> GetSpecializationByIdAsync(int SpecializationId);
@@ -10,5 +10,7 @@ public interface ISpecializationService
     Task<Response<Pagination<GetAllSpecializationsResponse>>> GetAllSpecializationsAsync(GetAllSpecializationsParams allSpecializationsParams);
 
     Task<Response<string>> CreateSpecialization(CreateSpecializationRequest newSpecializationUser);
+
+    Task<Response<GetSpecializationByIdResponse?>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest request);
 
 }
