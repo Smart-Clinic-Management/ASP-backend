@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
-
-namespace SmartClinic.Application.Services.Implementation;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
 public class SpecializationService(
 IFileHandlerService fileHandler,
@@ -110,7 +108,7 @@ UserManager<AppUser> userManager)
         #endregion
 
         #region Get Specialization
-        var specs = new SpecializationByIdSpecification(specializationId, _httpContextAccessor);
+        var specs = new UpdateSpecializationSpecification(specializationId);
         var specialization = await _unitOfWork.Repo<Specialization>().GetEntityWithSpecAsync(specs);
 
         if (specialization is null)
@@ -141,7 +139,7 @@ UserManager<AppUser> userManager)
 
             if (!result.Success)
             {
-                return BadRequest<UpdateSpecializationResponse>(errors: new List<string> { result.Error });
+                return BadRequest<UpdateSpecializationResponse>(errors: [result.Error]);
             }
 
             specialization.Image = result.RelativeFilePath;
@@ -153,10 +151,10 @@ UserManager<AppUser> userManager)
         {
             var response = new UpdateSpecializationResponse
             {
-                Id = specialization.Id,  
+                Id = specialization.Id,
                 Name = specialization.Name,
                 Description = specialization.Description,
-                Image = specialization.Image
+                Image = DoctorMappingExtensions.GetImgUrl(specialization.Image, _httpContextAccessor)
             };
 
             return Success(response, "Specialization updated successfully");
