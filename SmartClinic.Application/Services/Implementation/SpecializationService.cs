@@ -38,11 +38,9 @@ UserManager<AppUser> userManager)
         var specs = new SpecializationByIdSpecification(SpecializationId, _httpContextAccessor);
         var Specialization = await _unitOfWork.Repo<Specialization>().GetEntityWithSpecAsync(specs);
         if (Specialization is null)
-        {
             return NotFound<GetSpecializationByIdResponse?>($"No Specialization with id : {SpecializationId}");
 
-        }
-        return Success(Specialization);
+        return Success(Specialization)!;
     }
 
 

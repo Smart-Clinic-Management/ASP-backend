@@ -7,7 +7,7 @@ public class Response<T>
     {
 
     }
-    public Response(T data, string? message = null)
+    public Response(T? data, string? message = null)
     {
         Message = message;
         Data = data;

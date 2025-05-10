@@ -10,7 +10,7 @@ public class ResponseHandler
             Message = "Deleted Successfully"
         };
     }
-    public Response<T> Success<T>(T entity, string? message = null, object? Meta = null)
+    public Response<T> Success<T>(T? entity, string? message = null)
     {
         return new Response<T>()
         {
@@ -46,7 +46,7 @@ public class ResponseHandler
         };
     }
 
-    public Response<T> Created<T>(T entity, object? Meta = null)
+    public Response<T> Created<T>(T? entity)
     {
         return new Response<T>()
         {
