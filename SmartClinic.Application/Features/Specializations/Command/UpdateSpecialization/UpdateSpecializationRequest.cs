@@ -1,11 +1,15 @@
-﻿namespace SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class UpdateSpecializationRequest
+namespace SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public bool? IsActive { get; set; }
-    public IFormFile? Image { get; set; }
-
+    public record UpdateSpecializationRequest(
+     string? Name,
+     string? Description,
+     IFormFile? Image
+ );
 
 }

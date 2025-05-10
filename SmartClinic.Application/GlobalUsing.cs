@@ -38,6 +38,7 @@ global using SmartClinic.Application.Features.Patients.Query.GetPatients;
 global using SmartClinic.Application.Features.Profile.Command;
 global using SmartClinic.Application.Features.Profile.Query;
 global using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
+global using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
 global using SmartClinic.Application.Features.Specializations.Mapper;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
@@ -64,10 +65,10 @@ global using SmartClinic.Application.Services.Implementation.Specifications.Spec
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.DeleteSpecializationSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationByIdSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationsSpecifications;
+global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.UpdateSpecializationSpecifications;
 global using SmartClinic.Application.Services.Interfaces;
 global using SmartClinic.Application.Services.Interfaces.Email;
 global using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 global using SmartClinic.Domain.DTOs.Auth;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Domain.Entities.AppointmentAggregation;
-

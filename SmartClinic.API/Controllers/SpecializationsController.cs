@@ -42,16 +42,16 @@ public class SpecializationsController(ISpecializationService _specializationSer
     }
 
 
-    //[Authorize(Roles = "admin")]
-    //[HttpPut("Update/{id}")]
-    //[ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status400BadRequest)]
-    //[ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> UpdateSpecialization(int id, [FromForm] UpdateSpecializationRequest request)
-    //{
-    //    var response = await _specializationService.UpdateSpecializationAsync(id, request);
-    //    return NewResult(response);
-    //}
+    [Authorize(Roles = "admin")]
+    [HttpPut("Update/{id}")]
+    [ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<Response<UpdateSpecializationResponse>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateSpecialization(int id, [FromForm] UpdateSpecializationRequest request)
+    {
+        var response = await _specializationService.UpdateSpecializationAsync(id, request);
+        return NewResult(response);
+    }
 
 
     [Authorize(Roles = "admin")]
