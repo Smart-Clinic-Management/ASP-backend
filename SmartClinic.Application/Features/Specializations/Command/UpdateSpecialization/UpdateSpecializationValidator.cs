@@ -1,43 +1,47 @@
-﻿using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public class UpdateSpecializationValidator : AbstractValidator<UpdateSpecializationRequest>
+﻿public class UpdateSpecializationValidator : AbstractValidator<UpdateSpecializationRequest>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly int _specializationId; 
 
-    public UpdateSpecializationValidator(IUnitOfWork unitOfWork)
+    public UpdateSpecializationValidator(IUnitOfWork unitOfWork, int specializationId)
     {
         _unitOfWork = unitOfWork;
+        _specializationId = specializationId; 
 
         RuleFor(x => x.Name)
-            .NotEmpty()
             .Length(3, 50)
-            .MustAsync(IsUniqueSpecializationName).WithMessage("Specialization name already exists");
+            .When(x => !string.IsNullOrEmpty(x.Name))
+            .MustAsync((name, token) => IsUniqueSpecializationName(name, _specializationId, token))
+            .WithMessage("Specialization name already exists");
 
         RuleFor(x => x.Description)
-            .NotEmpty()
-            .Length(5, 200);
+            .Length(5, 200)
+            .When(x => !string.IsNullOrEmpty(x.Description));
 
         RuleFor(x => x.Image)
-            .NotEmpty()
             .Must(ValidImageExtension)
+            .When(x => x.Image != null)
             .WithMessage("Only accept jpg|jpeg|png images")
-            .Must(ValidateImageSize).WithMessage("Image max size 2MB");
+            .Must(ValidateImageSize)
+            .When(x => x.Image != null)
+            .WithMessage("Image max size 2MB");
     }
 
-    private async Task<bool> IsUniqueSpecializationName(string name, CancellationToken token)
+    private async Task<bool> IsUniqueSpecializationName(string name, int specializationId, CancellationToken token)
     {
         var spec = new SpecializationByNameSpecification(name);
-        return !await _unitOfWork.Repo<Specialization>().ExistsWithSpecAsync(spec);
-    }
+        var existingSpecialization = await _unitOfWork.Repo<Specialization>().GetEntityWithSpecAsync(spec);
 
+        if (existingSpecialization != null && existingSpecialization.Id != specializationId)
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     private bool ValidImageExtension(IFormFile? file) => UserFormValidator.IsValidImageExtension(file!);
 
     private bool ValidateImageSize(IFormFile? file) => UserFormValidator.IsValidImageSize(file!);
-
 }
+

@@ -33,7 +33,7 @@ public class SpecializationsController(ISpecializationService _specializationSer
 
 
 
-
+ 
     [HttpGet]
     [ProducesResponseType<Response<Pagination<GetAllSpecializationsResponse>>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllDoctors([FromQuery] GetAllSpecializationsParams allSpecializationsParams)
