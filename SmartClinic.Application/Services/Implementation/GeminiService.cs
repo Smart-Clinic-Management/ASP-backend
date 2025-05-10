@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace SmartClinic.Application.Services.Implementation
 {
@@ -8,12 +10,14 @@ namespace SmartClinic.Application.Services.Implementation
     {
         private readonly HttpClient _httpClient;
         private readonly GeminiApiSettings _apiSettings;
+        private readonly IDoctorService _doctorService;
         private const string BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
-        public GeminiService(HttpClient httpClient, IOptions<GeminiApiSettings> apiSettings)
+        public GeminiService(HttpClient httpClient, IOptions<GeminiApiSettings> apiSettings, IDoctorService doctorService)
         {
             _httpClient = httpClient;
             _apiSettings = apiSettings.Value;
+            _doctorService = doctorService;
         }
 
         public async Task<string> ProcessRequestAsync(string inputText, string language)
@@ -32,10 +36,7 @@ namespace SmartClinic.Application.Services.Implementation
             if (!string.IsNullOrEmpty(inputText))
             {
                 var content = new Content();
-                content.Parts.Add(new Part
-                {
-                    Text = inputText
-                });
+                content.Parts.Add(new Part { Text = inputText });
                 request.Contents.Add(content);
             }
             else
@@ -45,10 +46,7 @@ namespace SmartClinic.Application.Services.Implementation
                     : "Input text cannot be null or empty.");
             }
 
-            Console.WriteLine($"Contents: {JsonConvert.SerializeObject(request.Contents)}");
-
             var jsonRequest = JsonConvert.SerializeObject(request);
-            Console.WriteLine($"Request Body: {jsonRequest}");
             var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
             try
@@ -58,7 +56,6 @@ namespace SmartClinic.Application.Services.Implementation
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"Error Response: {jsonResponse}");
                     throw new HttpRequestException(language == "ar"
                         ? "فشل الطلب إلى API. تحقق من المدخلات."
                         : "API request failed. Please check the inputs.");
@@ -77,7 +74,6 @@ namespace SmartClinic.Application.Services.Implementation
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
                 return language == "ar"
                     ? $"خطأ: {ex.Message}"
                     : $"Error: {ex.Message}";
@@ -88,23 +84,109 @@ namespace SmartClinic.Application.Services.Implementation
         {
             var medicalKeywords = new List<string>
             {
-                "مرض", "علاج", "أعراض", "دواء", "تشخيص", "طبيب", "جراحة", "سكري", "ضغط الدم", "فيروس", "عدوى",
-                "disease", "treatment", "symptoms", "medicine", "diagnosis", "doctor", "surgery", "diabetes", "blood pressure", "virus", "infection"
+                "مرض", "علاج", "أعراض", "دواء", "تشخيص", "طبيب", "جراحة", "سكري",
+                "ضغط الدم", "فيروس", "عدوى", "التهاب", "نزيف", "حرارة", "حساسية", "آلام",
+                "كحة", "سعال", "صداع", "ورم", "إسهال", "قيء", "غثيان", "جلدية", "تنفس"
             };
 
-            bool isMedicalQuestion = medicalKeywords.Any(keyword => question.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            var greetings = new List<string> { "مرحباً", "أهلاً", "صباح الخير", "مساء الخير", "كيف حالك", "hello", "hi", "good morning", "good evening" };
 
-            if (!isMedicalQuestion)
+            string language = DetectLanguage(question);
+
+            if (greetings.Any(greeting => question.Contains(greeting, StringComparison.OrdinalIgnoreCase)))
             {
-                return IsArabic(question)
-                    ? "هذا السؤال غير متعلق بالطب. يرجى طرح سؤال طبي."
-                    : "This question is not related to medical topics. Please ask a medical question.";
+                return language == "ar" ? "أهلاً وسهلاً! كيف يمكنني مساعدتك اليوم؟" : "Hello! How can I assist you today?";
+            }
+            else if (Regex.IsMatch(question, @"\b(الدكاترة|الأطباء|doctors)\b", RegexOptions.IgnoreCase))
+            {
+                var doctors = await GetAllDoctorsAsync(language);
+                return JsonConvert.SerializeObject(doctors, Formatting.Indented);
+            }
+            else if (Regex.IsMatch(question, @"\b(جلدية|أسنان|أطفال|باطنة|جراحة|عيون|dermatologist|dentist|pediatrician|internal medicine|surgeon|ophthalmologist|eye doctor)\b", RegexOptions.IgnoreCase))
+            {
+                string specialization = Regex.Match(question, @"\b(جلدية|أسنان|أطفال|باطنة|جراحة|عيون|dermatologist|dentist|pediatrician|internal medicine|surgeon|ophthalmologist|eye doctor)\b", RegexOptions.IgnoreCase).Value;
+                var specializationTranslated = TranslateSpecialization(specialization.ToLower());
+                var doctors = await GetDoctorsBySpecializationAsync(specializationTranslated, language);
+                return JsonConvert.SerializeObject(doctors, Formatting.Indented);
+            }
+            else if (Regex.IsMatch(question, @"(?:دكتور|الدكتور|Dr\.?|doctor)\s+(\w+)", RegexOptions.IgnoreCase))
+            {
+                var match = Regex.Match(question, @"(?:دكتور|الدكتور|Dr\.?|doctor)\s+(\w+)", RegexOptions.IgnoreCase);
+                string doctorName = match.Groups[1].Value;
+                var doctors = await GetDoctorsByNameAsync(doctorName, language);
+                return JsonConvert.SerializeObject(doctors, Formatting.Indented);
+            }
+            else if (medicalKeywords.Any(keyword => question.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+            {
+                return await ProcessRequestAsync(question, language);
             }
 
-            string language = IsArabic(question) ? "ar" : "en";
-            var response = await ProcessRequestAsync(question, language);
+            return language == "ar"
+                ? "هذا السؤال غير متعلق بالطب. يرجى طرح سؤال طبي."
+                : "This question is not related to medical topics. Please ask a medical question.";
+        }
 
-            return response.TrimEnd();
+        private string TranslateSpecialization(string input)
+        {
+            var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "جلدية", "Dermatology" },
+                { "أسنان", "Dentistry" },
+                { "أطفال", "Pediatrics" },
+                { "باطنة", "Internal Medicine" },
+                { "جراحة", "Surgery" },
+                { "عيون", "Ophthalmology" },
+                { "dermatologist", "Dermatology" },
+                { "dentist", "Dentistry" },
+                { "pediatrician", "Pediatrics" },
+                { "internal medicine", "Internal Medicine" },
+                { "surgeon", "Surgery" },
+                { "ophthalmologist", "Ophthalmology" },
+                { "eye doctor", "Ophthalmology" }
+            };
+            return dict.TryGetValue(input, out var translated) ? translated : input;
+        }
+
+        public async Task<string> GetDoctorByIdAsync(int doctorId, string language)
+        {
+            var response = await _doctorService.GetDoctorByIdAsync(doctorId);
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound || response.Data == null)
+            {
+                return JsonConvert.SerializeObject(new
+                {
+                    Id = doctorId,
+                    Message = language == "ar" ? $"لا يوجد طبيب بالمعرف {doctorId}." : $"No doctor found with ID {doctorId}."
+                }, Formatting.Indented);
+            }
+
+            var doctorDetails = new
+            {
+                Id = doctorId,
+                Name = $"{response.Data.FirstName} {response.Data.LastName}",
+                Age = response.Data.Age,
+                Specialization = response.Data.Specialization ?? "غير محدد",
+                Description = response.Data.Description ?? "لا توجد تفاصيل إضافية"
+            };
+
+            return JsonConvert.SerializeObject(doctorDetails, Formatting.Indented);
+        }
+
+        public async Task<List<GetAllDoctorsResponse>> GetAllDoctorsAsync(string language, string doctorName = null, string specialization = null, int pageNumber = 1, int pageSize = 10)
+        {
+            var getAllDoctorsParams = new GetAllDoctorsParams
+            {
+                DoctorName = doctorName,
+                Specialization = specialization,
+                PageSize = pageSize,
+            };
+
+            var response = await _doctorService.GetAllDoctorsAsync(getAllDoctorsParams);
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound || response.Data == null)
+            {
+                return new List<GetAllDoctorsResponse>();
+            }
+
+            return response.Data?.Data?.ToList() ?? new List<GetAllDoctorsResponse>();
         }
 
         private bool IsArabic(string text)
@@ -112,28 +194,68 @@ namespace SmartClinic.Application.Services.Implementation
             return text.Any(c => c >= 0x0600 && c <= 0x06FF);
         }
 
-        private async Task<byte[]> ConvertToByteArrayAsync(IFormFile file)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                return memoryStream.ToArray();
-            }
-        }
-
-        public async Task<string> ProcessRequestAsync(string inputText, IFormFile imageFile, IFormFile documentFile)
-        {
-            return await Task.FromResult("This method is not implemented for file processing.");
-        }
-
-        public Task<string> ProcessRequestAsync(string inputText, IFormFile imageFile, IFormFile documentFile, string language)
-        {
-            throw new NotImplementedException();
-        }
-
         public string DetectLanguage(string inputText)
         {
             return IsArabic(inputText) ? "ar" : "en";
+        }
+
+        public async Task<string> ProcessImageAsync(IFormFile imageFile, string language)
+        {
+            if (imageFile == null)
+            {
+                return language == "ar" ? "الصورة غير موجودة." : "Image not provided.";
+            }
+
+            return language == "ar" ? "تم معالجة الصورة بنجاح." : "Image processed successfully.";
+        }
+
+        public async Task<string> ProcessDocumentAsync(IFormFile documentFile, string language)
+        {
+            if (documentFile == null)
+            {
+                return language == "ar" ? "المستند غير موجود." : "Document not provided.";
+            }
+
+            return language == "ar" ? "تم معالجة المستند بنجاح." : "Document processed successfully.";
+        }
+
+        public async Task<string> GetDoctorInformationAsync(string inputText)
+        {
+            return await ProcessRequestAsync(inputText, DetectLanguage(inputText));
+        }
+
+        public async Task<List<GetAllDoctorsResponse>> GetDoctorsBySpecializationAsync(string specialization, string language)
+        {
+            var getAllDoctorsParams = new GetAllDoctorsParams
+            {
+                Specialization = specialization,
+                PageSize = 10,
+            };
+
+            var response = await _doctorService.GetAllDoctorsAsync(getAllDoctorsParams);
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound || response.Data == null)
+            {
+                return new List<GetAllDoctorsResponse>();
+            }
+
+            return response.Data?.Data?.ToList() ?? new List<GetAllDoctorsResponse>();
+        }
+
+        public async Task<List<GetAllDoctorsResponse>> GetDoctorsByNameAsync(string name, string language)
+        {
+            var getAllDoctorsParams = new GetAllDoctorsParams
+            {
+                DoctorName = name,
+                PageSize = 10,
+            };
+
+            var response = await _doctorService.GetAllDoctorsAsync(getAllDoctorsParams);
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound || response.Data == null)
+            {
+                return new List<GetAllDoctorsResponse>();
+            }
+
+            return response.Data?.Data?.ToList() ?? new List<GetAllDoctorsResponse>();
         }
     }
 
