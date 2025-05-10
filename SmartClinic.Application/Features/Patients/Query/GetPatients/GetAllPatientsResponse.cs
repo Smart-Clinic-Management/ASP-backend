@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartClinic.Application.Features.Patients.Query.GetPatients
 {
-    public class GetAllPatientsResponse : IDto
+    public class GetAllPatientsResponse 
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

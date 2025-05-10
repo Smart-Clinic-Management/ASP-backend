@@ -33,8 +33,8 @@ global using SmartClinic.Application.Features.DoctorsSchedules.Command.DeleteDoc
 global using SmartClinic.Application.Features.DoctorsSchedules.DTOs;
 global using SmartClinic.Application.Features.DoctorsSchedules.Mapper;
 global using SmartClinic.Application.Features.DoctorsSchedules.Query.GetDoctorSchedule;
-global using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatient;
-global using SmartClinic.Application.Features.Patients.Query.DTOs.GetPatients;
+global using SmartClinic.Application.Features.Patients.Query.GetPatient;
+global using SmartClinic.Application.Features.Patients.Query.GetPatients;
 global using SmartClinic.Application.Features.Profile.Command;
 global using SmartClinic.Application.Features.Profile.Query;
 global using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
@@ -70,3 +70,5 @@ global using SmartClinic.Domain.DTOs.Auth;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Domain.Entities.AppointmentAggregation;
 global using SmartClinic.Application.Features.Patients.Query.GetPatients;
+
+
