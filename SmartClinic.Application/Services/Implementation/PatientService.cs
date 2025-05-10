@@ -1,4 +1,4 @@
-﻿using SmartClinic.Application.Services.Implementation.Specifications.PatientSpecifications.GetPatientByIdSpecifications;
+using SmartClinic.Application.Services.Implementation.Specifications.PatientSpecifications.GetPatientByIdSpecifications;
 using SmartClinic.Application.Services.Implementation.Specifications.PatientSpecifications.GetPatients;
 
 public class PatientService : ResponseHandler, IPatientService

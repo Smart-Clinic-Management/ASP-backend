@@ -8,6 +8,7 @@ public class CreateAppointmentSpecification : BaseSpecification<Doctor>
         var appointmentDay = appointmentDate.DayOfWeek;
 
         AsNoTracking();
+        AddInclude(x => x.User);
         AddInclude(x => x.DoctorSchedules
                 .Where(s => s.DayOfWeek == appointmentDay &&
                            s.StartTime <= appointmentRequest.StartTime &&

@@ -1,12 +1,12 @@
 ﻿namespace SmartClinic.Application.Services.Implementation;
 
-public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointment> pagedCreator)
+public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointment> pagedCreator, IEmailSender emailSender)
         : ResponseHandler,
     IAppointmentService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, int patientId)
+    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, ReceiverData receiverData)
     {
         #region Validation
 
@@ -34,12 +34,24 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 
         var scheduleTimeSlot = doctor.DoctorSchedules.FirstOrDefault()!.SlotDuration;
 
-        var appointment = appointmentDto.ToEntity(patientId, scheduleTimeSlot);
+        var appointment = appointmentDto.ToEntity(receiverData.Id, scheduleTimeSlot);
 
         await _unitOfWork.Repo<Appointment>().AddAsync(appointment);
 
         if (await _unitOfWork.SaveChangesAsync())
+        {
+            var emailMessage = new EmailMessage
+            {
+                To = receiverData.Email,
+                Subject = "Smart Clinic Appointment",
+                Body = $"Hello {receiverData.Name} you have successfully add appointment with doctor {doctor.User.FirstName}" +
+                $"at {appointment.AppointmentDate} at time from {appointment.Duration.StartTime} to {appointment.Duration.EndTime}"
+            };
+
+            await emailSender.SendEmailAsync(emailMessage);
+
             return Created("Created");
+        }
 
         return BadRequest<string>("Appointment not created");
     }

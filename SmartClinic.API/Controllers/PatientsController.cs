@@ -1,4 +1,4 @@
-﻿using SmartClinic.Application.Features.Patients.Query.GetPatient;
+using SmartClinic.Application.Features.Patients.Query.GetPatient;
 
 namespace SmartClinic.API.Controllers;
 

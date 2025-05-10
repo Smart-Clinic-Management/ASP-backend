@@ -59,6 +59,7 @@ global using SmartClinic.Application.Services.Implementation.Specifications.Doct
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorWithSchedulesSlots;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.UpdateDoctorSpecifications;
+global using SmartClinic.Application.Services.Implementation.Specifications.PatientSpecifications.GetPatients;
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.CreateSpecializationsSpecification;
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.DeleteSpecializationSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.SpecializationSpecifications.GetSpecializationByIdSpecifications;
@@ -69,6 +70,4 @@ global using SmartClinic.Application.Services.Interfaces.InfrastructureInterface
 global using SmartClinic.Domain.DTOs.Auth;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Domain.Entities.AppointmentAggregation;
-global using SmartClinic.Application.Features.Patients.Query.GetPatients;
-
 
