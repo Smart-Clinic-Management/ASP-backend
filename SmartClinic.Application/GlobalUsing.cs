@@ -70,3 +70,4 @@ global using SmartClinic.Application.Services.Interfaces.InfrastructureInterface
 global using SmartClinic.Domain.DTOs.Auth;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Domain.Entities.AppointmentAggregation;
+
