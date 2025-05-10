@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.Application.Services.Interfaces;
+﻿using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
+
+namespace SmartClinic.Application.Services.Interfaces;
 
 public interface ISpecializationService
 {
@@ -10,4 +12,6 @@ public interface ISpecializationService
     Task<Response<Pagination<GetAllSpecializationsResponse>>> GetAllSpecializationsAsync(GetAllSpecializationsParams allSpecializationsParams);
 
     Task<Response<string>> CreateSpecialization(CreateSpecializationRequest newSpecializationUser);
+
+    Task<Response<string>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest updatedSpecialization);
 }

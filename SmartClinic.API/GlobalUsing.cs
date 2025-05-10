@@ -41,4 +41,5 @@ global using SmartClinic.Domain.Entities;
 global using SmartClinic.Infrastructure;
 global using SmartClinic.Infrastructure.Data;
 global using SmartClinic.Application.Features.Patients.Query.GetPatients;
+global using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
 

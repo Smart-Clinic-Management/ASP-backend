@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.Application.Services.Implementation;
+﻿using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
+
+namespace SmartClinic.Application.Services.Implementation;
 
 public class SpecializationService(
 IFileHandlerService fileHandler,
@@ -95,4 +97,73 @@ UserManager<AppUser> userManager)
 
         return Success("", "Deleted Successfully");
     }
+
+
+    public async Task<Response<UpdateSpecializationResponse>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest updatedSpecialization)
+    {
+        #region Validation
+        var validator = new UpdateSpecializationValidator(_unitOfWork);
+        var validationResult = await validator.ValidateAsync(updatedSpecialization);
+
+        if (!validationResult.IsValid)
+            return BadRequest<UpdateSpecializationResponse>(errors: validationResult.Errors.Select(x => x.ErrorMessage).ToList());
+        #endregion
+
+        #region Get Specialization
+        var specs = new SpecializationByIdSpecification(specializationId, _httpContextAccessor);
+        var specialization = await _unitOfWork.Repo<Specialization>().GetEntityWithSpecAsync(specs);
+
+        if (specialization is null)
+            return NotFound<UpdateSpecializationResponse>($"No specialization with id {specializationId}");
+        #endregion
+
+        #region Update Specialization
+        if (!string.IsNullOrWhiteSpace(updatedSpecialization.Name))
+            specialization.Name = updatedSpecialization.Name;
+
+        if (!string.IsNullOrWhiteSpace(updatedSpecialization.Description))
+            specialization.Description = updatedSpecialization.Description;
+        #endregion
+
+        #region Update Image
+        if (updatedSpecialization.Image != null)
+        {
+            if (!string.IsNullOrEmpty(specialization.Image))
+            {
+                await _fileHandler.RemoveImg(specialization.Image);
+            }
+
+            var result = await _fileHandler.HandleFile(updatedSpecialization.Image, new FileValidation
+            {
+                AllowedExtenstions = new[] { ".jpg", ".jpeg", ".png" },
+                MaxSize = 5 * 1024 * 1024
+            });
+
+            if (!result.Success)
+            {
+                return BadRequest<UpdateSpecializationResponse>(errors: new List<string> { result.Error });
+            }
+
+            specialization.Image = result.RelativeFilePath;
+            await _fileHandler.SaveFile(updatedSpecialization.Image, result.FullFilePath);
+        }
+        #endregion
+
+        if (await _unitOfWork.SaveChangesAsync())
+        {
+            var response = new UpdateSpecializationResponse
+            {
+                Id = specialization.Id,  
+                Name = specialization.Name,
+                Description = specialization.Description,
+                Image = specialization.Image
+            };
+
+            return Success(response, "Specialization updated successfully");
+        }
+
+        return BadRequest<UpdateSpecializationResponse>("No changes made");
+    }
+
+
 }
