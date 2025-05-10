@@ -38,7 +38,7 @@ public class DoctorScheduleController(IDoctorScheduleService doctorScheduleServi
     }
 
 
-    [Authorize(Roles = "doctor")]
+    [Authorize(Roles = "admin")]
     [HttpPost]
     [ProducesResponseType<Response<GetDoctorSchedule>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<GetDoctorSchedule>>(StatusCodes.Status400BadRequest)]
