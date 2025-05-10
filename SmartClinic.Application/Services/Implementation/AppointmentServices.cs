@@ -38,22 +38,16 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 
         await _unitOfWork.Repo<Appointment>().AddAsync(appointment);
 
-        if (await _unitOfWork.SaveChangesAsync())
-        {
-            var emailMessage = new EmailMessage
-            {
-                To = receiverData.Email,
-                Subject = "Smart Clinic Appointment",
-                Body = $"Hello {receiverData.Name} you have successfully add appointment with doctor {doctor.User.FirstName}" +
-                $"at {appointment.AppointmentDate} at time from {appointment.Duration.StartTime} to {appointment.Duration.EndTime}"
-            };
+        await _unitOfWork.SaveChangesAsync();
 
-            await emailSender.SendEmailAsync(emailMessage);
+        #region Send Mail
+        var emailMessage = receiverData.GeneratePatientAppointmentMessage(appointment, doctor);
 
-            return Created("Created");
-        }
+        var mailSent = await emailSender.SendEmailAsync(emailMessage);
 
-        return BadRequest<string>("Appointment not created");
+        return Created("Created and mail Sent to patient");
+
+        #endregion
     }
 
     public async Task<Response<Pagination<AllAppointmentsResponseDto>>> ListAllAppointmentsAsync(AllAppointmentsParams appointmentsParams)
@@ -143,7 +137,7 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         return Success(result);
     }
 
-    public async Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateAppointmentRequest updateAppointment)
+    public async Task<Response<string>> UpdateDoctorAppointmentAsync(ReceiverData doctorData, UpdateAppointmentRequest updateAppointment)
     {
         #region Validation
 
@@ -156,7 +150,7 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 
         #endregion
 
-        var specs = new UpdateDoctorAppointmentSpecification(doctorId, updateAppointment);
+        var specs = new UpdateDoctorAppointmentSpecification(doctorData.Id, updateAppointment);
 
         var appointment = await _unitOfWork.Repo<Appointment>().GetEntityWithSpecAsync(specs);
 
@@ -176,6 +170,11 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
                 break;
             case AppointmentStatus.Canceled:
                 appointment!.Status = updateAppointment.Status;
+                #region Send Mail
+
+                var patientMessage = appointment.GeneratePatientCancelInformMessage(doctorData.Name);
+                await emailSender.SendEmailAsync(patientMessage);
+                #endregion
                 break;
             case AppointmentStatus.Completed:
                 if (CanBeCompletedAppointment(appointment!))
@@ -192,10 +191,10 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         return Success("", "Updated Successfully");
     }
 
-    public async Task<Response<string>> CancelPatientAppointmentAsync(int PatientId, int appointmentId)
+    public async Task<Response<string>> CancelPatientAppointmentAsync(ReceiverData receiverData, int appointmentId)
     {
 
-        var specs = new CancelAppointmentSpecification(PatientId, appointmentId);
+        var specs = new CancelAppointmentSpecification(receiverData.Id, appointmentId);
 
         var appointment = await _unitOfWork.Repo<Appointment>().GetEntityWithSpecAsync(specs);
 
@@ -211,7 +210,17 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 
         await _unitOfWork.SaveChangesAsync();
 
-        return Success("", "Updated Successfully");
+        #region Send Mails
+
+        var patientMessage = receiverData.GeneratePatientCancelAppointmentMessage(appointment);
+        await emailSender.SendEmailAsync(patientMessage);
+
+        var doctorMessage = receiverData.GenerateDoctorCancelAppointmentMessage(appointment);
+        await emailSender.SendEmailAsync(doctorMessage);
+
+        #endregion
+
+        return Success("", "Canceled Successfully and mails sent to the patient and the doctor");
     }
 
     private static void UpdateAppointmentsStatus(Pagination<Appointment> appointments)

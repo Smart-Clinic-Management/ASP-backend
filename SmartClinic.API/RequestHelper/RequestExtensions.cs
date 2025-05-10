@@ -12,5 +12,5 @@ public static class RequestExtensions
     public static ReceiverData GetUserData(this ClaimsPrincipal User)
        => new(GetUserId(User)
            , User.FindFirstValue(JwtRegisteredClaimNames.Name)!
-           , User.FindFirstValue(JwtRegisteredClaimNames.Email)!);
+           , User.FindFirstValue(ClaimTypes.Email)!);
 }

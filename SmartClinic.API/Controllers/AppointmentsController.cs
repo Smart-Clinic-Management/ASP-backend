@@ -58,7 +58,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     public async Task<IActionResult> UpdateAppointment([FromBody] UpdateAppointmentRequest updateDoctorAppointment)
     {
         var result = await _appointmentService
-            .UpdateDoctorAppointmentAsync(User.GetUserId(), updateDoctorAppointment);
+            .UpdateDoctorAppointmentAsync(User.GetUserData(), updateDoctorAppointment);
 
         return NewResult(result);
     }
@@ -71,7 +71,7 @@ public class AppointmentsController(IAppointmentService appointmentService) : Ap
     public async Task<IActionResult> DeleteAppointment(int appointmentId)
     {
         var result = await _appointmentService
-            .CancelPatientAppointmentAsync(User.GetUserId(), appointmentId);
+            .CancelPatientAppointmentAsync(User.GetUserData(), appointmentId);
 
         return NewResult(result);
     }

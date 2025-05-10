@@ -10,7 +10,7 @@ public interface IAppointmentService
 
     Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, ReceiverData receiverData);
 
-    Task<Response<string>> UpdateDoctorAppointmentAsync(int doctorId, UpdateAppointmentRequest updateDoctorAppointment);
+    Task<Response<string>> UpdateDoctorAppointmentAsync(ReceiverData doctorData, UpdateAppointmentRequest updateDoctorAppointment);
 
-    Task<Response<string>> CancelPatientAppointmentAsync(int PatientId, int appointmentId);
+    Task<Response<string>> CancelPatientAppointmentAsync(ReceiverData receiverData, int appointmentId);
 }

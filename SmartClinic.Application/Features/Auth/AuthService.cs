@@ -34,8 +34,8 @@ public class AuthService(
             new(JwtRegisteredClaimNames.Email, user.Email!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()) ,
-            new(JwtRegisteredClaimNames.Name, string.Join(' ',user.FirstName,user.LastName)) ,
-            new("id" , q?.Id.ToString() ?? "") ,
+            new(JwtRegisteredClaimNames.Name, user.FirstName) ,
+            new("id" , q?.Id.ToString() ?? "")
         };
 
         claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
