@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.API.Controllers;
+using SmartClinic.Application.Features.Patients.Query.GetPatient;
+
+namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -22,24 +24,14 @@ public class PatientsController : AppControllerBase
 
 
 
-    //[Authorize(Roles = "admin")]
-    //[HttpGet("GetAll")]
-    //[ProducesResponseType<Response<List<GetAllPatientsResponse>>>(StatusCodes.Status200OK)]
-    //public async Task<IActionResult> GetAllPatients(int pageSize = 20, int pageIndex = 1)
-    //{
-    //    var response = await _patientService.GetAllPatientsAsync(pageSize, pageIndex);
-    //    return NewResult(response);
-    //}
-
-
-    //[Authorize(Roles = "admin,doctor")]
-    //[HttpGet("GetById/{patientId}")]
-    //[ProducesResponseType<Response<GetPatientByIdResponse>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType<Response<GetPatientByIdResponse>>(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetPatientById(int patientId)
-    //{
-    //    var response = await _patientService.GetPatientByIdAsync(patientId);
-    //    return NewResult(response);
-    //}
+    [Authorize(Roles = "admin,doctor")]
+    [HttpGet("{patientId}")]
+    [ProducesResponseType<Response<GetPatientByIdResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Response<GetPatientByIdResponse>>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetPatientById(int patientId)
+    {
+        var response = await _patientService.GetPatientByIdAsync(patientId);
+        return NewResult(response);
+    }
 
 }

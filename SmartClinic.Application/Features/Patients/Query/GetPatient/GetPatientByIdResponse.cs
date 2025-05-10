@@ -1,6 +1,7 @@
-﻿namespace SmartClinic.Application.Features.Patients.Query.GetPatient;
 
-public record GetPatientByIdResponse(
+namespace SmartClinic.Application.Features.Patients.Query.GetPatient
+{
+    public record GetPatientByIdResponse(
  int id,
  string firstName,
  string lastName,
@@ -11,3 +12,5 @@ public record GetPatientByIdResponse(
 string? image,
 string? medicalHistory
 );
+
+}

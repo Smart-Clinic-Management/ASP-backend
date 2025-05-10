@@ -40,3 +40,5 @@ global using SmartClinic.Domain.DTOs.Auth;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Infrastructure;
 global using SmartClinic.Infrastructure.Data;
+global using SmartClinic.Application.Features.Patients.Query.GetPatients;
+
