@@ -12,8 +12,8 @@ using SmartClinic.Infrastructure.Data;
 namespace SmartClinic.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250507202756_init2")]
-    partial class init2
+    [Migration("20250510203905_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -284,7 +284,7 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.Property<DateOnly>("AppointmentDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("DoctorId")
+                    b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
                     b.Property<int>("PatientId")
@@ -470,7 +470,8 @@ namespace SmartClinic.Infrastructure.Migrations
                     b.HasOne("SmartClinic.Domain.Entities.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("SmartClinic.Domain.Entities.Patient", "Patient")
                         .WithMany("Appointments")
