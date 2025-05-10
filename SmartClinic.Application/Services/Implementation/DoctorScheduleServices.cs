@@ -10,18 +10,6 @@ public class DoctorScheduleServices(IUnitOfWork unitOfWork)
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    //public async Task<Response<IEnumerable<GetDoctorSchedule>>> GetSchedulesForDoctorAsync(int doctorId)
-    //{
-    //    var schedules = await _doctorScheduleRepo.GetByDoctorIdAsync(doctorId);
-
-    //    if (schedules == null || !schedules.Any())
-    //        return NotFound<IEnumerable<GetDoctorSchedule>>();
-
-    //    var scheduleDtos = schedules.Select(schedule => schedule.ToGetDoctorScheduleDto()).ToList();
-
-    //    return Success<IEnumerable<GetDoctorSchedule>>(scheduleDtos);
-    //}
-
     public async Task<Response<string>> DeleteScheduleAsync(DeleteDoctorScheduleRequest deleteDoctorSchedule)
     {
         var specs = new DeleteDoctorSchedulesSpecification(deleteDoctorSchedule);

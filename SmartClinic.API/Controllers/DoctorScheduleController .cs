@@ -1,28 +1,10 @@
-﻿using SmartClinic.Application.Features.DoctorsSchedules.Command.CreateDoctorSchedule;
-using SmartClinic.Application.Features.DoctorsSchedules.Query.DTOs.GetDoctorSchedule;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 public class DoctorScheduleController(IDoctorScheduleService doctorScheduleService) : AppControllerBase
 {
     private readonly IDoctorScheduleService _doctorScheduleService = doctorScheduleService;
-
-    //[HttpGet("GetByDoctor/{doctorId}")]
-    //[ProducesResponseType<Response<IEnumerable<GetDoctorSchedule>>>(StatusCodes.Status200OK)]
-    //[ProducesResponseType(StatusCodes.Status404NotFound)]
-    //public async Task<IActionResult> GetScheduleForDoctor(int doctorId)
-    //{
-    //    var response = await _doctorScheduleService.GetSchedulesForDoctorAsync(doctorId);
-
-    //    if (response == null || !response.Data.Any())
-    //    {
-    //        return NotFound(new { message = $"No schedules found for doctor {doctorId}" });
-    //    }
-
-    //    return NewResult(response);
-    //}
 
 
     [Authorize(Roles = "admin")]

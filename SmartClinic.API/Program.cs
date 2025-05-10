@@ -1,3 +1,5 @@
+using SmartClinic.API.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

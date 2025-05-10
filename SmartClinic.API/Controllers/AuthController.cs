@@ -1,13 +1,4 @@
-﻿using System.Security.Claims;
-using Models.DTOs.Auth;
-using SmartClinic.Application.Bases;
-using SmartClinic.Application.Features.Auth;
-using SmartClinic.Application.Features.Auth.Command;
-using SmartClinic.Application.Features.Profile.Command;
-using SmartClinic.Application.Features.Profile.Query;
-using SmartClinic.Domain.DTOs.Auth;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

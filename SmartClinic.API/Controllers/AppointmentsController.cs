@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Command.UpdateAppointmnet;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

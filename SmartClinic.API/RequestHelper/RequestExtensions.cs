@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace SmartClinic.API.RequestHelper;
+﻿namespace SmartClinic.API.RequestHelper;
 
 public static class RequestExtensions
 {
