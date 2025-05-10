@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.Appointments.Command.UpdateAppointmnet;
-
-namespace SmartClinic.Application.Services.Interfaces;
+﻿namespace SmartClinic.Application.Services.Interfaces;
 
 public interface IAppointmentService
 {

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace SmartClinic.Infrastructure.Configuration;
+﻿namespace SmartClinic.Infrastructure.Configuration;
 
 public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole<int>>
 {

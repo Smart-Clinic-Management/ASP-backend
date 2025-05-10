@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models.DTOs.Auth
+namespace SmartClinic.Domain.DTOs.Auth;
+
+public class LoginRequestDTO
 {
-    public class LoginRequestDTO
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; } = null!;
-        [Required]
-        [MinLength(6)]
-        public string Password { get; set; } = null!;
-    }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = null!;
+    [Required]
+    [MinLength(6)]
+    public string Password { get; set; } = null!;
 }

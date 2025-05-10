@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
+﻿namespace SmartClinic.Application.Features.Doctors.Command.UpdateDoctor;
 public class UpdateDoctorRequestValidator : AbstractValidator<UpdateDoctorRequest>
 {
     public UpdateDoctorRequestValidator()

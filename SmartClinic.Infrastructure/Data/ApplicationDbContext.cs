@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using Microsoft.AspNetCore.Identity;
-
-namespace SmartClinic.Infrastructure.Data;
+﻿namespace SmartClinic.Infrastructure.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<AppUser, IdentityRole<int>, int>(options)
@@ -22,35 +19,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         // Apply separate configuration classes
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-    }
-
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-
-        #region Patient
-        foreach (var entry in base.ChangeTracker.Entries<Patient>()
-            .Where(x => x.State.Equals(EntityState.Deleted)))
-        {
-            entry.State = EntityState.Modified;
-            entry.Entity.IsActive = false;
-            entry.Entity.User.IsActive = false;
-            entry.Entity.User.Email = null;
-        }
-        #endregion
-
-        #region Specialization
-        foreach (var entry in base.ChangeTracker.Entries<Specialization>()
-            .Where(x => x.State.Equals(EntityState.Deleted)))
-        {
-            entry.State = EntityState.Modified;
-            entry.Entity.IsActive = false;
-        }
-        #endregion
-
-
-
-        return base.SaveChangesAsync(cancellationToken);
     }
 
 }

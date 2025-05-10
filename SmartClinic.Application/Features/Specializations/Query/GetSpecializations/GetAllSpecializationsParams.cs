@@ -1,11 +1,10 @@
 ﻿
 
-namespace SmartClinic.Application.Features.Specializations.Query.GetSpecializations
+namespace SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
+
+public class GetAllSpecializationsParams : PagingParams
 {
-  public class GetAllSpecializationsParams : PagingParams
-    {
-        public string ? SpecializationName { get; set; }
+    public string? SpecializationName { get; set; }
 
 
-    }
 }

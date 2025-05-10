@@ -1,7 +1,6 @@
-﻿namespace SmartClinic.Application.Features.Profile.Command
+﻿namespace SmartClinic.Application.Features.Profile.Command;
+
+public record class ImgUpdateRequest
 {
-    public record class ImgUpdateRequest
-    {
-        public required IFormFile File { get; set; }
-    }
+    public required IFormFile File { get; set; }
 }

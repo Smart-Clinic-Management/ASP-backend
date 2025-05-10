@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SmartClinic.Application.Features.Auth.Command;
-using SmartClinic.Application.Features.Profile.Command;
-using SmartClinic.Application.Features.Profile.Query;
-
-namespace SmartClinic.Application.Services.Implementation.Profile;
+﻿namespace SmartClinic.Application.Services.Implementation.Profile;
 
 internal class ProfileService : IProfileService
 {
@@ -103,7 +98,7 @@ internal class ProfileService : IProfileService
             AllowedExtenstions = new[] { ".jpg", ".jpeg", ".png" }
         };
 
-        var fileResult = await fileHnadler.HanldeFile(request.File!, fileValidationOptions);
+        var fileResult = await fileHnadler.HandleFile(request.File!, fileValidationOptions);
 
         if (!fileResult.Success)
         {

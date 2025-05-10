@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using SmartClinic.Domain.Entities.AppointmentAggregation;
-
-namespace SmartClinic.Domain.Entities;
+﻿namespace SmartClinic.Domain.Entities;
 public class Doctor : BaseEntity
 {
 

@@ -1,7 +1,6 @@
-﻿namespace Models.DTOs.Auth
+﻿namespace SmartClinic.Domain.DTOs.Auth;
+
+public class LoginResponseDTO
 {
-    public class LoginResponseDTO
-    {
-        public string Token { get; set; }
-    }
+    public string Token { get; set; }
 }

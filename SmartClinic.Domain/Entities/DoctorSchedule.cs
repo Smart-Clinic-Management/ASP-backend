@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SmartClinic.Domain.Entities;
+﻿namespace SmartClinic.Domain.Entities;
 public class DoctorSchedule : BaseEntity
 {
 

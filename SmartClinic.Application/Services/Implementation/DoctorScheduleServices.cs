@@ -1,9 +1,4 @@
-﻿using SmartClinic.Application.Features.DoctorsSchedules.Command.CreateDoctorSchedule;
-using SmartClinic.Application.Features.DoctorsSchedules.Mapper;
-using SmartClinic.Application.Features.DoctorsSchedules.Query.DTOs.GetDoctorSchedule;
-using SmartClinic.Application.Services.Implementation.Specifications.DoctorSchedulesSpecifications.CreateDoctorSchedulesSpecifications;
-
-namespace SmartClinic.Application.Services.Implementation;
+﻿namespace SmartClinic.Application.Services.Implementation;
 
 public class DoctorScheduleServices(IUnitOfWork unitOfWork)
     : ResponseHandler, IDoctorScheduleService

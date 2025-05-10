@@ -1,5 +1,14 @@
-﻿global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿global using System.Collections.Concurrent;
+global using System.Linq.Dynamic.Core;
+global using System.Reflection;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Extensions.DependencyInjection;
+global using SmartClinic.Application.Services.Interfaces;
+global using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Domain.Entities.AppointmentAggregation;
 global using SmartClinic.Infrastructure.Data;
+global using SmartClinic.Infrastructure.Repos;

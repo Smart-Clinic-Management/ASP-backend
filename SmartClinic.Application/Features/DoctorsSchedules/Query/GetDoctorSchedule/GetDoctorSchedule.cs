@@ -1,4 +1,4 @@
-﻿namespace SmartClinic.Application.Features.DoctorsSchedules.Query.DTOs.GetDoctorSchedule;
+﻿namespace SmartClinic.Application.Features.DoctorsSchedules.Query.GetDoctorSchedule;
 
 public record GetDoctorSchedule(
      int Id,

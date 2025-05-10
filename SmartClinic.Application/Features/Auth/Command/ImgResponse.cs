@@ -1,7 +1,6 @@
-﻿namespace SmartClinic.Application.Features.Auth.Command
+﻿namespace SmartClinic.Application.Features.Auth.Command;
+
+public record ImgResponse
 {
-    public record ImgResponse
-    {
-        public string profileImg { get; set; } = null!;
-    }
+    public string profileImg { get; set; } = null!;
 }

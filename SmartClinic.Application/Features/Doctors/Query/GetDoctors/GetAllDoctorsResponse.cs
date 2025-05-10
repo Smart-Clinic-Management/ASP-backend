@@ -1,6 +1,6 @@
 ﻿namespace SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 
-public class GetAllDoctorsResponse : IDto
+public class GetAllDoctorsResponse
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
@@ -18,16 +18,4 @@ public class GetAllDoctorsResponse : IDto
 
     }
 
-
-    public GetAllDoctorsResponse(int id, string firstName, string? lastName, int age, string image, string specialization, string? description, int? waitingTime)
-    {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        Age = age;
-        Image = image;
-        Specialization = specialization;
-        Description = description;
-        WaitingTime = waitingTime;
-    }
 }

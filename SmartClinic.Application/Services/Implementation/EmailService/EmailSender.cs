@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using SmartClinic.Application.Models;
-using SmartClinic.Application.Services.Interfaces.Email;
-
-namespace SmartClinic.Application.Services.Implementation.EmailService;
+﻿namespace SmartClinic.Application.Services.Implementation.EmailService;
 public class EmailSender(IOptions<EmailSettings> emailSettings) : IEmailSender
 {
     public EmailSettings EmailSettings => emailSettings.Value;

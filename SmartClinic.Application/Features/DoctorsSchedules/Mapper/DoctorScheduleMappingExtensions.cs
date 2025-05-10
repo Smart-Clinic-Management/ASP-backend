@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.DoctorSchedule.Command.UpdateDoctorSchedule;
-using SmartClinic.Application.Features.DoctorsSchedules.Command.CreateDoctorSchedule;
-using SmartClinic.Application.Features.DoctorsSchedules.Query.DTOs.GetDoctorSchedule;
+﻿using SmartClinic.Application.Features.DoctorsSchedules.Query.GetDoctorSchedule;
 
 namespace SmartClinic.Application.Features.DoctorsSchedules.Mapper;
 
@@ -18,17 +16,6 @@ public static class DoctorScheduleMappingExtensions
         );
     }
 
-    //public static IEnumerable<GetDoctorSchedule> ToGetDoctorScheduleDtoList(this IEnumerable<Domain.Entities.DoctorSchedule> schedules)
-    //{
-    //    return schedules.Select(schedule => schedule.ToGetDoctorScheduleDto());
-    //}
-
-    //public static IEnumerable<GetDoctorSchedule> ToGetDoctorScheduleByDoctorIdDtoList(this IEnumerable<Domain.Entities.DoctorSchedule> schedules, int doctorId)
-    //{
-    //    return schedules
-    //        .Where(schedule => schedule.DoctorId == doctorId)
-    //        .ToGetDoctorScheduleDtoList();
-    //}
 
     public static Domain.Entities.DoctorSchedule ToEntity(this CreateDoctorScheduleRequest request)
     {
@@ -41,23 +28,5 @@ public static class DoctorScheduleMappingExtensions
             SlotDuration = request.SlotDuration
         };
     }
-
-    public static void UpdateFromRequest(this Domain.Entities.DoctorSchedule entity, UpdateDoctorScheduleRequest request)
-    {
-        if (request.Day.HasValue)
-            entity.DayOfWeek = request.Day.Value;
-
-        if (request.StartTime.HasValue)
-            entity.StartTime = request.StartTime.Value;
-
-        if (request.EndTime.HasValue)
-            entity.EndTime = request.EndTime.Value;
-
-        entity.DoctorId = request.DoctorId;
-        entity.SlotDuration = request.SlotDuration;
-    }
-
-
-
 
 }

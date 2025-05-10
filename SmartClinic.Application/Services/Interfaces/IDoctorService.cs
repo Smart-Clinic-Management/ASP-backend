@@ -1,6 +1,4 @@
-﻿
-
-namespace SmartClinic.Application.Services.Interfaces;
+﻿namespace SmartClinic.Application.Services.Interfaces;
 
 public interface IDoctorService
 {

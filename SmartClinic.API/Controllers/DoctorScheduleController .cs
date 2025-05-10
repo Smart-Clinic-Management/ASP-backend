@@ -1,4 +1,6 @@
-﻿namespace SmartClinic.API.Controllers;
+﻿using SmartClinic.Application.Features.DoctorsSchedules.Query.GetDoctorSchedule;
+
+namespace SmartClinic.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

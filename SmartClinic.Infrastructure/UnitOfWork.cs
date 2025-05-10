@@ -1,8 +1,4 @@
-﻿using System.Collections.Concurrent;
-using Microsoft.Extensions.DependencyInjection;
-using SmartClinic.Application.Services.Interfaces.InfrastructureInterfaces;
-
-namespace SmartClinic.Infrastructure;
+﻿namespace SmartClinic.Infrastructure;
 public class UnitOfWork(IServiceProvider serviceProvider, ApplicationDbContext context) : IUnitOfWork
 
 {

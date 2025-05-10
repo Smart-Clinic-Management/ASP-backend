@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace SmartClinic.Infrastructure.Configuration;
+﻿namespace SmartClinic.Infrastructure.Configuration;
 
 public class DoctorScheduleConfiguration : IEntityTypeConfiguration<DoctorSchedule>
 {

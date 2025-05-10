@@ -1,7 +1,6 @@
-﻿namespace SmartClinic.Application.Features.Profile.Query
+﻿namespace SmartClinic.Application.Features.Profile.Query;
+
+public class ProfileResponse
 {
-    public class ProfileResponse
-    {
-        public dynamic details { get; set; } = null!;
-    }
+    public dynamic details { get; set; } = null!;
 }

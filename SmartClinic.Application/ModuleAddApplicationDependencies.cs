@@ -1,6 +1,3 @@
-using SmartClinic.Application.Models;
-using SmartClinic.Application.Services.Implementation.Profile;
-
 namespace SmartClinic.Application;
 public static class ModuleAddApplicationDependencies
 {
