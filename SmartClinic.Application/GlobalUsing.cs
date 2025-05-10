@@ -24,6 +24,7 @@ global using SmartClinic.Application.Features.Doctors.Mapper;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctor;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithSchedulesSlots;
+global using SmartClinic.Application.Features.DoctorsSchedules.Command.DeleteDoctorSchedule;
 global using SmartClinic.Application.Features.Specializations.Command.CreateSpecialization;
 global using SmartClinic.Application.Features.Specializations.Command.DTOs.CreateSpecialization;
 global using SmartClinic.Application.Features.Specializations.Mapper;
@@ -38,6 +39,7 @@ global using SmartClinic.Application.Services.Implementation.Specifications.Appo
 global using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetDoctorAppointmentsSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.GetPatientAppointmentsSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.AppointmentSpecifications.UpdateDoctorAppointmentSpecifications;
+global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSchedulesSpecifications.DeleteDoctorSchedulesSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.DeleteDoctorSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctorByIdSpecifications;
 global using SmartClinic.Application.Services.Implementation.Specifications.DoctorSpecifications.GetDoctors;

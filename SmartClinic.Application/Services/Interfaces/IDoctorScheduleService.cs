@@ -1,4 +1,5 @@
-﻿using SmartClinic.Application.Features.DoctorsSchedules.Command.DeleteDoctorSchedule;
+﻿using SmartClinic.Application.Features.DoctorsSchedules.Command.CreateDoctorSchedule;
+using SmartClinic.Application.Features.DoctorsSchedules.Query.DTOs.GetDoctorSchedule;
 
 namespace SmartClinic.Application.Services.Interfaces;
 
@@ -8,7 +9,6 @@ public interface IDoctorScheduleService
 
     Task<Response<string>> DeleteScheduleAsync(DeleteDoctorScheduleRequest deleteDoctorSchedule);
 
-    //Task<Response<GetDoctorSchedule>> CreateAsync(CreateDoctorScheduleRequest request);
+    Task<Response<GetDoctorSchedule>> CreateAsync(CreateDoctorScheduleRequest request);
 
-    //Task<Response<GetDoctorSchedule>> UpdateAsync(UpdateDoctorScheduleRequest request);
 }

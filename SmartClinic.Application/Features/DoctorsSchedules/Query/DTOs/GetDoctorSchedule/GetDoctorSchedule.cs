@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SmartClinic.Application.Features.DoctorSchedule.Query.DTOs.GetDoctorSchedule;
+﻿namespace SmartClinic.Application.Features.DoctorsSchedules.Query.DTOs.GetDoctorSchedule;
 
 public record GetDoctorSchedule(
-    [Required] int DoctorId,
-    [Required] string DayOfWeek,
-    [Required] TimeOnly StartTime,
-    [Required] TimeOnly EndTime,
-    [Required] int SlotDuration
+     int Id,
+     int DoctorId,
+     string DayOfWeek,
+     TimeOnly StartTime,
+     TimeOnly EndTime,
+     int SlotDuration
 );

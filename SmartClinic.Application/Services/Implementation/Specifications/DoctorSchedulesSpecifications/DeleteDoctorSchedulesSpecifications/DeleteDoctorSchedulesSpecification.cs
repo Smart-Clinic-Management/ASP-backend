@@ -1,6 +1,4 @@
-﻿using SmartClinic.Application.Features.DoctorsSchedules.Command.DeleteDoctorSchedule;
-
-namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSchedulesSpecifications.DeleteDoctorSchedulesSpecifications;
+﻿namespace SmartClinic.Application.Services.Implementation.Specifications.DoctorSchedulesSpecifications.DeleteDoctorSchedulesSpecifications;
 public class DeleteDoctorSchedulesSpecification : BaseSpecification<Doctor>
 {
     public DeleteDoctorSchedulesSpecification(DeleteDoctorScheduleRequest deleteDoctorSchedule)
