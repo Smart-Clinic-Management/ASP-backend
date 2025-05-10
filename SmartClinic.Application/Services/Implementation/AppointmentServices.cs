@@ -6,7 +6,7 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, ReceiverData receiverData)
+    public async Task<Response<string>> CreateAppointmentAsync(CreateAppointmentRequest appointmentDto, MailData receiverData)
     {
         #region Validation
 
@@ -137,7 +137,7 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         return Success(result);
     }
 
-    public async Task<Response<string>> UpdateDoctorAppointmentAsync(ReceiverData doctorData, UpdateAppointmentRequest updateAppointment)
+    public async Task<Response<string>> UpdateDoctorAppointmentAsync(MailData doctorData, UpdateAppointmentRequest updateAppointment)
     {
         #region Validation
 
@@ -191,10 +191,10 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
         return Success("", "Updated Successfully");
     }
 
-    public async Task<Response<string>> CancelPatientAppointmentAsync(ReceiverData receiverData, int appointmentId)
+    public async Task<Response<string>> CancelPatientAppointmentAsync(MailData patientData, int appointmentId)
     {
 
-        var specs = new CancelAppointmentSpecification(receiverData.Id, appointmentId);
+        var specs = new CancelAppointmentSpecification(patientData.Id, appointmentId);
 
         var appointment = await _unitOfWork.Repo<Appointment>().GetEntityWithSpecAsync(specs);
 
@@ -212,10 +212,10 @@ public class AppointmentService(IUnitOfWork unitOfWork, IPagedCreator<Appointmen
 
         #region Send Mails
 
-        var patientMessage = receiverData.GeneratePatientCancelAppointmentMessage(appointment);
+        var patientMessage = patientData.GeneratePatientCancelAppointmentMessage(appointment);
         await emailSender.SendEmailAsync(patientMessage);
 
-        var doctorMessage = receiverData.GenerateDoctorCancelAppointmentMessage(appointment);
+        var doctorMessage = patientData.GenerateDoctorCancelAppointmentMessage(appointment);
         await emailSender.SendEmailAsync(doctorMessage);
 
         #endregion

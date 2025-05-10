@@ -1,7 +1,7 @@
 ﻿namespace SmartClinic.Application.Models;
 public static class EmailExtension
 {
-    public static EmailMessage GeneratePatientAppointmentMessage(this ReceiverData receiverData, Appointment appointment, Doctor doctor)
+    public static EmailMessage GeneratePatientAppointmentMessage(this MailData receiverData, Appointment appointment, Doctor doctor)
     {
         return new EmailMessage
         {
@@ -13,7 +13,7 @@ public static class EmailExtension
         };
     }
 
-    public static EmailMessage GeneratePatientCancelAppointmentMessage(this ReceiverData receiverData, Appointment appointment)
+    public static EmailMessage GeneratePatientCancelAppointmentMessage(this MailData receiverData, Appointment appointment)
     {
         return new EmailMessage
         {
@@ -37,7 +37,7 @@ public static class EmailExtension
         };
     }
 
-    public static EmailMessage GenerateDoctorCancelAppointmentMessage(this ReceiverData receiverData, Appointment appointment)
+    public static EmailMessage GenerateDoctorCancelAppointmentMessage(this MailData receiverData, Appointment appointment)
     {
         return new EmailMessage
         {
