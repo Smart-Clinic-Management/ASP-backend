@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SmartClinic.Application.Features.Patients.Query.GetPatients;
 
-namespace SmartClinic.Application.Features.Patients.Query.GetPatients
+public class GetAllPatientsParams : PagingParams
 {
-  public class GetAllPatientsParams : PagingParams
-    {
-        public string? PatientName { get; set; }
-    }
+    public string? PatientName { get; set; }
 }

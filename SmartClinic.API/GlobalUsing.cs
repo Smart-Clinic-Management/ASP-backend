@@ -30,6 +30,7 @@ global using SmartClinic.Application.Features.Doctors.Query.GetDoctors;
 global using SmartClinic.Application.Features.Doctors.Query.GetDoctorWithSchedulesSlots;
 global using SmartClinic.Application.Features.DoctorsSchedules.Command.CreateDoctorSchedule;
 global using SmartClinic.Application.Features.DoctorsSchedules.Command.DeleteDoctorSchedule;
+global using SmartClinic.Application.Features.Patients.Query.GetPatients;
 global using SmartClinic.Application.Features.Profile.Command;
 global using SmartClinic.Application.Features.Profile.Query;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;

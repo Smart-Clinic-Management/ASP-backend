@@ -1,26 +1,12 @@
-﻿using SmartClinic.Application.Services.Implementation.Specifications.PatientSpecifications.GetPatients;
-
-public class PatientService : ResponseHandler, IPatientService
+﻿namespace SmartClinic.Application.Services.Implementation;
+public class PatientService(
+    IUnitOfWork unitOfWork,
+    IHttpContextAccessor httpContextAccessor,
+    IPagedCreator<Patient> pagedCreator) : ResponseHandler, IPatientService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly UserManager<AppUser> _userManager;
-    private readonly IFileHandlerService _fileHandler;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IPagedCreator<Patient> _pagedCreator; 
-
-    public PatientService(
-        IUnitOfWork unitOfWork,
-        UserManager<AppUser> userManager,
-        IFileHandlerService fileHandler,
-        IHttpContextAccessor httpContextAccessor,
-        IPagedCreator<Patient> pagedCreator)  
-    {
-        _unitOfWork = unitOfWork;
-        _userManager = userManager;
-        _fileHandler = fileHandler;
-        _httpContextAccessor = httpContextAccessor;
-        _pagedCreator = pagedCreator;  
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IPagedCreator<Patient> _pagedCreator = pagedCreator;
 
     public async Task<Response<Pagination<GetAllPatientsResponse>>> GetAllPatientsAsync(GetAllPatientsParams allPatientsParams)
     {

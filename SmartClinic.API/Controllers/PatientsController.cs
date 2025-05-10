@@ -1,7 +1,4 @@
-﻿
-using SmartClinic.Application.Features.Patients.Query.GetPatients;
-
-namespace SmartClinic.API.Controllers;
+﻿namespace SmartClinic.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
