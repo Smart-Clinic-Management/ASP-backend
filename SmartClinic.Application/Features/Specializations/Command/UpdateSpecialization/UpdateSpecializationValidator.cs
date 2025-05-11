@@ -1,12 +1,13 @@
-﻿public class UpdateSpecializationValidator : AbstractValidator<UpdateSpecializationRequest>
+﻿namespace SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
+public class UpdateSpecializationValidator : AbstractValidator<UpdateSpecializationRequest>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly int _specializationId; 
+    private readonly int _specializationId;
 
     public UpdateSpecializationValidator(IUnitOfWork unitOfWork, int specializationId)
     {
         _unitOfWork = unitOfWork;
-        _specializationId = specializationId; 
+        _specializationId = specializationId;
 
         RuleFor(x => x.Name)
             .Length(3, 50)

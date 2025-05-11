@@ -62,6 +62,9 @@ UserManager<AppUser> userManager)
         var specialization = newSpecializationUser.ToSpecialization();
 
         await _unitOfWork.Repo<Specialization>().AddAsync(specialization);
+
+        await _unitOfWork.SaveChangesAsync();
+
         #endregion
 
         #region Saving Image
@@ -100,7 +103,7 @@ UserManager<AppUser> userManager)
     public async Task<Response<GetSpecializationByIdResponse?>> UpdateSpecializationAsync(int specializationId, UpdateSpecializationRequest request)
     {
         #region Validation
-        var validator = new UpdateSpecializationValidator(_unitOfWork, specializationId); 
+        var validator = new UpdateSpecializationValidator(_unitOfWork, specializationId);
         var validationResult = await validator.ValidateAsync(request);
 
         if (!validationResult.IsValid)
@@ -115,7 +118,7 @@ UserManager<AppUser> userManager)
         #endregion
 
         #region Update Specialization
-      
+
         var isUpdated = specialization.UpdateEntity(request);
 
         if (!isUpdated)
@@ -123,7 +126,7 @@ UserManager<AppUser> userManager)
 
         if (await _unitOfWork.SaveChangesAsync())
         {
-         
+
             if (request.Image is not null)
                 await _fileHandler.UpdateImg(request.Image, specialization.Image!, specialization.Image!);
 
