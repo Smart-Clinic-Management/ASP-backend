@@ -14,6 +14,7 @@ global using Scalar.AspNetCore;
 global using SmartClinic.API;
 global using SmartClinic.API.Bases;
 global using SmartClinic.API.Errors;
+global using SmartClinic.API.Middleware;
 global using SmartClinic.API.RequestHelper;
 global using SmartClinic.Application;
 global using SmartClinic.Application.Bases;
@@ -35,6 +36,7 @@ global using SmartClinic.Application.Features.DoctorsSchedules.Query.GetDoctorSc
 global using SmartClinic.Application.Features.Patients.Query.GetPatients;
 global using SmartClinic.Application.Features.Profile.Command;
 global using SmartClinic.Application.Features.Profile.Query;
+global using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecialization;
 global using SmartClinic.Application.Features.Specializations.Query.GetSpecializations;
 global using SmartClinic.Application.Models;
@@ -43,6 +45,3 @@ global using SmartClinic.Domain.DTOs.Auth;
 global using SmartClinic.Domain.Entities;
 global using SmartClinic.Infrastructure;
 global using SmartClinic.Infrastructure.Data;
-global using SmartClinic.Application.Features.Patients.Query.GetPatients;
-global using SmartClinic.Application.Features.Specializations.Command.UpdateSpecialization;
-
