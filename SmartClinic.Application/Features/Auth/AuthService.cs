@@ -19,23 +19,12 @@ public class AuthService(
         var userRoles = await userMGR.GetRolesAsync(user);
 
 
-        var q = await userMGR.Users
-            .Include(u => u.Patient)
-            .Include(u => u.Doctor)
-            .Where(u => u.Id == user.Id)
-            .Select(u => new
-            {
-                Id = (int?)u.Patient.Id ?? u.Doctor.Id
-            }).FirstOrDefaultAsync();
-
-
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Email, user.Email!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()) ,
-            new(JwtRegisteredClaimNames.Name, user.FirstName) ,
-            new("id" , q?.Id.ToString() ?? "")
+            new(JwtRegisteredClaimNames.Name, user.FirstName)
         };
 
         claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
@@ -62,7 +51,7 @@ public class AuthService(
     {
 
 
-        var userExist = await userMGR.FindByEmailAsync(user.Email);
+        var userExist = await userMGR.Users.FirstOrDefaultAsync(x => x.Email == user.Email && x.IsActive);
         if (userExist == null)
             return response.BadRequest<LoginResponseDTO>("invalid login attempts")!;
 
