@@ -4,7 +4,7 @@ public static class DataSeeding
     public static async Task SeedAsync(ApplicationDbContext context, UserManager<AppUser> userManager)
     {
 
-        if (!userManager.Users.Any(u => u.UserName == "admin@gmail.com"))
+        if (!userManager.Users.Any(u => u.UserName == "admin@gmail.com" && u.IsActive))
         {
             AppUser user = new()
             {
