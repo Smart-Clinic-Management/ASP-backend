@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
-namespace SmartClinic.Domain.DTOs.Auth;
+﻿namespace SmartClinic.Domain.DTOs.Auth;
 
 public class RegisterRequestDTO
 {

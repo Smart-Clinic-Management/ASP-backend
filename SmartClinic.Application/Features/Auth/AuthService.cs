@@ -5,7 +5,7 @@ public class AuthService(
     UserManager<AppUser> userMGR,
     SignInManager<AppUser> signMGR,
     ResponseHandler response,
-    IFileHandlerService fileHandler) : IAuthService
+    IFileHandlerService fileHandler) : ResponseHandler, IAuthService
 {
     private readonly IConfiguration configuration = configuration;
     private readonly UserManager<AppUser> userMGR = userMGR;
@@ -79,6 +79,15 @@ public class AuthService(
     public async Task<Response<RegisterResponseDTO>> Register(RegisterRequestDTO newPatientUser)
     {
         /////////////////////
+
+        #region validate mail uniqueness
+
+        var mailExists = await userMGR.FindByEmailAsync(newPatientUser.Email);
+
+        if (mailExists is not null)
+            return BadRequest<RegisterResponseDTO>("Registration failed. Please check your details and try again.");
+
+        #endregion
 
         var fileResult = new FileValidationResult();
         if (newPatientUser.Image != null)
