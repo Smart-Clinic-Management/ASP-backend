@@ -8,8 +8,6 @@ public static class ModuleAPIDependencies
         services.AddIdentity<AppUser, IdentityRole<int>>(opts =>
          {
              // password, lockout, etc.
-             opts.Password.RequireNonAlphanumeric = false;
-             opts.Password.RequireUppercase = false;
              opts.Password.RequiredLength = 6;
              opts.User.RequireUniqueEmail = true;
          }) // custom DbContext
@@ -32,13 +30,11 @@ public static class ModuleAPIDependencies
         });
 
 
-        services.AddAuthorization(options =>
-        {
-            options.DefaultPolicy = new AuthorizationPolicyBuilder(
+        services.AddAuthorizationBuilder()
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder(
                     JwtBearerDefaults.AuthenticationScheme)
                 .RequireAuthenticatedUser()
-                .Build();
-        });
+                .Build());
 
         // ? Add CORS policy
         services.AddCors(options =>
