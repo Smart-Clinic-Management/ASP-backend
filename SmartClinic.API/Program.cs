@@ -47,13 +47,14 @@ app.MapControllers();
 
 try
 {
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-    await context.Database.MigrateAsync();
-    await DataSeeding.SeedAsync(context, userManager);
-
+        await context.Database.MigrateAsync();
+        await DataSeeding.SeedAsync(context, userManager);
+    }
 }
 catch (Exception ex)
 {
