@@ -78,5 +78,5 @@ Smart Clinic is a comprehensive medical appointment and diagnosis system designe
    Open your browser and navigate to:
    [https://localhost:7047/scalar/v1](https://localhost:7047/scalar/v1)
 
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Smart-Clinic-Management/ASP-backend)
 
