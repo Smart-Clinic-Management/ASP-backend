@@ -245,13 +245,6 @@ public class DoctorService(
         return newAvailableDays;
     }
 
-
-
-
-    Task<Response<Features.Doctors.Query.GetDoctorWithSchedulesSlots.GetDoctorWithSchedulesSlotsResponse>> IDoctorService.GetDoctorWithSchedulesSlots(GetDoctorWithSchedulesSlotsParams schedulesSlotsParams)
-    {
-        throw new NotImplementedException();
-    }
 }
 
 
