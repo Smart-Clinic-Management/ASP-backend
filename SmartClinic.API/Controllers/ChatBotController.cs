@@ -17,7 +17,7 @@ public class ChatBotController : ControllerBase
     /// استخراج الكلمة المفتاحية أو الرد على استفسارات المواعيد أو الأسئلة الطبية
     /// </summary>
     [HttpPost("extract-keyword")]
-    public async Task<IActionResult> ExtractKeyword([FromForm] QuestionRequest questionRequest)
+    public async Task<IActionResult> ExtractKeyword([FromBody] QuestionRequest questionRequest)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
