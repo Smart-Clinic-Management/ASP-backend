@@ -10,7 +10,7 @@ public class SpecificationEvaluator<T>
             query = query.Where(spec.Criteria);
 
         if (spec.IsNoTracking)
-            query = query.AsNoTracking();
+            query = query.AsNoTrackingWithIdentityResolution();
 
         #region Ordering
 
@@ -21,13 +21,10 @@ public class SpecificationEvaluator<T>
             query = query.OrderBy(spec.OrderByDescending + " descending");
         else
         {
-            if (spec.OrderByDescending is null)
-                query = query.OrderBy(x => x.Id);
-            else
-                query = query.OrderByDescending(x => x.Id);
+            query = spec.OrderByDescending is null ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
         }
 
-        #endregion
+        #endregion Ordering
 
 
         if (spec.IsDistinct)
@@ -50,7 +47,7 @@ public class SpecificationEvaluator<T>
         if (spec.Criteria is not null)
             query = query.Where(spec.Criteria);
 
-        query = query.AsNoTracking();
+        query = query.AsNoTrackingWithIdentityResolution();
 
         var selectQuery = query.Select(spec.Select);
 
@@ -62,7 +59,7 @@ public class SpecificationEvaluator<T>
         else if (ValidProperty(spec.OrderByDescending))
             selectQuery = selectQuery.OrderBy(spec.OrderByDescending + " descending");
 
-        #endregion
+        #endregion Ordering
 
         if (spec.IsDistinct)
             selectQuery = selectQuery?.Distinct();
