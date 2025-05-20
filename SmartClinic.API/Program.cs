@@ -20,14 +20,11 @@ builder.Services.AddInfrastructureDependencies()
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference(op =>
-                op.WithTheme(ScalarTheme.Mars)
-                .WithDefaultHttpClient(ScalarTarget.Shell, ScalarClient.Httpie));
-}
+
+app.MapOpenApi();
+app.MapScalarApiReference(op =>
+            op.WithTheme(ScalarTheme.Mars)
+            .WithDefaultHttpClient(ScalarTarget.Shell, ScalarClient.Httpie));
 
 app.UseStaticFiles();
 
