@@ -1,5 +1,5 @@
 # Smart Clinic Management System - Back-End
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Smart-Clinic-Management/ASP-backend)
 Smart Clinic is a comprehensive medical appointment and diagnosis system designed to enhance the experience of patients, doctors, and clinic administrators. The system provides integrated modules for full control and efficient management of clinic operations, including electronic payments and an intelligent preliminary diagnosis assistant.
 
 ## 🎯 Project Goals
@@ -78,5 +78,4 @@ Smart Clinic is a comprehensive medical appointment and diagnosis system designe
    Open your browser and navigate to:
    [https://localhost:7047/scalar/v1](https://localhost:7047/scalar/v1)
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Smart-Clinic-Management/ASP-backend)
 
